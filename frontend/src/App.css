@@ -1,0 +1,129 @@
+/* ─────────────────────────────────────────────
+   App.css – Dark Mode IntelliProject UI Styling
+───────────────────────────────────────────── */
+
+/* Root container */
+#root {
+  max-width: 900px;
+  margin: 0 auto;
+  padding: 2rem;
+  font-family: 'Arial', Helvetica, sans-serif;
+  text-align: center;
+  background-color: #121212;  /* Dark background */
+  color: #ffffff;              /* Default text color white */
+}
+
+/* Logos */
+.logo {
+  height: 60px;
+  padding: 1rem;
+  will-change: filter;
+  transition: filter 300ms;
+}
+.logo:hover {
+  filter: drop-shadow(0 0 2em #9d7cffaa); /* subtle purple glow */
+}
+
+/* Header */
+h1 {
+  font-size: 2.8em;
+  margin-bottom: 1.5rem;
+  color: #ffffff;
+}
+
+/* Form inputs and select */
+input, select {
+  width: 100%;
+  padding: 0.8em 1em;
+  margin-bottom: 15px;
+  border-radius: 8px;
+  border: 1px solid #4b4b4b;
+  font-size: 16px;
+  box-sizing: border-box;
+  background-color: #1e1e1e; /* dark input background */
+  color: #ffffff;            /* white text */
+  transition: border 0.3s, box-shadow 0.3s;
+}
+input:focus, select:focus {
+  outline: none;
+  border: 1px solid #7c4dff;  /* purple border on focus */
+  box-shadow: 0 0 8px #7c4dff55;
+}
+
+/* Buttons */
+button {
+  width: 100%;
+  padding: 12px;
+  border-radius: 8px;
+  border: none;
+  background: linear-gradient(135deg, #7c4dff, #5e35b1);
+  color: #ffffff;
+  font-size: 16px;
+  font-weight: 600;
+  cursor: pointer;
+  transition: background 0.3s, transform 0.2s;
+}
+button:hover {
+  background: linear-gradient(135deg, #5e35b1, #7c4dff);
+  transform: translateY(-2px);
+}
+
+/* Loading & error messages */
+p.loading {
+  color: #7c4dff;  /* purple */
+  font-weight: 500;
+}
+p.error {
+  color: #ff5252;  /* red error */
+  font-weight: 500;
+}
+
+/* Project result cards */
+.project-card {
+  margin-top: 20px;
+  padding: 20px;
+  border-radius: 12px;
+  background-color: #1f1f1f;   /* dark card background */
+  border: 1px solid #333;
+  box-shadow: 0 4px 12px rgba(0,0,0,0.5);
+  text-align: left;
+  color: #ffffff;
+  transition: transform 0.2s, box-shadow 0.3s;
+}
+.project-card:hover {
+  transform: translateY(-3px);
+  box-shadow: 0 6px 18px rgba(124,77,255,0.5);
+}
+.project-card h3 {
+  margin-top: 0;
+  color: #7c4dff; /* purple titles */
+}
+.project-card p {
+  margin: 6px 0;
+  line-height: 1.5;
+}
+.project-card hr {
+  margin-top: 15px;
+  border: none;
+  border-top: 1px solid #444;
+}
+
+/* Card container for spacing */
+.card {
+  padding: 1rem 0;
+}
+
+/* Read docs link */
+.read-the-docs {
+  color: #888;
+}
+
+/* Responsive design */
+@media (max-width: 600px) {
+  #root {
+    padding: 1rem;
+  }
+  h1 {
+    font-size: 2.2em;
+  }
+}
