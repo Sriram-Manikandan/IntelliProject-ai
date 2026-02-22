@@ -1,8 +1,60 @@
 # 🎓 IntelliProject – AI-Powered Academic Project Recommendation Engine
 
-A clean, production-ready **FastAPI** backend that generates personalised
-academic project ideas based on a student's skills, domain, difficulty, and
-available time budget.
+IntelliProject is a full-stack AI-powered project recommendation system that generates structured academic project ideas based on a student’s:
+
+-->Skills
+
+-->Target domain
+
+-->Difficulty level
+
+-->Available time budget
+
+The system is built using a FastAPI backend and a React (Vite) frontend, following a clean layered architecture with clear separation of concerns.
+
+---
+
+🧠 Features
+
+-->Personalized project recommendations
+-->Structured, production-style API responses
+-->Layered backend architecture (Routes → Services → Models)
+-->Interactive API documentation (Swagger + ReDoc)
+-->Clean React UI for submitting inputs and viewing results
+-->Easily extendable to real LLM providers (OpenAI / Anthropic)
+
+---
+
+🛠 Tech Stack
+
+**Backend**
+-->Python 3.11+
+-->FastAPI
+-->Pydantic
+-->Uvicorn
+-->Environment-based configuration
+
+**Frontend**
+-->React (Vite)
+-->JavaScript (ES6+)
+-->Fetch API
+-->CSS
+
+---
+
+🏗 Architecture Overview
+
+1)Frontend sends a POST request to /api/v1/generate.
+
+2)FastAPI validates input using Pydantic schemas.
+
+3)Service layer processes logic and generates recommendations.
+
+4)Structured JSON response is returned.
+
+5)Frontend renders dynamic project cards.
+
+The business logic is isolated in recommendation_service.py, making it easy to plug in a real LLM without modifying the API layer.
 
 ---
 
@@ -80,7 +132,7 @@ cp .env.example .env
 # Edit .env if you want to change the port or CORS origins
 ```
 
-### 5. Start the server
+### 5. Start the backend server
 
 ```bash
 python run.py
@@ -89,10 +141,25 @@ python run.py
 Or, using uvicorn directly:
 
 ```bash
-uvicorn app.main:app --reload --host 0.0.0.0 --port 8000
+uvicorn main:app --reload --host 0.0.0.0 --port 8000
 ```
 
-The server will be available at **http://localhost:8000**
+The backend server will be available at **http://localhost:8000**
+
+---
+
+### 6. Start the frontend server
+
+in a new terminal:
+
+```bash
+cd frontend
+npm install
+npm run dev
+```
+
+The frontend server will be available at **http://localhost:5173**
+
 
 ---
 
@@ -161,15 +228,17 @@ curl -X POST http://localhost:8000/api/v1/generate \
 
 ## 🔧 Extending to a Real LLM
 
-Open `app/services/recommendation_service.py` and replace the body of
-`generate_projects()` with a call to your preferred provider:
+Open:
+```Code
+services/recommendation_service.py
+```
+Replace the body of generate_projects() with a call to your preferred LLM provider.
 
+Example (pseudo):
 ```python
-import openai  # or anthropic
-
 def generate_projects(req: ProjectRequest) -> ProjectResponse:
     prompt = build_prompt(req)          # craft your prompt
-    raw = openai.chat.completions.create(...)
+    response = call_llm(prompt)
     return parse_llm_response(raw)      # map to ProjectResponse
 ```
 
@@ -179,5 +248,19 @@ No changes needed in the route layer.
 
 ## ✅ Requirements
 
-- Python 3.10+
+- Python 3.11+
+- Node.js 18+
 - pip
+- npm
+
+---
+
+📌 Future Improvements
+
+-->Integrate real LLM (OpenAI / Anthropic).
+-->Add authentication.
+-->Deploy backend (Render / Railway).
+-->Deploy frontend (Vercel / Netlify).
+-->Add database for saving user sessions.
+
+---
