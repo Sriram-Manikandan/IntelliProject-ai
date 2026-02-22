@@ -10,25 +10,37 @@ available time budget.
 
 ```
 intelliproject/
-├── app/
+│
+├── main.py                     # FastAPI app instance, middleware, route registration
+├── run.py                      # Uvicorn entry point
+├── requirements.txt            # Backend dependencies
+├── .env.example                # Environment variable template
+├── README.md
+│
+├── api/
 │   ├── __init__.py
-│   ├── main.py                  # App factory, CORS, routing
-│   ├── api/
-│   │   ├── __init__.py
-│   │   └── routes.py            # POST /api/v1/generate
-│   ├── core/
-│   │   ├── __init__.py
-│   │   └── config.py            # Settings loaded from .env
-│   ├── models/
-│   │   ├── __init__.py
-│   │   └── schemas.py           # Pydantic request & response models
-│   └── services/
-│       ├── __init__.py
-│       └── recommendation_service.py  # Business / AI logic
-├── .env.example                 # Environment variable template
-├── requirements.txt
-├── run.py                       # Uvicorn entry point
-└── README.md
+│   └── routes.py               # API endpoints (POST /api/v1/generate)
+│
+├── core/
+│   ├── __init__.py
+│   └── config.py               # Centralized settings management
+│
+├── models/
+│   ├── __init__.py
+│   └── schemas.py              # Pydantic request/response models
+│
+├── services/
+│   ├── __init__.py
+│   └── recommendation_service.py  # Business logic / AI engine
+│
+└── frontend/
+    ├── package.json
+    ├── vite.config.js
+    └── src/
+        ├── main.jsx
+        ├── App.jsx
+        ├── App.css
+        └── index.css
 ```
 
 ---
