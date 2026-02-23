@@ -25,6 +25,7 @@ def create_app() -> FastAPI:
         ),
         docs_url="/docs",        # Swagger UI
         redoc_url="/redoc",      # ReDoc UI
+        openapi_url="/openapi.json"
         debug=settings.DEBUG,
     )
 
