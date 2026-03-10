@@ -61,12 +61,16 @@ The business logic is isolated in recommendation_service.py, making it easy to p
 ## 📁 Project Structure
 
 ```
-intelliproject/
+IntelliProject/
+│
+├── start.sh                    # Startup script (macOS/Linux)
+├── start.bat                   # Startup script (Windows Command Prompt)
+├── start.ps1                   # Startup script (Windows PowerShell)
 │
 ├── main.py                     # FastAPI app instance, middleware, route registration
 ├── run.py                      # Uvicorn entry point
 ├── requirements.txt            # Backend dependencies
-├── .env.example                # Environment variable template
+├── env.example                 # Environment variable template
 ├── README.md
 │
 ├── api/
@@ -88,27 +92,95 @@ intelliproject/
 └── frontend/
     ├── package.json
     ├── vite.config.js
+    ├── index.html
+    ├── eslint.config.js
+    ├── public/
     └── src/
         ├── main.jsx
         ├── App.jsx
         ├── App.css
-        └── index.css
+        ├── index.css
+        └── assets/
 ```
 
 ---
 
-## 🚀 Step-by-Step Setup & Run
+## 🚀 Setup & Run
 
-### 1. Clone / download the project
+### Step 1: Clone / Download the Project
 
 ```bash
 # If using git
 git clone <your-repo-url>
 cd intelliproject
 ```
+## ⚡ Quick Start (Recommended)
 
-### 2. Create a virtual environment
+Start both the backend and frontend with a **single command**:
 
+### macOS / Linux
+```bash
+./start.sh
+```
+
+### Windows (Command Prompt)
+```cmd
+start.bat
+```
+
+### Windows (PowerShell)
+```powershell
+.\start.ps1
+```
+
+**Both servers will start automatically:**
+- Backend: http://localhost:8000
+- Frontend: http://localhost:5173
+
+**To stop:** Close the terminal windows or press `Ctrl+C` in the main terminal.
+
+### Step 2: Make Startup Scripts Executable (macOS / Linux Only)
+
+```bash
+chmod +x start.sh
+```
+
+### Step 3: Run the Unified Startup Script
+
+The startup scripts automatically handle:
+- Creating/activating the Python virtual environment
+- Installing Python dependencies
+- Installing frontend node_modules
+- Starting both servers simultaneously
+
+**Choose your command based on your OS:**
+
+#### macOS / Linux
+```bash
+./start.sh
+```
+
+#### Windows (Command Prompt)
+```cmd
+start.bat
+```
+
+#### Windows (PowerShell)
+```powershell
+.\start.ps1
+```
+
+Both servers will be available at:
+- **Backend:** http://localhost:8000
+- **Frontend:** http://localhost:5173
+
+---
+
+### Manual Setup (Optional)
+
+If you prefer to run servers manually:
+
+#### Terminal 1 - Backend
 ```bash
 python -m venv venv
 
@@ -117,48 +189,17 @@ source venv/bin/activate
 
 # Activate (Windows)
 venv\Scripts\activate
-```
 
-### 3. Install dependencies
-
-```bash
 pip install -r requirements.txt
-```
-
-### 4. Configure environment variables
-
-```bash
-cp .env.example .env
-# Edit .env if you want to change the port or CORS origins
-```
-
-### 5. Start the backend server
-
-```bash
 python run.py
 ```
 
-Or, using uvicorn directly:
-
-```bash
-uvicorn main:app --reload --host 0.0.0.0 --port 8000
-```
-
-The backend server will be available at **http://localhost:8000**
-
----
-
-### 6. Start the frontend server
-
-in a new terminal:
-
+#### Terminal 2 - Frontend
 ```bash
 cd frontend
 npm install
 npm run dev
 ```
-
-The frontend server will be available at **http://localhost:5173**
 
 
 ---
