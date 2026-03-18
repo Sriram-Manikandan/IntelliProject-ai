@@ -2,70 +2,63 @@
 
 IntelliProject is a full-stack AI-powered project recommendation system that generates structured academic project ideas based on a student’s:
 
--->Skills
+- Skills
+- Target domain
+- Difficulty level
+- Available time budget
 
--->Target domain
-
--->Difficulty level
-
--->Available time budget
-
-The system is built using a FastAPI backend and a React (Vite) frontend, following a clean layered architecture with clear separation of concerns.
+The system is built using an asynchronous FastAPI backend and a custom dark-themed React (Vite + Tailwind CSS) frontend, following a clean, layered architecture with a clear separation of concerns.
 
 ---
 
-🧠 Features
+## 🧠 Features
 
--->Personalized project recommendations
--->Modern, dark-themed responsive UI (built with Tailwind CSS & lucide-react)
--->Structured, production-style API responses with strict Pydantic v2 validation
--->Layered backend architecture (Routes → Services → Models)
--->Interactive API documentation (Swagger + ReDoc)
--->Async-first service layer, ready for integration with real LLM providers (OpenAI / Anthropic)
+- **Personalized project recommendations**
+- **Modern, responsive UI** (built from scratch with Tailwind CSS v3 & lucide-react icons)
+- **Structured, production-style API responses** with strict Pydantic v2 validation
+- **Layered backend architecture** (Routes → Services → Models)
+- **Interactive API documentation** (Swagger + ReDoc)
+- **Async-first service layer**, ready for integration with real LLM providers (OpenAI / Anthropic)
 
 ---
 
-🛠 Tech Stack
+## 🛠 Tech Stack
 
 **Backend**
--->Python 3.11+
--->FastAPI (Async API)
--->Pydantic v2
--->Uvicorn
--->Environment-based configuration
+- Python 3.11+
+- FastAPI (Async API)
+- Pydantic v2
+- Uvicorn
+- Environment-based configuration
 
 **Frontend**
--->React (Vite)
--->Tailwind CSS v3
--->React Router DOM
--->Lucide React (Icons)
+- React (Vite)
+- Tailwind CSS v3
+- React Router DOM
+- Lucide React (Icons)
 
 ---
 
-🏗 Architecture Overview
+## 🏗 Architecture Overview
 
-1)Frontend sends a POST request to /api/v1/generate.
+1. Frontend sends a `POST` request to `/api/v1/generate`.
+2. FastAPI validates input via strict Pydantic models.
+3. Service layer asynchronously processes logic and generates recommendations.
+4. Structured JSON response is returned.
+5. Frontend renders dynamic, expandable project cards with inline scoring metrics.
 
-2)FastAPI validates input using Pydantic schemas.
-
-3)Service layer processes logic and generates recommendations.
-
-4)Structured JSON response is returned.
-
-5)Frontend renders dynamic project cards.
-
-The business logic is isolated in recommendation_service.py, making it easy to plug in a real LLM without modifying the API layer.
+The business logic is isolated in `recommendation_service.py`, making it incredibly easy to plug in a real LLM without modifying the API layer.
 
 ---
 
 ## 📁 Project Structure
 
-```
+```text
 IntelliProject/
 │
-├── start.sh                    # Startup script (macOS/Linux)
-├── start.bat                   # Startup script (Windows Command Prompt)
-├── start.ps1                   # Startup script (Windows PowerShell)
+├── start.sh                    # Unified startup script (macOS/Linux)
+├── start.bat                   # Unified startup script (Windows Cmd)
+├── start.ps1                   # Unified startup script (Windows PowerShell)
 │
 ├── main.py                     # FastAPI app instance, middleware, route registration
 ├── run.py                      # Uvicorn entry point
@@ -74,33 +67,26 @@ IntelliProject/
 ├── README.md
 │
 ├── api/
-│   ├── __init__.py
 │   └── routes.py               # API endpoints (POST /api/v1/generate)
 │
 ├── core/
-│   ├── __init__.py
 │   └── config.py               # Centralized settings management
 │
 ├── models/
-│   ├── __init__.py
 │   └── schemas.py              # Pydantic request/response models
 │
 ├── services/
-│   ├── __init__.py
 │   └── recommendation_service.py  # Business logic / AI engine
 │
-└── frontend/
+└── frontend/                   # React SPA
     ├── package.json
-    ├── vite.config.js
+    ├── tailwind.config.js
     ├── index.html
-    ├── eslint.config.js
-    ├── public/
     └── src/
-        ├── main.jsx
-        ├── App.jsx
-        ├── App.css
-        ├── index.css
-        └── assets/
+        ├── App.jsx             (React Router config)
+        ├── index.css           (Tailwind directives)
+        ├── components/         (Hero, Navbar, ProjectForm, Features, etc.)
+        └── pages/              (Home, Generate)
 ```
 
 ---
@@ -110,53 +96,17 @@ IntelliProject/
 ### Step 1: Clone / Download the Project
 
 ```bash
-# If using git
 git clone <your-repo-url>
 cd intelliproject
 ```
-## ⚡ Quick Start (Recommended)
 
-Start both the backend and frontend with a **single command**:
+### ⚡ Quick Start (Recommended)
 
-### macOS / Linux
-```bash
-./start.sh
-```
-
-### Windows (Command Prompt)
-```cmd
-start.bat
-```
-
-### Windows (PowerShell)
-```powershell
-.\start.ps1
-```
-
-**Both servers will start automatically:**
-- Backend: http://localhost:8000
-- Frontend: http://localhost:5173
-
-**To stop:** Close the terminal windows or press `Ctrl+C` in the main terminal.
-
-### Step 2: Make Startup Scripts Executable (macOS / Linux Only)
-
-```bash
-chmod +x start.sh
-```
-
-### Step 3: Run the Unified Startup Script
-
-The startup scripts automatically handle:
-- Creating/activating the Python virtual environment
-- Installing Python dependencies
-- Installing frontend node_modules
-- Starting both servers simultaneously
-
-**Choose your command based on your OS:**
+Start both the backend and frontend simultaneously with a **single command**:
 
 #### macOS / Linux
 ```bash
+chmod +x start.sh
 ./start.sh
 ```
 
@@ -170,26 +120,22 @@ start.bat
 .\start.ps1
 ```
 
-Both servers will be available at:
-- **Backend:** http://localhost:8000
-- **Frontend:** http://localhost:5173
+**Both servers will start automatically:**
+- **Backend**: http://localhost:8000
+- **Frontend**: http://localhost:5173
+
+*(To stop the servers, just close the terminal or press `Ctrl+C`)*
 
 ---
 
 ### Manual Setup (Optional)
 
-If you prefer to run servers manually:
+If you prefer to run the servers in separate terminal tabs manually:
 
 #### Terminal 1 - Backend
 ```bash
 python -m venv venv
-
-# Activate (macOS / Linux)
-source venv/bin/activate
-
-# Activate (Windows)
-venv\Scripts\activate
-
+source venv/bin/activate       # On Windows: venv\Scripts\activate
 pip install -r requirements.txt
 python run.py
 ```
@@ -200,7 +146,6 @@ cd frontend
 npm install
 npm run dev
 ```
-
 
 ---
 
@@ -222,68 +167,40 @@ npm run dev
 
 ```json
 {
-  "skills": "Python, Machine Learning, REST APIs",
+  "skills": "Python, React, Machine Learning",
   "domain": "Healthcare",
   "difficulty": "Intermediate",
-  "time_weeks": "8"
+  "time_weeks": 8
 }
 ```
 
 **Example with curl**
 
 ```bash
-curl -X POST http://localhost:8000/api/v1/generate \
+curl -s -X POST http://localhost:8000/api/v1/generate \
   -H "Content-Type: application/json" \
   -d '{
-    "skills": "Python, Machine Learning, REST APIs",
+    "skills": "Python, React, Machine Learning",
     "domain": "Healthcare",
     "difficulty": "Intermediate",
-    "time_weeks": "8"
+    "time_weeks": 8
   }'
-```
-
-**Response (trimmed)**
-
-```json
-{
-  "status": "success",
-  "input_summary": { ... },
-  "recommendations": [
-    {
-      "title": "AI-Powered Healthcare Diagnostic Assistant",
-      "problem_statement": "...",
-      "tech_stack": ["Python 3.11", "FastAPI", "scikit-learn", "..."],
-      "architecture": "...",
-      "implementation_roadmap": ["Week 1–2: ...", "..."],
-      "challenges": ["...", "..."],
-      "resume_score": 98,
-      "innovation_score": 92
-    },
-    { ... },
-    { ... }
-  ]
-}
 ```
 
 ---
 
 ## 🔧 Extending to a Real LLM
 
-Open:
-```Code
-services/recommendation_service.py
-```
-Replace the body of generate_projects() with a call to your preferred LLM provider.
+Open `services/recommendation_service.py` and replace the body of `generate_projects()` with a call to your preferred LLM provider.
 
 Example (pseudo):
 ```python
-def generate_projects(req: ProjectRequest) -> ProjectResponse:
+async def generate_projects(req: ProjectRequest) -> ProjectResponse:
     prompt = build_prompt(req)          # craft your prompt
-    response = call_llm(prompt)
+    response = await call_llm(prompt)
     return parse_llm_response(raw)      # map to ProjectResponse
 ```
-
-No changes needed in the route layer.
+_(No changes needed in the route layer!)_
 
 ---
 
@@ -296,12 +213,10 @@ No changes needed in the route layer.
 
 ---
 
-📌 Future Improvements
+## 📌 Future Improvements
 
--->Integrate real LLM (OpenAI / Anthropic).
--->Add authentication.
--->Deploy backend (Render / Railway).
--->Deploy frontend (Vercel / Netlify).
--->Add database for saving user sessions.
-
----
+- Integrate real LLM (OpenAI / Anthropic).
+- Add authentication.
+- Deploy backend (Render / Railway).
+- Deploy frontend (Vercel / Netlify).
+- Add database for saving user sessions.

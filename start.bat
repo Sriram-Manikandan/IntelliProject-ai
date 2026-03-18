@@ -40,15 +40,15 @@ REM Wait a moment for backend to initialize
 timeout /t 2 /nobreak
 
 REM Check if node_modules exists
-if not exist "%PROJECT_ROOT%frontend\frontend\node_modules" (
+if not exist "%PROJECT_ROOT%frontend\node_modules" (
     echo Installing frontend dependencies...
-    cd /d "%PROJECT_ROOT%frontend\frontend"
+    cd /d "%PROJECT_ROOT%frontend"
     call npm install
 )
 
 REM Start React frontend
 echo Starting frontend...
-cd /d "%PROJECT_ROOT%frontend\frontend"
+cd /d "%PROJECT_ROOT%frontend"
 start "IntelliProject Frontend" npm run dev
 
 echo.

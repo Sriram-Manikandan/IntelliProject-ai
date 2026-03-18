@@ -55,10 +55,10 @@ sleep 2
 
 # Start React frontend
 echo -e "${GREEN}Starting frontend...${NC}"
-cd "$PROJECT_ROOT/frontend/frontend"
+cd "$PROJECT_ROOT/frontend"
 
 # Check if node_modules exists, if not install dependencies
-if [ ! -d "$PROJECT_ROOT/frontend/frontend/node_modules" ]; then
+if [ ! -d "$PROJECT_ROOT/frontend/node_modules" ]; then
     echo -e "${YELLOW}Installing frontend dependencies...${NC}"
     npm install
 fi
