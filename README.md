@@ -17,11 +17,11 @@ The system is built using a FastAPI backend and a React (Vite) frontend, followi
 🧠 Features
 
 -->Personalized project recommendations
--->Structured, production-style API responses
+-->Modern, dark-themed responsive UI (built with Tailwind CSS & lucide-react)
+-->Structured, production-style API responses with strict Pydantic v2 validation
 -->Layered backend architecture (Routes → Services → Models)
 -->Interactive API documentation (Swagger + ReDoc)
--->Clean React UI for submitting inputs and viewing results
--->Easily extendable to real LLM providers (OpenAI / Anthropic)
+-->Async-first service layer, ready for integration with real LLM providers (OpenAI / Anthropic)
 
 ---
 
@@ -29,16 +29,16 @@ The system is built using a FastAPI backend and a React (Vite) frontend, followi
 
 **Backend**
 -->Python 3.11+
--->FastAPI
--->Pydantic
+-->FastAPI (Async API)
+-->Pydantic v2
 -->Uvicorn
 -->Environment-based configuration
 
 **Frontend**
 -->React (Vite)
--->JavaScript (ES6+)
--->Fetch API
--->CSS
+-->Tailwind CSS v3
+-->React Router DOM
+-->Lucide React (Icons)
 
 ---
 

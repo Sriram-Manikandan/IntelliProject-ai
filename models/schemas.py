@@ -5,7 +5,7 @@
 # ─────────────────────────────────────────────
 
 from pydantic import BaseModel, Field
-from typing import List
+from typing import List, Literal
 
 
 # ── Request ──────────────────────────────────
@@ -25,15 +25,17 @@ class ProjectRequest(BaseModel):
         example="Healthcare",
         description="Target domain / industry for the project",
     )
-    difficulty: str = Field(
+    difficulty: Literal["Beginner", "Intermediate", "Advanced"] = Field(
         ...,
         example="Intermediate",
         description="Beginner | Intermediate | Advanced",
     )
-    time_weeks: str = Field(
+    time_weeks: int = Field(
         ...,
-        example="8",
-        description="Available time budget in weeks",
+        ge=1,
+        le=52,
+        example=8,
+        description="Available time budget in weeks (1–52)",
     )
 
 
