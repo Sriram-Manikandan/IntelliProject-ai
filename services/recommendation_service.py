@@ -16,7 +16,7 @@ def _difficulty_weight(difficulty: str) -> int:
     )
 
 
-def generate_projects(req: ProjectRequest) -> ProjectResponse:
+async def generate_projects(req: ProjectRequest) -> ProjectResponse:
     """
     Build three tailored mock project recommendations.
 
@@ -55,8 +55,8 @@ def generate_projects(req: ProjectRequest) -> ProjectResponse:
         implementation_roadmap=[
             f"Week 1–2 : Requirements gathering, dataset sourcing, and repo setup",
             f"Week 3–4 : Data preprocessing pipeline and exploratory data analysis",
-            f"Week 5–{int(weeks)//2} : Model training, evaluation, and FastAPI integration",
-            f"Week {int(weeks)//2 + 1}–{int(weeks)-1} : Frontend dashboard and Docker packaging",
+            f"Week 5–{weeks//2} : Model training, evaluation, and FastAPI integration",
+            f"Week {weeks//2 + 1}–{weeks-1} : Frontend dashboard and Docker packaging",
             f"Week {weeks} : Testing, documentation, and demo preparation",
         ],
         challenges=[
@@ -96,8 +96,8 @@ def generate_projects(req: ProjectRequest) -> ProjectResponse:
         implementation_roadmap=[
             "Week 1–2 : Architecture design and local Kafka + InfluxDB setup",
             "Week 3–4 : Data producer simulation and Spark streaming job",
-            f"Week 5–{int(weeks)//2} : Forecasting model integration",
-            f"Week {int(weeks)//2 + 1}–{int(weeks)-1} : Grafana dashboards and FastAPI query layer",
+            f"Week 5–{weeks//2} : Forecasting model integration",
+            f"Week {weeks//2 + 1}–{weeks-1} : Grafana dashboards and FastAPI query layer",
             f"Week {weeks} : Load testing and final documentation",
         ],
         challenges=[
@@ -138,8 +138,8 @@ def generate_projects(req: ProjectRequest) -> ProjectResponse:
         implementation_roadmap=[
             "Week 1–2 : User & item data modelling, MongoDB schema design",
             "Week 3–4 : Content-based module with embedding pipeline",
-            f"Week 5–{int(weeks)//2} : Collaborative filtering and hybrid merge logic",
-            f"Week {int(weeks)//2 + 1}–{int(weeks)-1} : API, caching layer, and frontend integration",
+            f"Week 5–{weeks//2} : Collaborative filtering and hybrid merge logic",
+            f"Week {weeks//2 + 1}–{weeks-1} : API, caching layer, and frontend integration",
             f"Week {weeks} : A/B testing framework and performance benchmarking",
         ],
         challenges=[
