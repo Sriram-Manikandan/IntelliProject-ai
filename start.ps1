@@ -37,15 +37,15 @@ Write-Host ""
 Start-Sleep -Seconds 2
 
 # Check if node_modules exists
-if (-not (Test-Path "$ProjectRoot\frontend\node_modules")) {
+if (-not (Test-Path "$ProjectRoot\frontend\frontend\node_modules")) {
     Write-Host "Installing frontend dependencies..." -ForegroundColor Yellow
-    Set-Location "$ProjectRoot\frontend"
+    Set-Location "$ProjectRoot\frontend\frontend"
     npm install
 }
 
 # Start React frontend
 Write-Host "Starting frontend..." -ForegroundColor Green
-Set-Location "$ProjectRoot\frontend"
+Set-Location "$ProjectRoot\frontend\frontend"
 Start-Process npm -ArgumentList "run", "dev" -WindowStyle Normal
 
 Write-Host ""
