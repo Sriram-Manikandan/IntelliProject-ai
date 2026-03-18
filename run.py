@@ -12,5 +12,6 @@ if __name__ == "__main__":
         host=settings.HOST,
         port=settings.PORT,
         reload=settings.DEBUG,      # Hot-reload in dev mode
+        reload_excludes=["frontend/*"], # Prevent watching frontend/node_modules
         log_level="info",
     )

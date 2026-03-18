@@ -1,3 +1,4 @@
+import React from 'react';
 import { UserCircle, Settings2, Wand2, Rocket } from 'lucide-react';
 
 const steps = [

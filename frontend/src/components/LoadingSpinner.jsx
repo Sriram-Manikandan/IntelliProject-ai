@@ -1,3 +1,4 @@
+import React from 'react';
 export default function LoadingSpinner() {
   return (
     <div className="flex flex-col items-center justify-center py-32 animate-fade-in">

@@ -1,3 +1,4 @@
+import React from 'react';
 import { ArrowLeft, RefreshCw, Code2, Globe, BarChart3, Clock } from 'lucide-react';
 import ProjectCard from './ProjectCard';
 

@@ -6,7 +6,7 @@
 
 from fastapi import FastAPI
 from fastapi.middleware.cors import CORSMiddleware
-from fastapi.responses import JSONResponse
+from fastapi.responses import JSONResponse, RedirectResponse
 
 from core.config import settings
 from api.routes import router
@@ -46,6 +46,11 @@ def create_app() -> FastAPI:
     @app.get("/health", tags=["System"], summary="Health check")
     async def health() -> JSONResponse:
         return JSONResponse({"status": "ok", "app": settings.APP_NAME, "version": settings.APP_VERSION})
+
+    # ── Root Redirect ─────────────────────────
+    @app.get("/", include_in_schema=False)
+    async def root():
+        return RedirectResponse(url="/docs")
 
     return app
 

@@ -1,3 +1,4 @@
+import React from 'react';
 import { Brain, Target, Map } from 'lucide-react';
 
 const features = [

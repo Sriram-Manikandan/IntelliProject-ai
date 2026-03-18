@@ -1,4 +1,4 @@
-import { useState } from 'react';
+import React, { useState } from 'react';
 import { Sparkles, Code2, Globe, BarChart3, Clock } from 'lucide-react';
 
 const difficulties = ['Beginner', 'Intermediate', 'Advanced'];
