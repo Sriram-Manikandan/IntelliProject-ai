@@ -46,10 +46,10 @@ export default function Hero() {
 
         {/* CTA Buttons */}
         <div className="flex flex-col sm:flex-row items-center justify-center gap-4 animate-fade-in opacity-0" style={{ animationDelay: '0.5s' }}>
-          <Link to="/generate">
-            <button className="btn-primary text-base px-8 py-3.5 rounded-xl">
+          <Link to="/login">
+            <button className="btn-primary text-base px-10 py-4 rounded-xl">
               <span className="flex items-center gap-2">
-                Get Started
+                Start Building Your Portfolio
                 <ArrowRight className="w-5 h-5" />
               </span>
             </button>

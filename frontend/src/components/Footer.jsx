@@ -2,7 +2,7 @@ import React from 'react';
 import { Sparkles, Twitter, Github, Linkedin, Mail } from 'lucide-react';
 
 const links = [
-  { label: 'Product', items: ['Features', 'Testimonials', 'FAQ', 'Pricing'] },
+  { label: 'Product', items: ['Features', 'Testimonials', 'FAQ'] },
   { label: 'Company', items: ['About', 'Careers', 'Contact', 'Blog'] },
   { label: 'Legal', items: ['Privacy', 'Terms', 'Cookie Policy'] }
 ];

@@ -24,7 +24,7 @@ export default function FAQ() {
   const [activeIndex, setActiveIndex] = useState(null);
 
   return (
-    <section className="py-24 px-6 relative">
+    <section id="faq" className="py-24 px-6 relative">
       <div className="max-w-4xl mx-auto">
         <div className="text-center mb-16">
           <h2 className="text-3xl sm:text-4xl font-bold mb-4">

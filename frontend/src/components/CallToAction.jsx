@@ -30,9 +30,9 @@ export default function CallToAction() {
         </p>
 
         <div className="flex flex-col sm:flex-row items-center justify-center gap-6">
-          <Link to="/generate">
+          <Link to="/login">
             <button className="btn-primary flex items-center gap-2 text-base px-10 py-4 scale-110">
-              Generate Your First Idea <ArrowRight className="w-5 h-5" />
+              Start Building Now <ArrowRight className="w-5 h-5" />
             </button>
           </Link>
           <a href="#" className="text-gray-500 hover:text-white transition-colors text-sm font-medium border-b border-gray-500/20 hover:border-white pb-1">
