@@ -34,11 +34,11 @@ export default function Navbar() {
         {/* Navigation Links and CTA */}
         <div className="hidden md:flex items-center gap-10">
           <div className="flex items-center gap-8 mr-4">
-            <Link to="/" className={`text-sm font-semibold transition-colors ${location.pathname === '/' ? 'text-primary-400' : 'text-gray-400 hover:text-white'}`}>Home</Link>
+            <Link to="/" className={`text-sm font-semibold transition-colors ${location.pathname === '/' && !location.hash ? 'text-primary-400' : 'text-gray-400 hover:text-white'}`}>Home</Link>
             <Link to="/about" className={`text-sm font-semibold transition-colors ${location.pathname === '/about' ? 'text-primary-400' : 'text-gray-400 hover:text-white'}`}>About</Link>
-            <a href="/#features" className="text-sm font-semibold text-gray-400 hover:text-white transition-colors">Features</a>
-            <a href="/#testimonials" className="text-sm font-semibold text-gray-400 hover:text-white transition-colors">Testimonials</a>
-            <a href="/#faq" className="text-sm font-semibold text-gray-400 hover:text-white transition-colors">FAQ</a>
+            <Link to="/#features" className="text-sm font-semibold text-gray-400 hover:text-white transition-colors">Features</Link>
+            <Link to="/#testimonials" className="text-sm font-semibold text-gray-400 hover:text-white transition-colors">Testimonials</Link>
+            <Link to="/#faq" className="text-sm font-semibold text-gray-400 hover:text-white transition-colors">FAQ</Link>
           </div>
 
           <Link to="/login">
