@@ -220,3 +220,8 @@ _(No changes needed in the route layer!)_
 - Deploy backend (Render / Railway).
 - Deploy frontend (Vercel / Netlify).
 - Add database for saving user sessions.
+
+---
+
+## License
+This project is licensed under the MIT License.
