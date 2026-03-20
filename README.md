@@ -85,8 +85,8 @@ IntelliProject/
     └── src/
         ├── App.jsx             (React Router config)
         ├── index.css           (Tailwind directives)
-        ├── components/         (Hero, Navbar, ProjectForm, Features, etc.)
-        └── pages/              (Home, Generate)
+        ├── components/         (Hero, Navbar, Features, HowItWorks, SampleShowcase, Testimonials, FAQ, CallToAction, Footer, etc.)
+        └── pages/              (Home, About, Login, Signup)
 ```
 
 ---
@@ -216,7 +216,7 @@ _(No changes needed in the route layer!)_
 ## 📌 Future Improvements
 
 - Integrate real LLM (OpenAI / Anthropic).
-- Add authentication.
+- Integrate with Figma.
 - Deploy backend (Render / Railway).
 - Deploy frontend (Vercel / Netlify).
 - Add database for saving user sessions.
