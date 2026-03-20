@@ -31,6 +31,12 @@ export default function Navbar() {
           </span>
         </Link>
 
+        {/* Nav Links */}
+        <div className="hidden md:flex items-center gap-8">
+          <Link to="/" className={`text-sm font-medium transition-colors ${location.pathname === '/' ? 'text-white' : 'text-gray-400 hover:text-white'}`}>Home</Link>
+          <Link to="/pricing" className={`text-sm font-medium transition-colors ${location.pathname === '/pricing' ? 'text-white' : 'text-gray-400 hover:text-white'}`}>Pricing</Link>
+        </div>
+
         {/* CTA */}
         {location.pathname !== '/generate' && (
           <Link to="/generate">
