@@ -32,6 +32,20 @@ export default function Generate() {
     setError('');
   };
 
+  // Re-run with edited values from ResultsView without going back to the form
+  const handleRegenerate = async (formData) => {
+    setView('loading');
+    setError('');
+    try {
+      const data = await generateProjects(formData);
+      setResults(data);
+      setView('results');
+    } catch (err) {
+      setError(err.message || 'Something went wrong. Please try again.');
+      setView('error');
+    }
+  };
+
   return (
     <div className="min-h-screen bg-[#030303]">
       <Navbar />
@@ -48,7 +62,7 @@ export default function Generate() {
 
         {/* Results */}
         {view === 'results' && results && (
-          <ResultsView data={results} onReset={handleReset} />
+          <ResultsView data={results} onReset={handleReset} onRegenerate={handleRegenerate} />
         )}
 
         {/* Error */}
