@@ -32,8 +32,8 @@ async def generate_project_recommendations(payload: ProjectRequest) -> ProjectRe
     - Returns a structured ProjectResponse
     """
     logger.info(
-        "Generate request: skills=%s, domain=%s, difficulty=%s, time_weeks=%s",
-        payload.skills, payload.domain, payload.difficulty, payload.time_weeks,
+        "Generate request: skills=%s, domain=%s, difficulty=%s, time_hours=%s",
+        payload.skills, payload.domain, payload.difficulty, payload.time_hours,
     )
     try:
         result = await generate_projects(payload)
