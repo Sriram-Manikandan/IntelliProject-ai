@@ -7,9 +7,9 @@ export default function Hero() {
     <section className="relative min-h-screen flex items-center justify-center overflow-hidden pt-16">
       {/* Background gradient orbs */}
       <div className="absolute inset-0 overflow-hidden pointer-events-none">
-        <div className="absolute -top-40 -left-40 w-[500px] h-[500px] rounded-full bg-primary-600/20 blur-[120px] animate-pulse-glow" />
-        <div className="absolute -bottom-40 -right-40 w-[500px] h-[500px] rounded-full bg-accent-500/15 blur-[120px] animate-pulse-glow" style={{ animationDelay: '1.5s' }} />
-        <div className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-[300px] h-[300px] rounded-full bg-primary-500/10 blur-[100px] animate-pulse-glow" style={{ animationDelay: '0.8s' }} />
+        <div className="absolute -top-40 -left-40 w-[600px] h-[600px] rounded-full bg-primary-600/20 blur-[130px] animate-float" />
+        <div className="absolute top-1/2 -right-40 w-[500px] h-[500px] rounded-full bg-accent-500/15 blur-[120px] animate-float-delayed" />
+        <div className="absolute -bottom-40 left-1/4 w-[400px] h-[400px] rounded-full bg-primary-500/10 blur-[100px] animate-pulse-glow" />
       </div>
 
       {/* Grid pattern overlay */}
@@ -30,10 +30,10 @@ export default function Hero() {
         </div>
 
         {/* Headline */}
-        <h1 className="text-5xl sm:text-6xl md:text-7xl font-extrabold leading-tight tracking-tight mb-6 animate-fade-in-up opacity-0">
+        <h1 className="text-6xl sm:text-7xl md:text-8xl font-black leading-[1.1] tracking-tighter mb-8 animate-fade-in-up opacity-0">
           Don't just code.
           <br />
-          <span className="text-gradient">Build something</span>
+          <span className="text-gradient text-glow">Build something</span>
           <br />
           that matters.
         </h1>
@@ -45,18 +45,15 @@ export default function Hero() {
         </p>
 
         {/* CTA Buttons */}
-        <div className="flex flex-col sm:flex-row items-center justify-center gap-4 animate-fade-in opacity-0" style={{ animationDelay: '0.5s' }}>
-          <Link to="/login">
-            <button className="btn-primary text-base px-10 py-4 rounded-xl">
+        <div className="flex flex-col sm:flex-row items-center justify-center gap-6 animate-fade-in opacity-0" style={{ animationDelay: '0.3s' }}>
+          <Link to="/signup">
+            <button className="btn-primary text-lg px-10 py-4 scale-105 hover:scale-110 transition-transform">
               <span className="flex items-center gap-2">
-                Start Building Your Portfolio
+                Get Started
                 <ArrowRight className="w-5 h-5" />
               </span>
             </button>
           </Link>
-          <a href="#how-it-works" className="text-gray-400 hover:text-white transition-colors text-sm font-medium flex items-center gap-1">
-            See how it works ↓
-          </a>
         </div>
 
         {/* Stats */}

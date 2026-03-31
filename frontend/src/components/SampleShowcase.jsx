@@ -36,17 +36,17 @@ const samples = [
 
 export default function SampleShowcase() {
   return (
-    <section className="py-24 px-6 relative overflow-hidden">
+    <section className="py-32 px-6 relative overflow-hidden">
       {/* Background decoration */}
-      <div className="absolute top-1/2 left-0 w-96 h-96 bg-primary-500/10 blur-[120px] rounded-full pointer-events-none" />
+      <div className="absolute top-1/2 left-0 w-[500px] h-[500px] bg-indigo-500/10 blur-[130px] rounded-full pointer-events-none animate-float" />
       
-      <div className="max-w-6xl mx-auto relative z-10">
-        <div className="text-center mb-20">
-          <h2 className="text-3xl sm:text-4xl font-bold mb-4">
-            Example <span className="text-gradient">AI Generations</span>
+      <div className="max-w-7xl mx-auto relative z-10">
+        <div className="text-center mb-20 animate-fade-in-up opacity-0">
+          <h2 className="text-4xl sm:text-5xl font-black mb-6 tracking-tight leading-tight">
+            Example <span className="text-gradient text-glow">AI Blueprints</span>
           </h2>
-          <p className="text-gray-400 max-w-xl mx-auto">
-            Take a look at the depth and quality of projects our AI creates for builders like you.
+          <p className="text-gray-400 text-lg max-w-2xl mx-auto font-medium leading-relaxed">
+            Every generation includes a complete architecture, tech stack, roadmap, and complexity analysis.
           </p>
         </div>
 
@@ -54,47 +54,50 @@ export default function SampleShowcase() {
           {samples.map((sample, index) => (
             <div 
               key={index}
-              className="glass-card-hover group p-8 flex flex-col items-start gap-6 border-white/5"
+              className="glass-card-hover group p-10 flex flex-col items-start gap-8 border-white/5 animate-fade-in-up opacity-0"
+              style={{ animationDelay: `${index * 150}ms` }}
             >
-              <div className={`w-14 h-14 rounded-2xl bg-gradient-to-br ${sample.color} flex items-center justify-center shadow-lg transform group-hover:scale-110 transition-transform duration-500`}>
-                <sample.icon className="w-7 h-7 text-white" />
+              <div className={`w-16 h-16 rounded-2xl bg-gradient-to-br ${sample.color} flex items-center justify-center shadow-lg group-hover:shadow-[0_0_30px_rgba(255,255,255,0.1)] transition-all duration-500 group-hover:scale-110`}>
+                <sample.icon className="w-8 h-8 text-white" />
               </div>
 
               <div>
-                <div className="flex items-center gap-2 mb-2">
-                  <span className="text-[10px] font-bold tracking-widest text-primary-400 uppercase">{sample.category}</span>
+                <div className="flex items-center gap-2 mb-4">
+                  <span className="text-[10px] font-black tracking-[0.2em] text-indigo-400 uppercase">{sample.category}</span>
                 </div>
-                <h3 className="text-xl font-bold text-white mb-3 group-hover:text-primary-300 transition-colors">
+                <h3 className="text-2xl font-black text-white mb-4 group-hover:text-glow transition-all">
                   {sample.title}
                 </h3>
-                <p className="text-sm text-gray-400 leading-relaxed mb-6">
+                <p className="text-base text-gray-400 leading-relaxed mb-6 font-medium line-clamp-3">
                   {sample.description}
                 </p>
               </div>
 
-              <div className="w-full space-y-4 mb-6">
-                <div className="flex justify-between items-end">
-                  <span className="text-xs text-gray-500 font-medium">Resume Impact</span>
-                  <span className="text-sm font-bold text-white">{sample.impact}%</span>
-                </div>
-                <div className="h-1.5 w-full bg-white/5 rounded-full overflow-hidden">
-                  <div 
-                    className="h-full bg-gradient-to-r from-primary-500 to-primary-400" 
-                    style={{ width: `${sample.impact}%` }}
-                  />
+              <div className="w-full space-y-5 mb-8">
+                <div className="space-y-2">
+                  <div className="flex justify-between items-end mb-1">
+                    <span className="text-[10px] text-gray-500 font-black uppercase tracking-widest">Resume Impact</span>
+                    <span className="text-xs font-black text-white">{sample.impact}%</span>
+                  </div>
+                  <div className="score-bar">
+                    <div 
+                      className="score-bar-fill" 
+                      style={{ width: `${sample.impact}%` }}
+                    />
+                  </div>
                 </div>
               </div>
 
-              <div className="flex flex-wrap gap-2 mt-auto">
+              <div className="flex flex-wrap gap-2.5 mt-auto">
                 {sample.tech.map(t => (
-                  <span key={t} className="text-[10px] px-2 py-1 rounded bg-white/5 border border-white/10 text-gray-400">
+                  <span key={t} className="text-[10px] px-3 py-1.5 rounded-xl bg-white/[0.02] border border-white/10 text-gray-400 font-bold group-hover:border-white/20 transition-all cursor-default">
                     {t}
                   </span>
                 ))}
               </div>
 
-              <button className="flex items-center gap-2 text-xs font-bold text-primary-400 group-hover:text-primary-300 mt-6 transition-colors">
-                SEE ROADMAP <ArrowUpRight className="w-3.5 h-3.5" />
+              <button className="flex items-center gap-2 text-xs font-black text-indigo-400 group-hover:text-indigo-300 mt-8 transition-colors tracking-widest uppercase">
+                EXPLORE ROADMAP <ArrowUpRight className="w-4 h-4" />
               </button>
             </div>
           ))}

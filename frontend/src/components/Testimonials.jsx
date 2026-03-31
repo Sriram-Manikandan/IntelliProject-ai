@@ -27,13 +27,13 @@ const testimonials = [
 
 export default function Testimonials() {
   return (
-    <section id="testimonials" className="py-24 px-6 relative">
-      <div className="max-w-6xl mx-auto">
-        <div className="text-center mb-16">
-          <h2 className="text-3xl sm:text-4xl font-bold mb-4">
-            Trusted by <span className="text-gradient">Engineers</span>
+    <section id="testimonials" className="py-32 px-6 relative">
+      <div className="max-w-7xl mx-auto">
+        <div className="text-center mb-20 animate-fade-in-up opacity-0">
+          <h2 className="text-4xl sm:text-5xl font-black mb-6 tracking-tight leading-tight">
+            Trusted by <span className="text-gradient text-glow">Builders</span>
           </h2>
-          <p className="text-gray-400 max-w-xl mx-auto">
+          <p className="text-gray-400 text-lg max-w-2xl mx-auto font-medium leading-relaxed">
             Hundreds of developers use IntelliProject to plan projects that stand out in a crowded market.
           </p>
         </div>
@@ -42,30 +42,35 @@ export default function Testimonials() {
           {testimonials.map((t, i) => (
             <div 
               key={i} 
-              className="glass-card p-8 group hover:border-primary-500/30 transition-all duration-300"
+              className="glass-card-hover p-10 group animate-fade-in-up opacity-0 flex flex-col items-start gap-8"
+              style={{ animationDelay: `${i * 150}ms` }}
             >
-              <div className="flex gap-1 mb-6">
+              <div className="flex gap-1.5 mb-2">
                 {[...Array(5)].map((_, j) => (
-                  <Star key={j} className="w-4 h-4 text-yellow-500 fill-yellow-500" />
+                  <Star key={j} className="w-5 h-5 text-indigo-400 fill-indigo-400/20 drop-shadow-[0_0_8px_rgba(99,102,241,0.4)]" />
                 ))}
               </div>
 
-              <p className="text-gray-300 leading-relaxed italic mb-8 relative">
-                <span className="absolute -top-4 -left-2 text-4xl text-primary-500/20 font-serif overflow-hidden">"</span>
-                {t.text}
-              </p>
+              <div className="relative">
+                <span className="absolute -top-10 -left-6 text-8xl text-indigo-500/10 font-black leading-none pointer-events-none uppercase tracking-tighter overflow-hidden">"</span>
+                <p className="text-gray-200 text-lg leading-relaxed font-medium mb-4 relative z-10 line-clamp-4 italic">
+                  {t.text}
+                </p>
+              </div>
 
-              <div className="flex items-center justify-between">
+              <div className="flex items-center justify-between w-full mt-auto pt-8 border-t border-white/5">
                 <div className="flex items-center gap-4">
-                  <div className="w-12 h-12 rounded-full overflow-hidden border-2 border-white/5 bg-white/5 p-0.5">
-                    <img src={t.avatar} alt={t.name} className="w-full h-full rounded-full object-cover" />
+                  <div className="w-14 h-14 rounded-full p-1 bg-gradient-to-br from-indigo-500/20 to-purple-600/20 shadow-lg group-hover:shadow-indigo-500/10 transition-shadow">
+                    <img src={t.avatar} alt={t.name} className="w-full h-full rounded-full object-cover border border-white/10" />
                   </div>
                   <div>
-                    <h4 className="text-sm font-bold text-white mb-0.5">{t.name}</h4>
-                    <p className="text-xs text-gray-500">{t.role}</p>
+                    <h4 className="text-base font-black text-white tracking-tight">{t.name}</h4>
+                    <p className="text-xs text-gray-500 font-bold uppercase tracking-widest">{t.role}</p>
                   </div>
                 </div>
-                <t.social className="w-4 h-4 text-gray-600 group-hover:text-primary-400 transition-colors" />
+                <div className="p-2.5 rounded-xl bg-white/5 text-gray-400 group-hover:text-indigo-400 group-hover:bg-indigo-500/10 transition-all">
+                  <t.social className="w-5 h-5" />
+                </div>
               </div>
             </div>
           ))}

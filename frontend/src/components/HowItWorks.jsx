@@ -30,46 +30,53 @@ const steps = [
 
 export default function HowItWorks() {
   return (
-    <section id="how-it-works" className="relative py-24 px-6">
+    <section id="how-it-works" className="relative py-32 px-6 overflow-hidden">
       {/* Subtle top gradient line */}
-      <div className="absolute top-0 left-1/2 -translate-x-1/2 w-1/2 h-px bg-gradient-to-r from-transparent via-primary-500/30 to-transparent" />
+      <div className="absolute top-0 left-1/2 -translate-x-1/2 w-3/4 h-px bg-gradient-to-r from-transparent via-indigo-500/30 to-transparent" />
 
-      <div className="max-w-6xl mx-auto">
+      <div className="max-w-7xl mx-auto">
         {/* Section Header */}
-        <div className="text-center mb-16">
-          <h2 className="text-3xl sm:text-4xl font-bold mb-4">
-            How It <span className="text-gradient">Works</span>
+        <div className="text-center mb-24 animate-fade-in-up opacity-0">
+          <h2 className="text-4xl sm:text-5xl font-black mb-6 tracking-tight leading-tight">
+            How It <span className="text-gradient text-glow">Works</span>
           </h2>
-          <p className="text-gray-400 max-w-xl mx-auto">
-            From confused to building in four simple steps.
+          <p className="text-gray-400 text-lg max-w-2xl mx-auto font-medium leading-relaxed">
+            From architecture to implementation, our AI ecosystem guides you through every phase of building.
           </p>
         </div>
 
         {/* Steps */}
-        <div className="grid sm:grid-cols-2 lg:grid-cols-4 gap-6">
+        <div className="grid sm:grid-cols-2 lg:grid-cols-4 gap-8">
           {steps.map((step, index) => (
             <div
               key={step.number}
-              className="relative glass-card p-6 text-center opacity-0 animate-fade-in"
-              style={{ animationDelay: `${index * 0.15}s` }}
+              className="relative glass-card p-10 text-center animate-fade-in-up opacity-0 group hover:bg-white/[0.03] transition-all duration-500"
+              style={{ animationDelay: `${index * 150}ms` }}
             >
               {/* Connector line for desktop */}
               {index < steps.length - 1 && (
-                <div className="hidden lg:block absolute top-1/2 -right-3 w-6 h-px bg-gradient-to-r from-primary-500/40 to-accent-500/40" />
+                <div className="hidden lg:block absolute top-1/2 -right-4 w-8 h-px bg-gradient-to-r from-indigo-500/40 to-transparent z-0 group-hover:from-indigo-400 transition-all duration-500" />
               )}
 
-              {/* Number badge */}
-              <div className="text-xs font-bold text-primary-400/60 tracking-widest mb-4">
-                STEP {step.number}
+              {/* Number/Icon Stack */}
+              <div className="relative mb-8 pt-4">
+                <div className="absolute -top-4 left-1/2 -translate-x-1/2 text-5xl font-black text-indigo-500/5 select-none tracking-tighter group-hover:text-indigo-500/10 transition-colors">
+                  {step.number}
+                </div>
+                <div className="w-16 h-16 mx-auto rounded-2xl bg-gradient-to-br from-indigo-500/10 to-purple-500/10 border border-indigo-500/20 flex items-center justify-center relative z-10 group-hover:scale-110 transition-transform duration-500 shadow-xl group-hover:shadow-indigo-500/10">
+                  <step.icon className="w-8 h-8 text-indigo-400" />
+                </div>
               </div>
 
-              {/* Icon */}
-              <div className="w-14 h-14 mx-auto rounded-2xl bg-gradient-to-br from-primary-500/10 to-accent-500/10 border border-primary-500/10 flex items-center justify-center mb-5">
-                <step.icon className="w-6 h-6 text-primary-400" />
-              </div>
+              <h3 className="text-xl font-black text-white mb-4 tracking-tight group-hover:text-glow transition-all">{step.title}</h3>
+              <p className="text-sm text-gray-400 leading-relaxed font-medium">{step.description}</p>
 
-              <h3 className="text-lg font-semibold text-white mb-2">{step.title}</h3>
-              <p className="text-sm text-gray-400 leading-relaxed">{step.description}</p>
+              {/* Step label */}
+              <div className="mt-8 flex justify-center">
+                <div className="px-3 py-1 rounded-full bg-white/5 border border-white/5 text-[9px] font-black tracking-[0.2em] text-gray-500 uppercase group-hover:text-indigo-400 group-hover:border-indigo-500/20 transition-all">
+                  Phase {step.number}
+                </div>
+              </div>
             </div>
           ))}
         </div>

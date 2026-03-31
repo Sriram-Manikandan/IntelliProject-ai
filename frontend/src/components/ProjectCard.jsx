@@ -11,12 +11,14 @@ import {
 
 function ScoreBar({ label, score, icon: Icon }) {
   return (
-    <div className="flex items-center gap-3">
-      <Icon className="w-4 h-4 text-primary-400 shrink-0" />
+    <div className="flex items-center gap-4 group">
+      <div className="p-2 rounded-lg bg-indigo-500/10 text-indigo-400 group-hover:scale-110 transition-transform">
+        <Icon className="w-4 h-4 shrink-0" />
+      </div>
       <div className="flex-1">
         <div className="flex justify-between items-center mb-1.5">
-          <span className="text-xs text-gray-400">{label}</span>
-          <span className="text-xs font-semibold text-white">{score}/100</span>
+          <span className="text-xs font-bold text-gray-400 uppercase tracking-widest">{label}</span>
+          <span className="text-xs font-black text-white">{score}/100</span>
         </div>
         <div className="score-bar">
           <div className="score-bar-fill" style={{ width: `${score}%` }} />
@@ -31,37 +33,37 @@ export default function ProjectCard({ project, index }) {
 
   return (
     <div
-      className="glass-card-hover p-6 sm:p-8 opacity-0 animate-fade-in"
-      style={{ animationDelay: `${index * 0.2}s` }}
+      className="glass-card-hover p-8 sm:p-10 opacity-0 animate-fade-in-up"
+      style={{ animationDelay: `${index * 150}ms` }}
     >
       {/* Header */}
-      <div className="flex items-start justify-between gap-4 mb-4">
+      <div className="flex items-start justify-between gap-6 mb-8">
         <div className="flex-1">
-          <div className="text-xs font-bold text-primary-400/60 tracking-widest mb-2">
-            PROJECT {String(index + 1).padStart(2, '0')}
+          <div className="inline-flex items-center gap-2 px-3 py-1 rounded-full bg-indigo-500/5 border border-indigo-500/20 text-[10px] font-black text-indigo-400 tracking-[0.2em] uppercase mb-4">
+            Blueprint {String(index + 1).padStart(2, '0')}
           </div>
-          <h3 className="text-xl sm:text-2xl font-bold text-white leading-snug">
+          <h3 className="text-2xl sm:text-3xl font-black text-white leading-tight tracking-tight">
             {project.title}
           </h3>
         </div>
       </div>
 
       {/* Problem Statement */}
-      <p className="text-gray-400 text-sm leading-relaxed mb-6">
+      <p className="text-gray-400 text-base leading-relaxed mb-8 font-medium">
         {project.problem_statement}
       </p>
 
       {/* Tech Stack Pills */}
-      <div className="mb-6">
-        <div className="flex items-center gap-2 mb-3">
-          <Layers className="w-4 h-4 text-accent-400" />
-          <span className="text-xs font-semibold text-gray-300 uppercase tracking-wider">Tech Stack</span>
+      <div className="mb-8">
+        <div className="flex items-center gap-2 mb-4">
+          <Layers className="w-4 h-4 text-purple-400" />
+          <span className="text-xs font-black text-gray-300 uppercase tracking-widest">Stack Architecture</span>
         </div>
-        <div className="flex flex-wrap gap-2">
+        <div className="flex flex-wrap gap-2.5">
           {project.tech_stack.map((tech) => (
             <span
               key={tech}
-              className="px-3 py-1 rounded-lg bg-white/[0.04] border border-white/[0.06] text-xs font-medium text-gray-300 hover:border-primary-500/30 hover:text-primary-300 transition-colors"
+              className="px-4 py-1.5 rounded-xl bg-white/[0.02] border border-white/5 text-xs font-bold text-gray-300 hover:border-indigo-500/40 hover:text-indigo-300 transition-all cursor-default"
             >
               {tech}
             </span>
@@ -70,52 +72,52 @@ export default function ProjectCard({ project, index }) {
       </div>
 
       {/* Scores */}
-      <div className="grid grid-cols-2 gap-4 mb-6">
-        <ScoreBar label="Resume Impact" score={project.resume_score} icon={Trophy} />
-        <ScoreBar label="Innovation" score={project.innovation_score} icon={Lightbulb} />
+      <div className="grid grid-cols-1 md:grid-cols-2 gap-8 mb-8">
+        <ScoreBar label="Portfolio Impact" score={project.resume_score} icon={Trophy} />
+        <ScoreBar label="Technical Innovation" score={project.innovation_score} icon={Lightbulb} />
       </div>
 
       {/* Expand / Collapse */}
       <button
         onClick={() => setExpanded(!expanded)}
-        className="w-full flex items-center justify-center gap-2 py-2.5 rounded-xl border border-white/5 bg-white/[0.02] text-gray-400 hover:text-white hover:border-primary-500/20 transition-all text-sm font-medium"
+        className="w-full flex items-center justify-center gap-3 py-3.5 rounded-2xl border border-white/5 bg-white/[0.02] text-gray-400 hover:text-white hover:border-indigo-500/30 transition-all text-sm font-bold group"
       >
-        {expanded ? 'Show Less' : 'View Full Details'}
-        {expanded ? <ChevronUp className="w-4 h-4" /> : <ChevronDown className="w-4 h-4" />}
+        {expanded ? 'Collapse Blueprint' : 'Expand Technical Details'}
+        {expanded ? <ChevronUp className="w-4 h-4 group-hover:-translate-y-0.5 transition-transform" /> : <ChevronDown className="w-4 h-4 group-hover:translate-y-0.5 transition-transform" />}
       </button>
 
       {/* Expanded Content */}
-      {expanded && (
-        <div className="mt-6 space-y-6 animate-fade-in">
+      <div className={`overflow-hidden transition-all duration-700 ease-in-out ${expanded ? 'max-h-[2000px] opacity-100 mt-8' : 'max-h-0 opacity-0'}`}>
+        <div className="space-y-8 pt-4 border-t border-white/5">
           {/* Architecture */}
           <div>
-            <h4 className="text-sm font-semibold text-white mb-2 flex items-center gap-2">
-              <Layers className="w-4 h-4 text-primary-400" />
-              Architecture
+            <h4 className="text-sm font-black text-white mb-3 flex items-center gap-2 uppercase tracking-widest">
+              <Layers className="w-4 h-4 text-indigo-400" />
+              Technical Architecture
             </h4>
-            <p className="text-sm text-gray-400 leading-relaxed bg-white/[0.02] rounded-xl p-4 border border-white/5">
+            <div className="text-sm text-gray-400 leading-relaxed bg-white/[0.01] rounded-2xl p-6 border border-white/5 font-medium">
               {project.architecture}
-            </p>
+            </div>
           </div>
 
           {/* Implementation Roadmap */}
           <div>
-            <h4 className="text-sm font-semibold text-white mb-3 flex items-center gap-2">
-              <CheckCircle2 className="w-4 h-4 text-green-400" />
-              Implementation Roadmap
+            <h4 className="text-sm font-black text-white mb-4 flex items-center gap-2 uppercase tracking-widest">
+              <CheckCircle2 className="w-4 h-4 text-indigo-400" />
+              Development Roadmap
             </h4>
-            <div className="space-y-3">
+            <div className="space-y-4">
               {project.implementation_roadmap.map((step, i) => (
-                <div key={i} className="flex gap-3">
+                <div key={i} className="flex gap-4 group">
                   <div className="flex flex-col items-center">
-                    <div className="w-6 h-6 rounded-full bg-gradient-to-br from-primary-500/20 to-accent-500/20 border border-primary-500/20 flex items-center justify-center shrink-0">
-                      <span className="text-[10px] font-bold text-primary-400">{i + 1}</span>
+                    <div className="w-8 h-8 rounded-xl bg-indigo-500/10 border border-indigo-500/20 flex items-center justify-center shrink-0 group-hover:bg-indigo-500/20 transition-colors">
+                      <span className="text-xs font-black text-indigo-400 uppercase">{i + 1}</span>
                     </div>
                     {i < project.implementation_roadmap.length - 1 && (
-                      <div className="w-px flex-1 bg-gradient-to-b from-primary-500/20 to-transparent mt-1" />
+                      <div className="w-px flex-1 bg-gradient-to-b from-indigo-500/20 to-transparent mt-2" />
                     )}
                   </div>
-                  <p className="text-sm text-gray-400 pb-3">{step}</p>
+                  <p className="text-sm text-gray-400 pb-5 font-medium group-hover:text-gray-300 transition-colors">{step}</p>
                 </div>
               ))}
             </div>
@@ -123,21 +125,21 @@ export default function ProjectCard({ project, index }) {
 
           {/* Challenges */}
           <div>
-            <h4 className="text-sm font-semibold text-white mb-3 flex items-center gap-2">
-              <AlertTriangle className="w-4 h-4 text-amber-400" />
-              Potential Challenges
+            <h4 className="text-sm font-black text-white mb-4 flex items-center gap-2 uppercase tracking-widest">
+              <AlertTriangle className="w-4 h-4 text-amber-500/80" />
+              Complexity & Edge Cases
             </h4>
-            <ul className="space-y-2">
+            <div className="grid gap-3">
               {project.challenges.map((challenge, i) => (
-                <li key={i} className="flex items-start gap-2 text-sm text-gray-400">
-                  <div className="w-1.5 h-1.5 rounded-full bg-amber-400/60 mt-1.5 shrink-0" />
-                  {challenge}
-                </li>
+                <div key={i} className="flex items-start gap-3 p-4 rounded-xl bg-white/[0.01] border border-white/5 hover:border-amber-500/20 transition-colors">
+                  <div className="w-1.5 h-1.5 rounded-full bg-amber-500/60 mt-2 shrink-0 shadow-[0_0_8px_rgba(245,158,11,0.4)]" />
+                  <p className="text-sm text-gray-400 font-medium leading-relaxed">{challenge}</p>
+                </div>
               ))}
-            </ul>
+            </div>
           </div>
         </div>
-      )}
+      </div>
     </div>
   );
 }

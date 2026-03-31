@@ -24,66 +24,66 @@ export default function ProjectForm({ onSubmit, isLoading }) {
   const isValid = form.skills && form.domain && form.time_weeks;
 
   return (
-    <div className="max-w-2xl mx-auto animate-fade-in-up opacity-0">
+    <div className="max-w-2xl mx-auto">
       {/* Header */}
-      <div className="text-center mb-10">
-        <h1 className="text-3xl sm:text-4xl font-bold mb-3">
-          Let's find your <span className="text-gradient">perfect project</span>
+      <div className="text-center mb-12 animate-fade-in-up opacity-0">
+        <h1 className="text-4xl sm:text-5xl font-black mb-4 tracking-tight">
+          Let's find your <span className="text-gradient text-glow">perfect project</span>
         </h1>
-        <p className="text-gray-400">
+        <p className="text-gray-400 text-lg">
           Tell us about yourself and we'll generate tailored project ideas.
         </p>
       </div>
 
       <form onSubmit={handleSubmit} className="space-y-6">
         {/* Skills Input */}
-        <div className="glass-card p-6 space-y-2">
-          <label className="flex items-center gap-2 text-sm font-medium text-gray-300">
-            <Code2 className="w-4 h-4 text-primary-400" />
-            Your Skills
+        <div className="glass-card p-8 space-y-3 animate-fade-in-up opacity-0 animate-delay-100">
+          <label className="flex items-center gap-2.5 text-sm font-bold text-indigo-300 uppercase tracking-widest">
+            <Code2 className="w-4 h-4" />
+            Your Expertise
           </label>
           <input
             type="text"
             value={form.skills}
             onChange={(e) => handleChange('skills', e.target.value)}
-            placeholder="e.g., Python, React, Machine Learning, REST APIs"
-            className="w-full bg-white/[0.03] border border-white/10 rounded-xl px-4 py-3 text-white placeholder-gray-600 focus:outline-none focus:border-primary-500/50 focus:ring-1 focus:ring-primary-500/20 transition-all text-sm"
+            placeholder="e.g., Python, React, Machine Learning"
+            className="w-full bg-white/[0.02] border border-white/10 rounded-2xl px-5 py-4 text-white placeholder-gray-600 focus:outline-none focus:border-indigo-500/50 focus:ring-4 focus:ring-indigo-500/10 transition-all text-base"
           />
-          <p className="text-xs text-gray-600">Comma-separated list of technologies you know</p>
+          <p className="text-xs text-gray-500 font-medium">What technologies do you know best?</p>
         </div>
 
         {/* Domain Input */}
-        <div className="glass-card p-6 space-y-2">
-          <label className="flex items-center gap-2 text-sm font-medium text-gray-300">
-            <Globe className="w-4 h-4 text-accent-400" />
+        <div className="glass-card p-8 space-y-3 animate-fade-in-up opacity-0 animate-delay-200">
+          <label className="flex items-center gap-2.5 text-sm font-bold text-purple-300 uppercase tracking-widest">
+            <Globe className="w-4 h-4" />
             Domain of Interest
           </label>
           <input
             type="text"
             value={form.domain}
             onChange={(e) => handleChange('domain', e.target.value)}
-            placeholder="e.g., Healthcare, Finance, Education, E-commerce"
-            className="w-full bg-white/[0.03] border border-white/10 rounded-xl px-4 py-3 text-white placeholder-gray-600 focus:outline-none focus:border-primary-500/50 focus:ring-1 focus:ring-primary-500/20 transition-all text-sm"
+            placeholder="e.g., Healthcare, FinTech, Web3"
+            className="w-full bg-white/[0.02] border border-white/10 rounded-2xl px-5 py-4 text-white placeholder-gray-600 focus:outline-none focus:border-purple-500/50 focus:ring-4 focus:ring-purple-500/10 transition-all text-base"
           />
-          <p className="text-xs text-gray-600">The industry or field you want to build for</p>
+          <p className="text-xs text-gray-500 font-medium">What industry excites you most?</p>
         </div>
 
         {/* Difficulty Selector */}
-        <div className="glass-card p-6 space-y-3">
-          <label className="flex items-center gap-2 text-sm font-medium text-gray-300">
-            <BarChart3 className="w-4 h-4 text-primary-400" />
-            Difficulty Level
+        <div className="glass-card p-8 space-y-4 animate-fade-in-up opacity-0 animate-delay-300">
+          <label className="flex items-center gap-2.5 text-sm font-bold text-indigo-300 uppercase tracking-widest">
+            <BarChart3 className="w-4 h-4" />
+            Complexity Level
           </label>
-          <div className="flex gap-3">
+          <div className="flex gap-4">
             {difficulties.map((level) => (
               <button
                 type="button"
                 key={level}
                 onClick={() => handleChange('difficulty', level)}
-                className={`flex-1 py-2.5 rounded-xl text-sm font-medium transition-all duration-300 border ${
+                className={`flex-1 py-3.5 rounded-2xl text-sm font-bold transition-all duration-500 border ${
                   form.difficulty === level
-                    ? 'bg-gradient-to-r from-primary-500/20 to-accent-500/20 border-primary-500/40 text-white shadow-lg shadow-primary-500/10'
-                    : 'bg-white/[0.02] border-white/5 text-gray-500 hover:border-white/10 hover:text-gray-300'
+                    ? 'bg-indigo-500/20 border-indigo-500/50 text-white shadow-[0_0_20px_rgba(99,102,241,0.2)]'
+                    : 'bg-white/[0.02] border-white/5 text-gray-500 hover:border-white/20 hover:text-gray-300'
                 }`}
               >
                 {level}
@@ -93,10 +93,10 @@ export default function ProjectForm({ onSubmit, isLoading }) {
         </div>
 
         {/* Time Input */}
-        <div className="glass-card p-6 space-y-2">
-          <label className="flex items-center gap-2 text-sm font-medium text-gray-300">
-            <Clock className="w-4 h-4 text-accent-400" />
-            Time Available (weeks)
+        <div className="glass-card p-8 space-y-3 animate-fade-in-up opacity-0 animate-delay-400">
+          <label className="flex items-center gap-2.5 text-sm font-bold text-purple-300 uppercase tracking-widest">
+            <Clock className="w-4 h-4" />
+            Timeline (weeks)
           </label>
           <input
             type="number"
@@ -104,25 +104,30 @@ export default function ProjectForm({ onSubmit, isLoading }) {
             max="52"
             value={form.time_weeks}
             onChange={(e) => handleChange('time_weeks', e.target.value)}
-            placeholder="e.g., 4, 8, 12"
-            className="w-full bg-white/[0.03] border border-white/10 rounded-xl px-4 py-3 text-white placeholder-gray-600 focus:outline-none focus:border-primary-500/50 focus:ring-1 focus:ring-primary-500/20 transition-all text-sm"
+            placeholder="How long is your runway?"
+            className="w-full bg-white/[0.02] border border-white/10 rounded-2xl px-5 py-4 text-white placeholder-gray-600 focus:outline-none focus:border-purple-500/50 focus:ring-4 focus:ring-purple-500/10 transition-all text-base"
           />
-          <p className="text-xs text-gray-600">How many weeks can you dedicate to this project?</p>
         </div>
 
         {/* Submit Button */}
-        <button
-          type="submit"
-          disabled={!isValid || isLoading}
-          className={`w-full btn-primary py-4 rounded-xl text-base ${
-            !isValid ? 'opacity-40 cursor-not-allowed' : ''
-          }`}
-        >
-          <span className="flex items-center justify-center gap-2">
-            <Sparkles className="w-5 h-5" />
-            Generate Project Ideas
-          </span>
-        </button>
+        <div className="pt-4 animate-fade-in-up opacity-0 animate-delay-500">
+          <button
+            type="submit"
+            disabled={!isValid || isLoading}
+            className={`w-full btn-primary py-5 rounded-2xl text-lg font-bold shadow-2xl transition-all ${
+              !isValid || isLoading ? 'opacity-40 cursor-not-allowed grayscale' : 'hover:scale-[1.02] active:scale-[0.98]'
+            }`}
+          >
+            <span className="flex items-center justify-center gap-3">
+              {isLoading ? (
+                <div className="w-5 h-5 border-2 border-white/30 border-t-white rounded-full animate-spin" />
+              ) : (
+                <Sparkles className="w-6 h-6" />
+              )}
+              {isLoading ? 'Architecting your project...' : 'Generate Project Blueprint'}
+            </span>
+          </button>
+        </div>
       </form>
     </div>
   );
