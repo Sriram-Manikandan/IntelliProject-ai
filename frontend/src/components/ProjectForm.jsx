@@ -9,25 +9,31 @@ export default function ProjectForm({ onSubmit, isLoading }) {
     domain: '',
     difficulty: 'Intermediate',
   });
-  const [timeValue, setTimeValue] = useState('');
-  const [timeUnit, setTimeUnit] = useState('hours'); // 'hours' | 'days' | 'weeks'
+  const [weeks, setWeeks] = useState(0);
+  const [days, setDays]   = useState(0);
+  const [hours, setHours] = useState(0);
 
   const handleChange = (field, value) => {
     setForm((prev) => ({ ...prev, [field]: value }));
   };
 
-  // Working-hour multipliers (1 day = 8h, 1 week = 40h)
-  const toHours = { hours: 1, days: 8, weeks: 40 };
-  const unitLimits = { hours: [1, 99], days: [1, 30], weeks: [1, 52] };
+  // Working-hour multipliers: 1 week = 40h, 1 day = 8h
+  const totalHours = (weeks * 40) + (days * 8) + hours;
+
+  // Human-readable preview
+  const previewParts = [];
+  if (weeks)  previewParts.push(`${weeks} week${weeks  > 1 ? 's' : ''}`);
+  if (days)   previewParts.push(`${days} day${days    > 1 ? 's' : ''}`);
+  if (hours)  previewParts.push(`${hours} hour${hours > 1 ? 's' : ''}`);
+  const preview = previewParts.length ? previewParts.join(' ') : null;
 
   const handleSubmit = (e) => {
     e.preventDefault();
-    if (!form.skills || !form.domain || !timeValue) return;
-    const totalHours = Math.round(Number(timeValue) * toHours[timeUnit]);
+    if (!form.skills || !form.domain || totalHours < 1) return;
     onSubmit({ ...form, time_hours: totalHours });
   };
 
-  const isValid = form.skills && form.domain && timeValue;
+  const isValid = form.skills && form.domain && totalHours >= 1;
 
   return (
     <div className="max-w-2xl mx-auto">
@@ -99,37 +105,62 @@ export default function ProjectForm({ onSubmit, isLoading }) {
         </div>
 
         {/* Time Input */}
-        <div className="glass-card p-8 space-y-3 animate-fade-in-up opacity-0 animate-delay-400">
+        <div className="glass-card p-8 space-y-4 animate-fade-in-up opacity-0 animate-delay-400">
           <label className="flex items-center gap-2.5 text-sm font-bold text-purple-300 uppercase tracking-widest">
             <Clock className="w-4 h-4" />
             Available Time
           </label>
-          <div className="flex gap-3">
-            {/* Quantity */}
-            <input
-              type="number"
-              min={unitLimits[timeUnit][0]}
-              max={unitLimits[timeUnit][1]}
-              value={timeValue}
-              onChange={(e) => setTimeValue(e.target.value)}
-              placeholder="e.g. 2"
-              className="flex-1 bg-white/[0.02] border border-white/10 rounded-2xl px-5 py-4 text-white placeholder-gray-600 focus:outline-none focus:border-purple-500/50 focus:ring-4 focus:ring-purple-500/10 transition-all text-base"
-            />
-            {/* Unit Selector */}
-            <select
-              value={timeUnit}
-              onChange={(e) => { setTimeUnit(e.target.value); setTimeValue(''); }}
-              className="bg-white/[0.04] border border-white/10 rounded-2xl px-4 py-4 text-white font-bold focus:outline-none focus:border-purple-500/50 focus:ring-4 focus:ring-purple-500/10 transition-all text-sm cursor-pointer appearance-none text-center"
-            >
-              <option value="hours" className="bg-[#0d0d0d]">Hours</option>
-              <option value="days" className="bg-[#0d0d0d]">Days</option>
-              <option value="weeks" className="bg-[#0d0d0d]">Weeks</option>
-            </select>
+
+          {/* Three duration selects */}
+          <div className="grid grid-cols-3 gap-3">
+            {/* Weeks */}
+            <div className="flex flex-col items-center gap-2">
+              <select
+                value={weeks}
+                onChange={(e) => setWeeks(Number(e.target.value))}
+                className="w-full bg-white/[0.04] border border-white/10 rounded-2xl px-3 py-4 text-white font-bold text-lg focus:outline-none focus:border-purple-500/50 focus:ring-4 focus:ring-purple-500/10 transition-all text-center appearance-none cursor-pointer"
+              >
+                {Array.from({ length: 53 }, (_, i) => (
+                  <option key={i} value={i} className="bg-[#0d0d0d]">{i}</option>
+                ))}
+              </select>
+              <span className="text-xs font-black text-gray-500 uppercase tracking-widest">Weeks</span>
+            </div>
+
+            {/* Days */}
+            <div className="flex flex-col items-center gap-2">
+              <select
+                value={days}
+                onChange={(e) => setDays(Number(e.target.value))}
+                className="w-full bg-white/[0.04] border border-white/10 rounded-2xl px-3 py-4 text-white font-bold text-lg focus:outline-none focus:border-purple-500/50 focus:ring-4 focus:ring-purple-500/10 transition-all text-center appearance-none cursor-pointer"
+              >
+                {Array.from({ length: 5 }, (_, i) => (
+                  <option key={i} value={i} className="bg-[#0d0d0d]">{i}</option>
+                ))}
+              </select>
+              <span className="text-xs font-black text-gray-500 uppercase tracking-widest">Days</span>
+            </div>
+
+            {/* Hours */}
+            <div className="flex flex-col items-center gap-2">
+              <select
+                value={hours}
+                onChange={(e) => setHours(Number(e.target.value))}
+                className="w-full bg-white/[0.04] border border-white/10 rounded-2xl px-3 py-4 text-white font-bold text-lg focus:outline-none focus:border-purple-500/50 focus:ring-4 focus:ring-purple-500/10 transition-all text-center appearance-none cursor-pointer"
+              >
+                {Array.from({ length: 8 }, (_, i) => (
+                  <option key={i} value={i} className="bg-[#0d0d0d]">{i}</option>
+                ))}
+              </select>
+              <span className="text-xs font-black text-gray-500 uppercase tracking-widest">Hours</span>
+            </div>
           </div>
+
+          {/* Live summary */}
           <p className="text-xs text-gray-500 font-medium">
-            {timeUnit === 'hours' && 'Up to 99 hours'}
-            {timeUnit === 'days'  && `Up to 30 days · ${timeValue ? timeValue * 8 : '?'} working hours`}
-            {timeUnit === 'weeks' && `Up to 52 weeks · ${timeValue ? timeValue * 40 : '?'} working hours`}
+            {preview
+              ? <span>Total: <span className="text-indigo-400 font-bold">{preview}</span> &middot; {totalHours} working hours</span>
+              : 'Select your available time above'}
           </p>
         </div>
 
