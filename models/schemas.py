@@ -30,12 +30,12 @@ class ProjectRequest(BaseModel):
         example="Intermediate",
         description="Beginner | Intermediate | Advanced",
     )
-    time_weeks: int = Field(
+    time_hours: int = Field(
         ...,
         ge=1,
-        le=52,
-        example=8,
-        description="Available time budget in weeks (1–52)",
+        le=999,
+        example=40,
+        description="Available time budget in hours (1–999)",
     )
 
 

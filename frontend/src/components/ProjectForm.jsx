@@ -8,7 +8,7 @@ export default function ProjectForm({ onSubmit, isLoading }) {
     skills: '',
     domain: '',
     difficulty: 'Intermediate',
-    time_weeks: '',
+    time_hours: '',
   });
 
   const handleChange = (field, value) => {
@@ -17,11 +17,11 @@ export default function ProjectForm({ onSubmit, isLoading }) {
 
   const handleSubmit = (e) => {
     e.preventDefault();
-    if (!form.skills || !form.domain || !form.time_weeks) return;
+    if (!form.skills || !form.domain || !form.time_hours) return;
     onSubmit(form);
   };
 
-  const isValid = form.skills && form.domain && form.time_weeks;
+  const isValid = form.skills && form.domain && form.time_hours;
 
   return (
     <div className="max-w-2xl mx-auto">
@@ -96,17 +96,18 @@ export default function ProjectForm({ onSubmit, isLoading }) {
         <div className="glass-card p-8 space-y-3 animate-fade-in-up opacity-0 animate-delay-400">
           <label className="flex items-center gap-2.5 text-sm font-bold text-purple-300 uppercase tracking-widest">
             <Clock className="w-4 h-4" />
-            Timeline (weeks)
+            Available Hours
           </label>
           <input
             type="number"
             min="1"
-            max="52"
-            value={form.time_weeks}
-            onChange={(e) => handleChange('time_weeks', e.target.value)}
-            placeholder="How long is your runway?"
+            max="999"
+            value={form.time_hours}
+            onChange={(e) => handleChange('time_hours', e.target.value)}
+            placeholder="e.g. 40 hours to work on your project"
             className="w-full bg-white/[0.02] border border-white/10 rounded-2xl px-5 py-4 text-white placeholder-gray-600 focus:outline-none focus:border-purple-500/50 focus:ring-4 focus:ring-purple-500/10 transition-all text-base"
           />
+          <p className="text-xs text-gray-500 font-medium">Total hours you can dedicate (1–999)</p>
         </div>
 
         {/* Submit Button */}

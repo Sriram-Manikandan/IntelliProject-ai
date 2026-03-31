@@ -1,10 +1,10 @@
 const API_BASE = 'http://localhost:8000/api/v1';
 
-export async function generateProjects({ skills, domain, difficulty, time_weeks }) {
+export async function generateProjects({ skills, domain, difficulty, time_hours }) {
   const res = await fetch(`${API_BASE}/generate`, {
     method: 'POST',
     headers: { 'Content-Type': 'application/json' },
-    body: JSON.stringify({ skills, domain, difficulty, time_weeks }),
+    body: JSON.stringify({ skills, domain, difficulty, time_hours }),
   });
 
   if (!res.ok) {

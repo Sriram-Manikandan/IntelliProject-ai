@@ -1,4 +1,5 @@
 import React from 'react';
+import { Link } from 'react-router-dom';
 import { ArrowLeft, RefreshCw, Code2, Globe, BarChart3, Clock } from 'lucide-react';
 import ProjectCard from './ProjectCard';
 
@@ -6,17 +7,28 @@ const summaryIcons = {
   skills: Code2,
   domain: Globe,
   difficulty: BarChart3,
-  time_weeks: Clock,
+  time_hours: Clock,
 };
 
 const summaryLabels = {
   skills: 'Skills',
   domain: 'Domain',
   difficulty: 'Difficulty',
-  time_weeks: 'Time (weeks)',
+  time_hours: 'Time',
+  time_display: null, // rendered separately — skip in loop
 };
 
 export default function ResultsView({ data, onReset }) {
+  const { input_summary, recommendations } = data;
+
+  // Show time as the human-readable display value, not raw hours
+  const displaySummary = {
+    skills: input_summary.skills,
+    domain: input_summary.domain,
+    difficulty: input_summary.difficulty,
+    time_hours: input_summary.time_display || `${input_summary.time_hours}h`,
+  };
+
   return (
     <div className="max-w-5xl mx-auto px-6 py-12">
       {/* Header */}
@@ -25,14 +37,16 @@ export default function ResultsView({ data, onReset }) {
           Your <span className="text-gradient text-glow">Project Architecture</span>
         </h1>
         <p className="text-gray-400 text-lg max-w-2xl mx-auto">
-          We've architected {data.recommendations.length} personalized roadmaps based on your expertise and goals.
+          We've architected {recommendations.length} personalized roadmaps based on your expertise and goals.
         </p>
       </div>
 
       {/* Input Summary */}
       <div className="glass-card p-6 mb-12 flex flex-wrap items-center gap-6 justify-center animate-fade-in-up opacity-0 animate-delay-100">
-        {Object.entries(data.input_summary).map(([key, value], i) => {
+        {Object.entries(displaySummary).map(([key, value]) => {
           const Icon = summaryIcons[key];
+          const label = summaryLabels[key];
+          if (!label) return null;
           return (
             <div
               key={key}
@@ -42,7 +56,7 @@ export default function ResultsView({ data, onReset }) {
                 {Icon && <Icon className="w-4 h-4" />}
               </div>
               <div className="flex flex-col">
-                <span className="text-[10px] uppercase tracking-widest text-gray-500 font-bold">{summaryLabels[key]}</span>
+                <span className="text-[10px] uppercase tracking-widest text-gray-500 font-bold">{label}</span>
                 <span className="text-sm font-bold text-gray-200">{value}</span>
               </div>
             </div>
@@ -52,7 +66,7 @@ export default function ResultsView({ data, onReset }) {
 
       {/* Project Cards */}
       <div className="grid gap-8 mb-16">
-        {data.recommendations.map((project, index) => (
+        {recommendations.map((project, index) => (
           <ProjectCard key={index} project={project} index={index} />
         ))}
       </div>
@@ -71,7 +85,7 @@ export default function ResultsView({ data, onReset }) {
           className="flex items-center gap-2 text-gray-500 hover:text-white transition-all text-sm font-bold group"
         >
           <ArrowLeft className="w-4 h-4 group-hover:-translate-x-1 transition-transform" />
-          Back to Terminal
+          Back to Home
         </Link>
       </div>
     </div>
