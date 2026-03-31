@@ -111,47 +111,47 @@ export default function ProjectForm({ onSubmit, isLoading }) {
             Available Time
           </label>
 
-          {/* Three duration selects */}
+          {/* Three duration inputs */}
           <div className="grid grid-cols-3 gap-3">
             {/* Weeks */}
             <div className="flex flex-col items-center gap-2">
-              <select
-                value={weeks}
-                onChange={(e) => setWeeks(Number(e.target.value))}
-                className="w-full bg-white/[0.04] border border-white/10 rounded-2xl px-3 py-4 text-white font-bold text-lg focus:outline-none focus:border-purple-500/50 focus:ring-4 focus:ring-purple-500/10 transition-all text-center appearance-none cursor-pointer"
-              >
-                {Array.from({ length: 53 }, (_, i) => (
-                  <option key={i} value={i} className="bg-[#0d0d0d]">{i}</option>
-                ))}
-              </select>
+              <input
+                type="number"
+                min="0"
+                max="52"
+                value={weeks || ''}
+                onChange={(e) => setWeeks(Math.max(0, Math.min(52, Number(e.target.value) || 0)))}
+                placeholder="0"
+                className="w-full bg-white/[0.02] border border-white/10 rounded-2xl px-3 py-4 text-white font-bold text-lg focus:outline-none focus:border-purple-500/50 focus:ring-4 focus:ring-purple-500/10 transition-all text-center"
+              />
               <span className="text-xs font-black text-gray-500 uppercase tracking-widest">Weeks</span>
             </div>
 
             {/* Days */}
             <div className="flex flex-col items-center gap-2">
-              <select
-                value={days}
-                onChange={(e) => setDays(Number(e.target.value))}
-                className="w-full bg-white/[0.04] border border-white/10 rounded-2xl px-3 py-4 text-white font-bold text-lg focus:outline-none focus:border-purple-500/50 focus:ring-4 focus:ring-purple-500/10 transition-all text-center appearance-none cursor-pointer"
-              >
-                {Array.from({ length: 5 }, (_, i) => (
-                  <option key={i} value={i} className="bg-[#0d0d0d]">{i}</option>
-                ))}
-              </select>
+              <input
+                type="number"
+                min="0"
+                max="4"
+                value={days || ''}
+                onChange={(e) => setDays(Math.max(0, Math.min(4, Number(e.target.value) || 0)))}
+                placeholder="0"
+                className="w-full bg-white/[0.02] border border-white/10 rounded-2xl px-3 py-4 text-white font-bold text-lg focus:outline-none focus:border-purple-500/50 focus:ring-4 focus:ring-purple-500/10 transition-all text-center"
+              />
               <span className="text-xs font-black text-gray-500 uppercase tracking-widest">Days</span>
             </div>
 
             {/* Hours */}
             <div className="flex flex-col items-center gap-2">
-              <select
-                value={hours}
-                onChange={(e) => setHours(Number(e.target.value))}
-                className="w-full bg-white/[0.04] border border-white/10 rounded-2xl px-3 py-4 text-white font-bold text-lg focus:outline-none focus:border-purple-500/50 focus:ring-4 focus:ring-purple-500/10 transition-all text-center appearance-none cursor-pointer"
-              >
-                {Array.from({ length: 8 }, (_, i) => (
-                  <option key={i} value={i} className="bg-[#0d0d0d]">{i}</option>
-                ))}
-              </select>
+              <input
+                type="number"
+                min="0"
+                max="7"
+                value={hours || ''}
+                onChange={(e) => setHours(Math.max(0, Math.min(7, Number(e.target.value) || 0)))}
+                placeholder="0"
+                className="w-full bg-white/[0.02] border border-white/10 rounded-2xl px-3 py-4 text-white font-bold text-lg focus:outline-none focus:border-purple-500/50 focus:ring-4 focus:ring-purple-500/10 transition-all text-center"
+              />
               <span className="text-xs font-black text-gray-500 uppercase tracking-widest">Hours</span>
             </div>
           </div>
@@ -160,7 +160,7 @@ export default function ProjectForm({ onSubmit, isLoading }) {
           <p className="text-xs text-gray-500 font-medium">
             {preview
               ? <span>Total: <span className="text-indigo-400 font-bold">{preview}</span> &middot; {totalHours} working hours</span>
-              : 'Select your available time above'}
+              : 'Enter your available time above'}
           </p>
         </div>
 
