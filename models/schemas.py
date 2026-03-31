@@ -4,7 +4,7 @@
 # structured response serialisation
 # ─────────────────────────────────────────────
 
-from pydantic import BaseModel, Field
+from pydantic import BaseModel, Field, field_validator
 from typing import List, Literal
 
 
@@ -37,6 +37,14 @@ class ProjectRequest(BaseModel):
         example=40,
         description="Available working hours (1h min – 52 weeks / 2080h max)",
     )
+
+    @field_validator("skills", "domain", mode="before")
+    @classmethod
+    def strip_whitespace(cls, v: str) -> str:
+        """Strip surrounding whitespace so '  ' cannot bypass min_length=2."""
+        if isinstance(v, str):
+            return v.strip()
+        return v
 
 
 # ── Sub-models ───────────────────────────────

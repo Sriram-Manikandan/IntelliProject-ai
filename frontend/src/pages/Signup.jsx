@@ -27,10 +27,11 @@ export default function Signup() {
 
           <form className="space-y-5" onSubmit={handleSignup}>
             <div className="space-y-3">
-              <label className="text-[10px] font-black text-gray-500 uppercase tracking-[0.2em] pl-1">Full Name</label>
+              <label htmlFor="signup-name" className="text-[10px] font-black text-gray-500 uppercase tracking-[0.2em] pl-1">Full Name</label>
               <div className="relative group">
                 <User className="absolute left-5 top-1/2 -translate-y-1/2 w-5 h-5 text-gray-500 group-focus-within:text-indigo-400 transition-colors" />
                 <input 
+                  id="signup-name"
                   type="text" 
                   placeholder="John Architect"
                   className="w-full bg-white/[0.02] border border-white/10 rounded-2xl py-4 pl-14 pr-5 text-white placeholder:text-gray-600 focus:outline-none focus:border-indigo-500/40 focus:ring-4 focus:ring-indigo-500/5 transition-all text-sm font-medium"
@@ -39,10 +40,11 @@ export default function Signup() {
             </div>
 
             <div className="space-y-3">
-              <label className="text-[10px] font-black text-gray-500 uppercase tracking-[0.2em] pl-1">Neural ID (Email)</label>
+              <label htmlFor="signup-email" className="text-[10px] font-black text-gray-500 uppercase tracking-[0.2em] pl-1">Neural ID (Email)</label>
               <div className="relative group">
                 <Mail className="absolute left-5 top-1/2 -translate-y-1/2 w-5 h-5 text-gray-500 group-focus-within:text-indigo-400 transition-colors" />
                 <input 
+                  id="signup-email"
                   type="email" 
                   placeholder="architect@nexus.com"
                   className="w-full bg-white/[0.02] border border-white/10 rounded-2xl py-4 pl-14 pr-5 text-white placeholder:text-gray-600 focus:outline-none focus:border-indigo-500/40 focus:ring-4 focus:ring-indigo-500/5 transition-all text-sm font-medium"
@@ -51,10 +53,11 @@ export default function Signup() {
             </div>
 
             <div className="space-y-3">
-              <label className="text-[10px] font-black text-gray-500 uppercase tracking-[0.2em] pl-1">Access Key (Password)</label>
+              <label htmlFor="signup-password" className="text-[10px] font-black text-gray-500 uppercase tracking-[0.2em] pl-1">Access Key (Password)</label>
               <div className="relative group">
                 <Lock className="absolute left-5 top-1/2 -translate-y-1/2 w-5 h-5 text-gray-500 group-focus-within:text-indigo-400 transition-colors" />
                 <input 
+                  id="signup-password"
                   type="password" 
                   placeholder="Create access key"
                   className="w-full bg-white/[0.02] border border-white/10 rounded-2xl py-4 pl-14 pr-5 text-white placeholder:text-gray-600 focus:outline-none focus:border-indigo-500/40 focus:ring-4 focus:ring-indigo-500/5 transition-all text-sm font-medium"

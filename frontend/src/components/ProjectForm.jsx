@@ -50,11 +50,12 @@ export default function ProjectForm({ onSubmit, isLoading }) {
       <form onSubmit={handleSubmit} className="space-y-6">
         {/* Skills Input */}
         <div className="glass-card p-8 space-y-3 animate-fade-in-up opacity-0 animate-delay-100">
-          <label className="flex items-center gap-2.5 text-sm font-bold text-indigo-300 uppercase tracking-widest">
+          <label htmlFor="skills" className="flex items-center gap-2.5 text-sm font-bold text-indigo-300 uppercase tracking-widest">
             <Code2 className="w-4 h-4" />
             Your Expertise
           </label>
           <input
+            id="skills"
             type="text"
             value={form.skills}
             onChange={(e) => handleChange('skills', e.target.value)}
@@ -66,11 +67,12 @@ export default function ProjectForm({ onSubmit, isLoading }) {
 
         {/* Domain Input */}
         <div className="glass-card p-8 space-y-3 animate-fade-in-up opacity-0 animate-delay-200">
-          <label className="flex items-center gap-2.5 text-sm font-bold text-purple-300 uppercase tracking-widest">
+          <label htmlFor="domain" className="flex items-center gap-2.5 text-sm font-bold text-purple-300 uppercase tracking-widest">
             <Globe className="w-4 h-4" />
             Domain of Interest
           </label>
           <input
+            id="domain"
             type="text"
             value={form.domain}
             onChange={(e) => handleChange('domain', e.target.value)}
@@ -116,6 +118,7 @@ export default function ProjectForm({ onSubmit, isLoading }) {
             {/* Weeks */}
             <div className="flex flex-col items-center gap-2">
               <input
+                id="time-weeks"
                 type="number"
                 min="0"
                 max="52"
@@ -123,13 +126,15 @@ export default function ProjectForm({ onSubmit, isLoading }) {
                 onChange={(e) => setWeeks(Math.max(0, Math.min(52, Number(e.target.value) || 0)))}
                 placeholder="0"
                 className="w-full bg-white/[0.02] border border-white/10 rounded-2xl px-3 py-4 text-white font-bold text-lg focus:outline-none focus:border-purple-500/50 focus:ring-4 focus:ring-purple-500/10 transition-all text-center"
+                aria-label="Weeks"
               />
-              <span className="text-xs font-black text-gray-500 uppercase tracking-widest">Weeks</span>
+              <label htmlFor="time-weeks" className="text-xs font-black text-gray-500 uppercase tracking-widest">Weeks</label>
             </div>
 
             {/* Days */}
             <div className="flex flex-col items-center gap-2">
               <input
+                id="time-days"
                 type="number"
                 min="0"
                 max="4"
@@ -137,13 +142,15 @@ export default function ProjectForm({ onSubmit, isLoading }) {
                 onChange={(e) => setDays(Math.max(0, Math.min(4, Number(e.target.value) || 0)))}
                 placeholder="0"
                 className="w-full bg-white/[0.02] border border-white/10 rounded-2xl px-3 py-4 text-white font-bold text-lg focus:outline-none focus:border-purple-500/50 focus:ring-4 focus:ring-purple-500/10 transition-all text-center"
+                aria-label="Days"
               />
-              <span className="text-xs font-black text-gray-500 uppercase tracking-widest">Days</span>
+              <label htmlFor="time-days" className="text-xs font-black text-gray-500 uppercase tracking-widest">Days</label>
             </div>
 
             {/* Hours */}
             <div className="flex flex-col items-center gap-2">
               <input
+                id="time-hours"
                 type="number"
                 min="0"
                 max="7"
@@ -151,8 +158,9 @@ export default function ProjectForm({ onSubmit, isLoading }) {
                 onChange={(e) => setHours(Math.max(0, Math.min(7, Number(e.target.value) || 0)))}
                 placeholder="0"
                 className="w-full bg-white/[0.02] border border-white/10 rounded-2xl px-3 py-4 text-white font-bold text-lg focus:outline-none focus:border-purple-500/50 focus:ring-4 focus:ring-purple-500/10 transition-all text-center"
+                aria-label="Hours"
               />
-              <span className="text-xs font-black text-gray-500 uppercase tracking-widest">Hours</span>
+              <label htmlFor="time-hours" className="text-xs font-black text-gray-500 uppercase tracking-widest">Hours</label>
             </div>
           </div>
 

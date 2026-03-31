@@ -27,10 +27,11 @@ export default function Login() {
 
           <form className="space-y-6" onSubmit={handleLogin}>
             <div className="space-y-3">
-              <label className="text-[10px] font-black text-gray-500 uppercase tracking-[0.2em] pl-1">Neural ID (Email)</label>
+              <label htmlFor="login-email" className="text-[10px] font-black text-gray-500 uppercase tracking-[0.2em] pl-1">Neural ID (Email)</label>
               <div className="relative group">
                 <Mail className="absolute left-5 top-1/2 -translate-y-1/2 w-5 h-5 text-gray-500 group-focus-within:text-indigo-400 transition-colors" />
                 <input 
+                  id="login-email"
                   type="email" 
                   placeholder="architect@nexus.com"
                   className="w-full bg-white/[0.02] border border-white/10 rounded-2xl py-4 pl-14 pr-5 text-white placeholder:text-gray-600 focus:outline-none focus:border-indigo-500/40 focus:ring-4 focus:ring-indigo-500/5 transition-all text-sm font-medium"
@@ -39,10 +40,11 @@ export default function Login() {
             </div>
 
             <div className="space-y-3">
-              <label className="text-[10px] font-black text-gray-500 uppercase tracking-[0.2em] pl-1">Access Key (Password)</label>
+              <label htmlFor="login-password" className="text-[10px] font-black text-gray-500 uppercase tracking-[0.2em] pl-1">Access Key (Password)</label>
               <div className="relative group">
                 <Lock className="absolute left-5 top-1/2 -translate-y-1/2 w-5 h-5 text-gray-500 group-focus-within:text-indigo-400 transition-colors" />
                 <input 
+                  id="login-password"
                   type="password" 
                   placeholder="••••••••"
                   className="w-full bg-white/[0.02] border border-white/10 rounded-2xl py-4 pl-14 pr-5 text-white placeholder:text-gray-600 focus:outline-none focus:border-indigo-500/40 focus:ring-4 focus:ring-indigo-500/5 transition-all text-sm font-medium"
@@ -51,9 +53,9 @@ export default function Login() {
             </div>
 
             <div className="flex items-center justify-between pt-2">
-              <label className="flex items-center gap-3 cursor-pointer group">
+              <label htmlFor="login-remember" className="flex items-center gap-3 cursor-pointer group">
                 <div className="relative">
-                  <input type="checkbox" className="peer sr-only" />
+                  <input id="login-remember" type="checkbox" className="peer sr-only" />
                   <div className="w-5 h-5 rounded-lg border-2 border-white/10 bg-white/5 peer-checked:bg-indigo-500 peer-checked:border-indigo-500 transition-all shadow-[0_0_10px_rgba(99,102,241,0)] peer-checked:shadow-[0_0_10px_rgba(99,102,241,0.4)]" />
                   <div className="absolute inset-0 flex items-center justify-center text-white opacity-0 peer-checked:opacity-100 transition-opacity">
                     <svg className="w-3.5 h-3.5" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="4" strokeLinecap="round" strokeLinejoin="round"><polyline points="20 6 9 17 4 12" /></svg>
