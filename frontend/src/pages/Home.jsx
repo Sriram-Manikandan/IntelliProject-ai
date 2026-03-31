@@ -1,7 +1,6 @@
 import React from 'react';
 import Navbar from '../components/Navbar';
 import Hero from '../components/Hero';
-import Features from '../components/Features';
 import HowItWorks from '../components/HowItWorks';
 import AboutSection from '../components/AboutSection';
 import SampleShowcase from '../components/SampleShowcase';
@@ -17,7 +16,6 @@ export default function Home() {
       <main>
         <Hero />
         <AboutSection />
-        <Features />
         <SampleShowcase />
         <HowItWorks />
         <Testimonials />

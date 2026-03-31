@@ -9,6 +9,7 @@ import json
 import re
 from groq import Groq
 from dotenv import load_dotenv
+from tenacity import retry, stop_after_attempt, wait_exponential
 
 load_dotenv()
 
@@ -100,7 +101,12 @@ Respond with the JSON array only. Absolutely nothing else."""
  
  
 # ── LLM Caller ────────────────────────────────
- 
+
+@retry(
+    stop=stop_after_attempt(3),
+    wait=wait_exponential(multiplier=1, min=2, max=10),
+    reraise=True
+)
 async def _call_groq(prompt: str) -> list[dict]:
     """
     Call Groq (llama-3.3-70b-versatile) and return a parsed list of project idea dicts.
