@@ -8,20 +8,26 @@ export default function ProjectForm({ onSubmit, isLoading }) {
     skills: '',
     domain: '',
     difficulty: 'Intermediate',
-    time_hours: '',
   });
+  const [timeValue, setTimeValue] = useState('');
+  const [timeUnit, setTimeUnit] = useState('hours'); // 'hours' | 'days' | 'weeks'
 
   const handleChange = (field, value) => {
     setForm((prev) => ({ ...prev, [field]: value }));
   };
 
+  // Working-hour multipliers (1 day = 8h, 1 week = 40h)
+  const toHours = { hours: 1, days: 8, weeks: 40 };
+  const unitLimits = { hours: [1, 99], days: [1, 30], weeks: [1, 52] };
+
   const handleSubmit = (e) => {
     e.preventDefault();
-    if (!form.skills || !form.domain || !form.time_hours) return;
-    onSubmit(form);
+    if (!form.skills || !form.domain || !timeValue) return;
+    const totalHours = Math.round(Number(timeValue) * toHours[timeUnit]);
+    onSubmit({ ...form, time_hours: totalHours });
   };
 
-  const isValid = form.skills && form.domain && form.time_hours;
+  const isValid = form.skills && form.domain && timeValue;
 
   return (
     <div className="max-w-2xl mx-auto">
@@ -96,18 +102,35 @@ export default function ProjectForm({ onSubmit, isLoading }) {
         <div className="glass-card p-8 space-y-3 animate-fade-in-up opacity-0 animate-delay-400">
           <label className="flex items-center gap-2.5 text-sm font-bold text-purple-300 uppercase tracking-widest">
             <Clock className="w-4 h-4" />
-            Available Hours
+            Available Time
           </label>
-          <input
-            type="number"
-            min="1"
-            max="999"
-            value={form.time_hours}
-            onChange={(e) => handleChange('time_hours', e.target.value)}
-            placeholder="e.g. 40 hours to work on your project"
-            className="w-full bg-white/[0.02] border border-white/10 rounded-2xl px-5 py-4 text-white placeholder-gray-600 focus:outline-none focus:border-purple-500/50 focus:ring-4 focus:ring-purple-500/10 transition-all text-base"
-          />
-          <p className="text-xs text-gray-500 font-medium">Total hours you can dedicate (1–999)</p>
+          <div className="flex gap-3">
+            {/* Quantity */}
+            <input
+              type="number"
+              min={unitLimits[timeUnit][0]}
+              max={unitLimits[timeUnit][1]}
+              value={timeValue}
+              onChange={(e) => setTimeValue(e.target.value)}
+              placeholder="e.g. 2"
+              className="flex-1 bg-white/[0.02] border border-white/10 rounded-2xl px-5 py-4 text-white placeholder-gray-600 focus:outline-none focus:border-purple-500/50 focus:ring-4 focus:ring-purple-500/10 transition-all text-base"
+            />
+            {/* Unit Selector */}
+            <select
+              value={timeUnit}
+              onChange={(e) => { setTimeUnit(e.target.value); setTimeValue(''); }}
+              className="bg-white/[0.04] border border-white/10 rounded-2xl px-4 py-4 text-white font-bold focus:outline-none focus:border-purple-500/50 focus:ring-4 focus:ring-purple-500/10 transition-all text-sm cursor-pointer appearance-none text-center"
+            >
+              <option value="hours" className="bg-[#0d0d0d]">Hours</option>
+              <option value="days" className="bg-[#0d0d0d]">Days</option>
+              <option value="weeks" className="bg-[#0d0d0d]">Weeks</option>
+            </select>
+          </div>
+          <p className="text-xs text-gray-500 font-medium">
+            {timeUnit === 'hours' && 'Up to 99 hours'}
+            {timeUnit === 'days'  && `Up to 30 days · ${timeValue ? timeValue * 8 : '?'} working hours`}
+            {timeUnit === 'weeks' && `Up to 52 weeks · ${timeValue ? timeValue * 40 : '?'} working hours`}
+          </p>
         </div>
 
         {/* Submit Button */}

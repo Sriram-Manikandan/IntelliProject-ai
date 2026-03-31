@@ -19,19 +19,21 @@ from models.schemas import ProjectRequest, ProjectIdea, ProjectResponse
  
 def hours_to_human(hours: int) -> str:
     """
-    Convert raw hours into a human-readable string.
+    Convert working hours into a human-readable string.
+    Uses working-hour conventions: 1 day = 8h, 1 week = 40h (5 days × 8h).
  
     Examples:
         5   → "5 hours"
-        25  → "1 day 1 hour"
-        60  → "2 days 12 hours"
-        200 → "1 week 1 day 8 hours"
+        8   → "1 day"
+        40  → "1 week"
+        52  → "1 week 1 day 4 hours"
+        80  → "2 weeks"
     """
     if hours <= 0:
         return "0 hours"
  
-    weeks, remainder = divmod(hours, 7 * 24)   # 1 week = 168 hours
-    days, hrs = divmod(remainder, 24)
+    weeks, remainder = divmod(hours, 40)   # 1 working week = 40 hours
+    days, hrs = divmod(remainder, 8)       # 1 working day  = 8 hours
  
     parts = []
     if weeks:

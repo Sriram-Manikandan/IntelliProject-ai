@@ -33,9 +33,9 @@ class ProjectRequest(BaseModel):
     time_hours: int = Field(
         ...,
         ge=1,
-        le=999,
+        le=2080,
         example=40,
-        description="Available time budget in hours (1–999)",
+        description="Available working hours (1h min – 52 weeks / 2080h max)",
     )
 
 
