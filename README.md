@@ -13,12 +13,14 @@ The system is built using an asynchronous FastAPI backend and a custom dark-them
 
 ## 🧠 Features
 
-- **Personalized project recommendations**
-- **Modern, responsive UI** (built from scratch with Tailwind CSS v3 & lucide-react icons)
-- **Structured, production-style API responses** with strict Pydantic v2 validation
-- **Layered backend architecture** (Routes → Services → Models)
-- **Interactive API documentation** (Swagger + ReDoc)
-- **Async-first service layer**, ready for integration with real LLM providers (OpenAI / Anthropic)
+- **Personalized project recommendations** based on skills, domain, difficulty, and time budget.
+- **Premium "Nexus" UI Design**, featuring a high-end, responsive, startup-ready aesthetic built from scratch with Tailwind CSS v3 & lucide-react icons.
+- **Advanced Duration Picker & Inline Editing** via a custom 3-column time budget picker (Weeks/Days/Hours) and an interactive Results View.
+- **Streamlined Navigation** containing a consolidated Home page, smooth scrolling anchor links, Login, and Signup functionalities.
+- **Structured, production-style API responses** with strict Pydantic v2 validation.
+- **Layered backend architecture** (Routes → Services → Models).
+- **Interactive API documentation** (Swagger + ReDoc).
+- **High-performance AI Integration** using Groq (llama-3.3-70b-versatile) with automatic retry logic via Tenacity.
 
 ---
 
@@ -28,6 +30,7 @@ The system is built using an asynchronous FastAPI backend and a custom dark-them
 - Python 3.11+
 - FastAPI (Async API)
 - Pydantic v2
+- Groq API (llama-3.3-70b-versatile)
 - Uvicorn
 - Environment-based configuration
 
@@ -47,7 +50,7 @@ The system is built using an asynchronous FastAPI backend and a custom dark-them
 4. Structured JSON response is returned.
 5. Frontend renders dynamic, expandable project cards with inline scoring metrics.
 
-The business logic is isolated in `recommendation_service.py`, making it incredibly easy to plug in a real LLM without modifying the API layer.
+The business logic is isolated in `recommendation_service.py`, deeply integrated with Groq for real-time recommendations alongside a robust fallback system in case of outages.
 
 ---
 
@@ -85,8 +88,8 @@ IntelliProject/
     └── src/
         ├── App.jsx             (React Router config)
         ├── index.css           (Tailwind directives)
-        ├── components/         (Hero, Navbar, Features, HowItWorks, SampleShowcase, Testimonials, FAQ, CallToAction, Footer, etc.)
-        └── pages/              (Home, About, Login, Signup)
+        ├── components/         (Hero, Navbar, AboutSection, HowItWorks, ProjectForm, ResultsView, ProjectCard, etc.)
+        └── pages/              (Home, Generate, Login, Signup)
 ```
 
 ---
@@ -170,7 +173,7 @@ npm run dev
   "skills": "Python, React, Machine Learning",
   "domain": "Healthcare",
   "difficulty": "Intermediate",
-  "time_weeks": 8
+  "time_hours": 320
 }
 ```
 
@@ -183,24 +186,21 @@ curl -s -X POST http://localhost:8000/api/v1/generate \
     "skills": "Python, React, Machine Learning",
     "domain": "Healthcare",
     "difficulty": "Intermediate",
-    "time_weeks": 8
+    "time_hours": 320
   }'
 ```
 
 ---
 
-## 🔧 Extending to a Real LLM
+## 🤖 AI Integration (Groq)
 
-Open `services/recommendation_service.py` and replace the body of `generate_projects()` with a call to your preferred LLM provider.
+The application is fully integrated with **Groq** (using the `llama-3.3-70b-versatile` model) to deliver lightning-fast AI recommendations.
 
-Example (pseudo):
-```python
-async def generate_projects(req: ProjectRequest) -> ProjectResponse:
-    prompt = build_prompt(req)          # craft your prompt
-    response = await call_llm(prompt)
-    return parse_llm_response(raw)      # map to ProjectResponse
+To enable the AI capabilities, simply create an `.env` file in the root directory (using `env.example` as a template) and add your Groq API key:
+```env
+GROQ_API_KEY=gsk_your_api_key_here
 ```
-_(No changes needed in the route layer!)_
+_Note: If the API key is missing or the Groq service is unreachable, the system automatically uses a graceful fallback mechanism to return mock data._
 
 ---
 
@@ -210,16 +210,17 @@ _(No changes needed in the route layer!)_
 - Node.js 18+
 - pip
 - npm
+- Groq API Key (Optional, for real LLM generation)
 
 ---
 
 ## 📌 Future Improvements
 
-- Integrate real LLM (OpenAI / Anthropic).
-- Integrate with Figma.
+- Add OAuth / Social Login integration.
+- Save user sessions or allow exporting to PDF/Markdown.
+- Integrate with Figma for UI design exports.
 - Deploy backend (Render / Railway).
 - Deploy frontend (Vercel / Netlify).
-- Add database for saving user sessions.
 
 ---
 
