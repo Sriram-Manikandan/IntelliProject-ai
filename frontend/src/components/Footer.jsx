@@ -3,7 +3,7 @@ import { Sparkles, Twitter, Github, Linkedin, Mail } from 'lucide-react';
 
 const links = [
   { label: 'Product', items: ['Features', 'Testimonials', 'FAQ'] },
-  { label: 'Company', items: ['About', 'Careers', 'Contact', 'Blog'] },
+  { label: 'Company', items: ['About', 'Feedback', 'Careers', 'Contact', 'Blog'] },
   { label: 'Legal', items: ['Privacy', 'Terms', 'Cookie Policy'] }
 ];
 

@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import Navbar from '../components/Navbar';
 import ProjectForm from '../components/ProjectForm';
 import SkeletonLoader from '../components/SkeletonCard';
@@ -12,12 +12,28 @@ export default function Generate() {
   const [results, setResults] = useState(null);
   const [error, setError] = useState('');
 
+  // ── Browser History Fix ──────────────────────────
+  // Attempt to load from session storage on initial mount
+  useEffect(() => {
+    const cached = sessionStorage.getItem('intelliproject_current_generation');
+    if (cached) {
+      try {
+        setResults(JSON.parse(cached));
+        setView('results');
+      } catch (e) {
+        sessionStorage.removeItem('intelliproject_current_generation');
+      }
+    }
+  }, []);
+  // ────────────────────────────────────────────────
+
   const handleSubmit = async (formData) => {
     setView('loading');
     setError('');
 
     try {
       const data = await generateProjects(formData);
+      sessionStorage.setItem('intelliproject_current_generation', JSON.stringify(data));
       setResults(data);
       setView('results');
     } catch (err) {
@@ -27,6 +43,7 @@ export default function Generate() {
   };
 
   const handleReset = () => {
+    sessionStorage.removeItem('intelliproject_current_generation');
     setView('form');
     setResults(null);
     setError('');
@@ -38,6 +55,7 @@ export default function Generate() {
     setError('');
     try {
       const data = await generateProjects(formData);
+      sessionStorage.setItem('intelliproject_current_generation', JSON.stringify(data));
       setResults(data);
       setView('results');
     } catch (err) {

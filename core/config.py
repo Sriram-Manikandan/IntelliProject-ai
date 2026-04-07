@@ -18,6 +18,10 @@ class Settings(BaseSettings):
     # Accepts a comma-separated string from the .env file
     ALLOWED_ORIGINS: str = "http://localhost:3000,http://localhost:5173"
 
+    # Supabase configuration
+    SUPABASE_URL: str = ""
+    SUPABASE_SERVICE_ROLE_KEY: str = ""
+
     @property
     def origins_list(self) -> List[str]:
         return [o.strip() for o in self.ALLOWED_ORIGINS.split(",")]

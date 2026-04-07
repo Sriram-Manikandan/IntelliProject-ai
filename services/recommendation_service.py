@@ -58,6 +58,12 @@ def _difficulty_weight(difficulty: str) -> int:
 # ── Prompt Builder ────────────────────────────
  
 def _build_prompt(req: ProjectRequest, time_display: str) -> str:
+    # Select roadmap instruction based on difficulty
+    if req.difficulty.lower() == "beginner":
+        roadmap_rule = f"The implementation roadmap MUST be broken down using the available time: {time_display}. Use standard SDLC steps (Setup, Backend, Frontend, Testing)."
+    else:
+        roadmap_rule = f"The implementation roadmap MUST be broken down using the available time: {time_display}. SKIP generic software steps (like 'setup database', 'build UI'). Create a deeply technical roadmap focusing directly on the core problem, algorithms, and complex integrations that make this idea difficult."
+
     return f"""You are an expert software engineering mentor specialising in academic project design.
 Your task is to generate exactly 3 highly specific, creative, and technically rich project ideas.
  
@@ -75,10 +81,14 @@ Your task is to generate exactly 3 highly specific, creative, and technically ri
    - Idea 2: API / Integration heavy
    - Idea 3: Product / UX heavy
 3. The tech stack must reference the student's actual skills ({req.skills}) — do not suggest unrelated technologies.
-4. The implementation roadmap MUST be broken down using the available time: {time_display}.
-   Use the format "Days 1-3:", "Week 1:", etc. Be realistic about what is achievable.
-5. Scores must be honest integers (0–100). Do not give everything 95+.
-6. Never repeat ideas across the 3 results. Each must solve a different problem.
+4. {roadmap_rule}
+   - Maintain STRICT chronological order (e.g. Day 1, Day 2-3, Day 4-5).
+   - NEVER overlap timeframes or reset the units (e.g. do not put "Week 1" after "Days 1-3").
+   - Pick one granularity (Days OR Weeks) depending on {time_display} and stick to it for the entire roadmap list.
+5. In the "architecture" section, DO NOT give generic client/server descriptions. Focus heavily on the CRUX of the problem: explain the advanced data pipelines, critical algorithms, or tricky infrastructure integrations.
+6. Provide "prerequisites", a key-value dictionary where the key is the category (e.g., 'Frontend', 'Backend', 'Database', 'Deployment', 'AI Assistance') and the value is a LIST of 2-3 highly recommended free/open-source tool options (e.g., 'Frontend': ['React', 'Vue'], 'AI Assistance': ['AntiGravity IDE', 'Cursor']). You MUST provide multiple options per category.
+7. Scores must be honest integers (0–100). Do not give everything 95+.
+8. Never repeat ideas across the 3 results. Each must solve a different problem.
  
 ## Output Format
 Respond ONLY with a valid JSON array. No explanation, no markdown, no backticks.
@@ -92,6 +102,7 @@ The array must contain exactly 3 objects, each with this exact structure:
     "architecture": "...",
     "implementation_roadmap": ["...", "..."],
     "challenges": ["...", "..."],
+    "prerequisites": {{"Frontend": ["React", "Vue"], "AI Assistance": ["AntiGravity IDE", "Cursor"]}},
     "resume_score": 0,
     "innovation_score": 0
   }}
@@ -180,6 +191,13 @@ def _build_fallback(req: ProjectRequest, time_display: str) -> list[dict]:
                 "Model explainability",
                 "Data privacy compliance",
             ],
+            "prerequisites": {
+                "Frontend": ["React", "Vue"],
+                "Backend": ["FastAPI", "Express"],
+                "Database": ["PostgreSQL", "MongoDB"],
+                "AI Assistance": ["AntiGravity IDE", "Cursor"],
+                "Deployment": ["Vercel", "Render"]
+            },
             "resume_score": min(88 + dw, 100),
             "innovation_score": min(82 + dw, 100),
         },
@@ -204,6 +222,13 @@ def _build_fallback(req: ProjectRequest, time_display: str) -> list[dict]:
                 "Windowing strategy for forecasts",
                 "Operational Kafka complexity",
             ],
+            "prerequisites": {
+                "Frontend": ["Next.js", "React"],
+                "Backend": ["FastAPI", "Go"],
+                "Database": ["InfluxDB", "TimescaleDB"],
+                "AI Assistance": ["AntiGravity IDE", "GitHub Copilot"],
+                "Deployment": ["AWS EC2 Free Tier", "GCP Compute Free"]
+            },
             "resume_score": min(84 + dw, 100),
             "innovation_score": min(79 + dw, 100),
         },
@@ -228,6 +253,13 @@ def _build_fallback(req: ProjectRequest, time_display: str) -> list[dict]:
                 "Keeping embeddings in sync",
                 "Offline evaluation metrics",
             ],
+            "prerequisites": {
+                "Frontend": ["React", "Svelte"],
+                "Backend": ["FastAPI", "Django"],
+                "Database": ["MongoDB Atlas", "PostgreSQL"],
+                "AI Assistance": ["AntiGravity IDE", "Cursor"],
+                "Deployment": ["Vercel", "Fly.io"]
+            },
             "resume_score": min(80 + dw, 100),
             "innovation_score": min(85 + dw, 100),
         },
@@ -264,6 +296,7 @@ async def generate_projects(req: ProjectRequest) -> ProjectResponse:
                 architecture=raw["architecture"],
                 implementation_roadmap=raw["implementation_roadmap"],
                 challenges=raw["challenges"],
+                prerequisites=raw.get("prerequisites", {"Tools": ["AntiGravity IDE"]}),
                 resume_score=int(raw.get("resume_score", 75)),
                 innovation_score=int(raw.get("innovation_score", 75)),
             )

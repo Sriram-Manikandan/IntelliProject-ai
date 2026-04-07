@@ -1,16 +1,36 @@
-import React from 'react';
-import { Link, useNavigate } from 'react-router-dom';
+import React, { useState } from 'react';
+import { Link, useNavigate, Navigate } from 'react-router-dom';
 import Navbar from '../components/Navbar';
-import { Mail, Lock, ArrowRight } from 'lucide-react';
+import { Mail, Lock, ArrowRight, Loader2 } from 'lucide-react';
+import { useAuth } from '../context/AuthContext';
 
 export default function Login() {
   const navigate = useNavigate();
+  const { login, isAuthenticated } = useAuth();
+  const [email, setEmail] = useState('');
+  const [password, setPassword] = useState('');
+  const [loading, setLoading] = useState(false);
+  const [error, setError] = useState('');
 
-  const handleLogin = (e) => {
+  const handleLogin = async (e) => {
     e.preventDefault();
-    // Simulate successful login and redirect
-    navigate('/generate');
+    setLoading(true);
+    setError('');
+    
+    try {
+      await login(email, password);
+      navigate('/generate');
+    } catch (err) {
+      setError(err.message || 'Invalid login credentials');
+    } finally {
+      setLoading(false);
+    }
   };
+
+  if (isAuthenticated) {
+    return <Navigate to="/generate" replace />;
+  }
+
   return (
     <div className="min-h-screen bg-[#030303] flex flex-col">
       <Navbar />
@@ -26,6 +46,12 @@ export default function Login() {
           </div>
 
           <form className="space-y-6" onSubmit={handleLogin}>
+            {error && (
+              <div className="bg-red-500/10 border border-red-500/20 rounded-xl p-4 text-xs font-bold text-red-400 animate-shake">
+                {error}
+              </div>
+            )}
+
             <div className="space-y-3">
               <label htmlFor="login-email" className="text-[10px] font-black text-gray-500 uppercase tracking-[0.2em] pl-1">Neural ID (Email)</label>
               <div className="relative group">
@@ -33,6 +59,9 @@ export default function Login() {
                 <input 
                   id="login-email"
                   type="email" 
+                  required
+                  value={email}
+                  onChange={(e) => setEmail(e.target.value)}
                   placeholder="architect@nexus.com"
                   className="w-full bg-white/[0.02] border border-white/10 rounded-2xl py-4 pl-14 pr-5 text-white placeholder:text-gray-600 focus:outline-none focus:border-indigo-500/40 focus:ring-4 focus:ring-indigo-500/5 transition-all text-sm font-medium"
                 />
@@ -46,6 +75,9 @@ export default function Login() {
                 <input 
                   id="login-password"
                   type="password" 
+                  required
+                  value={password}
+                  onChange={(e) => setPassword(e.target.value)}
                   placeholder="••••••••"
                   className="w-full bg-white/[0.02] border border-white/10 rounded-2xl py-4 pl-14 pr-5 text-white placeholder:text-gray-600 focus:outline-none focus:border-indigo-500/40 focus:ring-4 focus:ring-indigo-500/5 transition-all text-sm font-medium"
                 />
@@ -66,8 +98,14 @@ export default function Login() {
               <a href="#" className="text-xs text-indigo-400 hover:text-indigo-300 font-bold transition-colors uppercase tracking-widest">Restore Link</a>
             </div>
 
-            <button type="submit" className="btn-primary w-full py-4.5 flex items-center justify-center gap-3 mt-6 text-lg group">
-              Initialize Session <ArrowRight className="w-5 h-5 group-hover:translate-x-1 transition-transform" />
+            <button type="submit" disabled={loading} className="btn-primary w-full py-4.5 flex items-center justify-center gap-3 mt-6 text-lg group disabled:opacity-50 disabled:cursor-not-allowed">
+              {loading ? (
+                <Loader2 className="w-5 h-5 animate-spin" />
+              ) : (
+                <>
+                  Initialize Session <ArrowRight className="w-5 h-5 group-hover:translate-x-1 transition-transform" />
+                </>
+              )}
             </button>
           </form>
 

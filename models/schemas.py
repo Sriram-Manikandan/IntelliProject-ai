@@ -58,6 +58,7 @@ class ProjectIdea(BaseModel):
     architecture: str
     implementation_roadmap: List[str]
     challenges: List[str]
+    prerequisites: dict[str, List[str]] = Field(..., description="Mapping of categories to lists of recommended free/open-source tools (e.g. {'Frontend': ['React', 'Vue'], 'AI Assistance': ['AntiGravity IDE', 'Cursor']})")
     resume_score: int = Field(..., ge=0, le=100, description="Resume impact score (0-100)")
     innovation_score: int = Field(..., ge=0, le=100, description="Innovation score (0-100)")
 

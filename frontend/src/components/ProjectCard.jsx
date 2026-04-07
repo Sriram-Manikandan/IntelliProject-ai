@@ -7,6 +7,10 @@ import {
   Trophy,
   Lightbulb,
   CheckCircle2,
+  Package,
+  Bookmark,
+  Check,
+  Loader2,
 } from 'lucide-react';
 
 function ScoreBar({ label, score, icon: Icon }) {
@@ -28,8 +32,46 @@ function ScoreBar({ label, score, icon: Icon }) {
   );
 }
 
-export default function ProjectCard({ project, index }) {
+import { useAuth } from '../context/AuthContext';
+import { supabase } from '../lib/supabaseClient';
+
+export default function ProjectCard({ project, index, initialIsSaved = false }) {
   const [expanded, setExpanded] = useState(false);
+  const { user } = useAuth();
+  const [isSaved, setIsSaved] = useState(initialIsSaved);
+  const [saveLoading, setSaveLoading] = useState(false);
+
+  const toggleSave = async () => {
+    if (!user) return;
+    setSaveLoading(true);
+
+    try {
+      if (isSaved) {
+        const { error } = await supabase
+          .from('saved_projects')
+          .delete()
+          .eq('user_id', user.id)
+          .eq('project_data->>title', project.title);
+        
+        if (error) throw error;
+        setIsSaved(false);
+      } else {
+        const { error } = await supabase
+          .from('saved_projects')
+          .insert({
+            user_id: user.id,
+            project_data: project
+          });
+        
+        if (error) throw error;
+        setIsSaved(true);
+      }
+    } catch (err) {
+      console.error('Error toggling save:', err);
+    } finally {
+      setSaveLoading(false);
+    }
+  };
 
   return (
     <div
@@ -46,6 +88,24 @@ export default function ProjectCard({ project, index }) {
             {project.title}
           </h3>
         </div>
+        <button 
+          onClick={toggleSave}
+          disabled={saveLoading}
+          className={`shrink-0 w-12 h-12 rounded-2xl border flex items-center justify-center transition-all duration-300 disabled:opacity-50 ${
+            isSaved 
+              ? 'bg-emerald-500/10 border-emerald-500/30 text-emerald-400' 
+              : 'bg-white/5 border-white/10 text-gray-500 hover:text-white hover:border-white/20'
+          }`}
+          title={isSaved ? "Remove from saved" : "Save this blueprint"}
+        >
+          {saveLoading ? (
+            <Loader2 className="w-5 h-5 animate-spin" />
+          ) : isSaved ? (
+            <Check className="w-5 h-5" />
+          ) : (
+            <Bookmark className="w-5 h-5" />
+          )}
+        </button>
       </div>
 
       {/* Problem Statement */}
@@ -95,10 +155,44 @@ export default function ProjectCard({ project, index }) {
               <Layers className="w-4 h-4 text-indigo-400" />
               Technical Architecture
             </h4>
-            <div className="text-sm text-gray-400 leading-relaxed bg-white/[0.01] rounded-2xl p-6 border border-white/5 font-medium">
+            <div className="text-sm text-gray-400 leading-relaxed bg-white/[0.01] rounded-2xl p-6 border border-white/5 font-medium whitespace-pre-wrap">
               {project.architecture}
             </div>
           </div>
+
+          {/* Prerequisites & Tooling */}
+          {project.prerequisites && Object.keys(project.prerequisites).length > 0 && (
+            <div>
+              <h4 className="text-sm font-black text-white mb-4 flex items-center gap-2 uppercase tracking-widest">
+                <Package className="w-4 h-4 text-emerald-400" />
+                Prerequisites & Recommended Tools
+              </h4>
+              <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
+                {Object.entries(project.prerequisites).map(([category, tools], i) => (
+                  <details key={i} className="group p-4 rounded-xl bg-white/[0.01] border border-white/5 [&_summary::-webkit-details-marker]:hidden cursor-pointer hover:border-emerald-500/30 transition-colors">
+                    <summary className="flex items-center justify-between list-none focus:outline-none">
+                      <span className="block text-[10px] font-black text-emerald-500/80 uppercase tracking-widest">{category}</span>
+                      <ChevronDown className="w-3.5 h-3.5 text-gray-500 group-open:rotate-180 transition-transform" />
+                    </summary>
+                    <div className="mt-3 flex flex-wrap gap-2">
+                      {Array.isArray(tools) ? tools.map((tool, idx) => (
+                        <span key={idx} className="px-2.5 py-1 rounded-lg bg-emerald-500/10 text-emerald-300/90 text-xs font-bold border border-emerald-500/20">
+                          {tool}
+                        </span>
+                      )) : (
+                        <span className="px-2.5 py-1 rounded-lg bg-emerald-500/10 text-emerald-300/90 text-xs font-bold border border-emerald-500/20">
+                          {tools}
+                        </span>
+                      )}
+                    </div>
+                  </details>
+                ))}
+              </div>
+              <p className="mt-4 text-[10px] text-gray-500 font-medium italic text-center">
+                * Note: These are only recommendations. You are completely free to use any alternative tools or platforms that you prefer for your stack.
+              </p>
+            </div>
+          )}
 
           {/* Implementation Roadmap */}
           <div>
@@ -114,7 +208,7 @@ export default function ProjectCard({ project, index }) {
                       <span className="text-xs font-black text-indigo-400 uppercase">{i + 1}</span>
                     </div>
                     {i < project.implementation_roadmap.length - 1 && (
-                      <div className="w-px flex-1 bg-gradient-to-b from-indigo-500/20 to-transparent mt-2" />
+                      <div className="w-px flex-1 bg-indigo-500/20 my-2" />
                     )}
                   </div>
                   <p className="text-sm text-gray-400 pb-5 font-medium group-hover:text-gray-300 transition-colors">{step}</p>
@@ -137,6 +231,17 @@ export default function ProjectCard({ project, index }) {
                 </div>
               ))}
             </div>
+          </div>
+
+          {/* Bottom Collapse */}
+          <div className="pt-6 border-t border-white/5 pb-2">
+            <button
+              onClick={() => setExpanded(false)}
+              className="w-full flex items-center justify-center gap-3 py-3.5 rounded-2xl border border-white/5 bg-white/[0.02] text-gray-400 hover:text-white hover:border-indigo-500/30 transition-all text-sm font-bold group"
+            >
+              Collapse Blueprint
+              <ChevronUp className="w-4 h-4 group-hover:-translate-y-0.5 transition-transform" />
+            </button>
           </div>
         </div>
       </div>
