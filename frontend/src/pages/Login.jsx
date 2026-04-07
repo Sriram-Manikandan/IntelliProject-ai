@@ -21,7 +21,11 @@ export default function Login() {
       await login(email, password);
       navigate('/generate');
     } catch (err) {
-      setError(err.message || 'Invalid login credentials');
+      if (err.message?.toLowerCase().includes('email not confirmed')) {
+        setError('Please verify your email first. Check your inbox for the link.');
+      } else {
+        setError(err.message || 'Invalid login credentials');
+      }
     } finally {
       setLoading(false);
     }
