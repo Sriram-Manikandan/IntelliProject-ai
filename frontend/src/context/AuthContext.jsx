@@ -33,7 +33,10 @@ export function AuthProvider({ children }) {
     const { data, error } = await supabase.auth.signUp({ 
       email, 
       password,
-      options: { data: metadata }
+      options: { 
+        data: metadata,
+        emailRedirectTo: `${window.location.origin}/auth/callback`
+      }
     });
     if (error) throw error;
     return data;
