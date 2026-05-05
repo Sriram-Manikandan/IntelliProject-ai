@@ -1,125 +1,109 @@
 import React, { useState } from 'react';
 import { Link, useNavigate, Navigate } from 'react-router-dom';
-import Navbar from '../components/Navbar';
-import { Mail, Lock, ArrowRight, Loader2 } from 'lucide-react';
+import Navbar from '../components/layout/Navbar';
 import { useAuth } from '../context/AuthContext';
 
 export default function Login() {
-  const navigate = useNavigate();
-  const { login, isAuthenticated } = useAuth();
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
   const [loading, setLoading] = useState(false);
-  const [error, setError] = useState('');
+  const [error, setError] = useState(null);
+  
+  const { login, isAuthenticated } = useAuth();
+  const navigate = useNavigate();
 
-  const handleLogin = async (e) => {
+  // Redirect if already logged in
+  if (isAuthenticated) {
+    return <Navigate to="/dashboard" replace />;
+  }
+
+  const handleSubmit = async (e) => {
     e.preventDefault();
+    setError(null);
     setLoading(true);
-    setError('');
-    
+
     try {
-      await login(email, password);
-      navigate('/generate');
+      const { error } = await login(email, password);
+      if (error) throw error;
+      navigate('/dashboard');
     } catch (err) {
-      if (err.message?.toLowerCase().includes('email not confirmed')) {
-        setError('Please verify your email first. Check your inbox for the link.');
-      } else {
-        setError(err.message || 'Invalid login credentials');
-      }
+      setError(err.message || 'Failed to sign in. Please check your credentials.');
     } finally {
       setLoading(false);
     }
   };
 
-  if (isAuthenticated) {
-    return <Navigate to="/generate" replace />;
-  }
-
   return (
-    <div className="min-h-screen bg-[#030303] flex flex-col">
+    <div className="min-h-screen bg-[#030303] text-white selection:bg-indigo-500/30 font-sans">
       <Navbar />
-      <main className="flex-1 flex items-center justify-center px-6 pt-28 pb-12 relative overflow-hidden">
-        {/* Background Orbs */}
-        <div className="absolute top-1/4 -left-20 w-[400px] h-[400px] bg-indigo-500/5 blur-[120px] rounded-full animate-float" />
-        <div className="absolute bottom-1/4 -right-20 w-[400px] h-[400px] bg-purple-500/5 blur-[120px] rounded-full animate-float-delayed" />
 
-        <div className="w-full max-w-md glass-card p-12 sm:p-14 border-white/10 shadow-2xl animate-fade-in-up opacity-0 relative z-10">
-          <div className="text-center mb-10">
-            <h1 className="text-4xl font-black text-white mb-3 tracking-tight text-glow">Secure Login</h1>
-            <p className="text-gray-500 text-sm font-bold uppercase tracking-[0.2em]">Authorized Access Only</p>
-          </div>
-
-          <form className="space-y-6" onSubmit={handleLogin}>
-            {error && (
-              <div className="bg-red-500/10 border border-red-500/20 rounded-xl p-4 text-xs font-bold text-red-400 animate-shake">
-                {error}
-              </div>
-            )}
-
-            <div className="space-y-3">
-              <label htmlFor="login-email" className="text-[10px] font-black text-gray-500 uppercase tracking-[0.2em] pl-1">Neural ID (Email)</label>
-              <div className="relative group">
-                <Mail className="absolute left-5 top-1/2 -translate-y-1/2 w-5 h-5 text-gray-500 group-focus-within:text-indigo-400 transition-colors" />
-                <input 
-                  id="login-email"
-                  type="email" 
-                  required
-                  value={email}
-                  onChange={(e) => setEmail(e.target.value)}
-                  placeholder="architect@nexus.com"
-                  className="w-full bg-white/[0.02] border border-white/10 rounded-2xl py-4 pl-14 pr-5 text-white placeholder:text-gray-600 focus:outline-none focus:border-indigo-500/40 focus:ring-4 focus:ring-indigo-500/5 transition-all text-sm font-medium"
-                />
-              </div>
+      <div className="pt-32 pb-20 px-6 flex items-center justify-center min-h-screen">
+        <div className="w-full max-w-md bg-[#0a0a0a] border border-white/10 rounded-lg p-8 shadow-2xl">
+          <h2 className="text-2xl font-bold text-center mb-6">Log in to IntelliProject</h2>
+          
+          {error && (
+            <div className="bg-red-500/10 border border-red-500/20 text-red-400 p-3 rounded-md mb-6 text-sm text-center">
+              {error}
             </div>
+          )}
 
-            <div className="space-y-3">
-              <label htmlFor="login-password" className="text-[10px] font-black text-gray-500 uppercase tracking-[0.2em] pl-1">Access Key (Password)</label>
-              <div className="relative group">
-                <Lock className="absolute left-5 top-1/2 -translate-y-1/2 w-5 h-5 text-gray-500 group-focus-within:text-indigo-400 transition-colors" />
-                <input 
-                  id="login-password"
-                  type="password" 
-                  required
-                  value={password}
-                  onChange={(e) => setPassword(e.target.value)}
-                  placeholder="••••••••"
-                  className="w-full bg-white/[0.02] border border-white/10 rounded-2xl py-4 pl-14 pr-5 text-white placeholder:text-gray-600 focus:outline-none focus:border-indigo-500/40 focus:ring-4 focus:ring-indigo-500/5 transition-all text-sm font-medium"
-                />
-              </div>
-            </div>
-
-            <div className="flex items-center justify-between pt-2">
-              <label htmlFor="login-remember" className="flex items-center gap-3 cursor-pointer group">
-                <div className="relative">
-                  <input id="login-remember" type="checkbox" className="peer sr-only" />
-                  <div className="w-5 h-5 rounded-lg border-2 border-white/10 bg-white/5 peer-checked:bg-indigo-500 peer-checked:border-indigo-500 transition-all shadow-[0_0_10px_rgba(99,102,241,0)] peer-checked:shadow-[0_0_10px_rgba(99,102,241,0.4)]" />
-                  <div className="absolute inset-0 flex items-center justify-center text-white opacity-0 peer-checked:opacity-100 transition-opacity">
-                    <svg className="w-3.5 h-3.5" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="4" strokeLinecap="round" strokeLinejoin="round"><polyline points="20 6 9 17 4 12" /></svg>
-                  </div>
-                </div>
-                <span className="text-xs text-gray-500 font-bold group-hover:text-gray-400 transition-colors">Keep Me Synced</span>
+          <form onSubmit={handleSubmit} className="space-y-4">
+            <div>
+              <label className="block text-sm font-medium text-gray-300 mb-1" htmlFor="email">
+                Email address
               </label>
-              <a href="#" className="text-xs text-indigo-400 hover:text-indigo-300 font-bold transition-colors uppercase tracking-widest">Restore Link</a>
+              <input
+                id="email"
+                type="email"
+                value={email}
+                onChange={(e) => setEmail(e.target.value)}
+                required
+                className="w-full bg-black border border-gray-700 rounded-md px-4 py-2 text-white focus:outline-none focus:border-indigo-500 focus:ring-1 focus:ring-indigo-500"
+              />
+            </div>
+            
+            <div>
+              <label className="block text-sm font-medium text-gray-300 mb-1" htmlFor="password">
+                Password
+              </label>
+              <input
+                id="password"
+                type="password"
+                value={password}
+                onChange={(e) => setPassword(e.target.value)}
+                required
+                className="w-full bg-black border border-gray-700 rounded-md px-4 py-2 text-white focus:outline-none focus:border-indigo-500 focus:ring-1 focus:ring-indigo-500"
+              />
             </div>
 
-            <button type="submit" disabled={loading} className="btn-primary w-full py-4.5 flex items-center justify-center gap-3 mt-6 text-lg group disabled:opacity-50 disabled:cursor-not-allowed">
-              {loading ? (
-                <Loader2 className="w-5 h-5 animate-spin" />
-              ) : (
-                <>
-                  Initialize Session <ArrowRight className="w-5 h-5 group-hover:translate-x-1 transition-transform" />
-                </>
-              )}
+            <div className="flex items-center">
+              <input
+                id="remember_me"
+                type="checkbox"
+                className="h-4 w-4 rounded border-gray-700 bg-black text-indigo-600 focus:ring-indigo-500"
+              />
+              <label htmlFor="remember_me" className="ml-2 block text-sm text-gray-400">
+                Remember me
+              </label>
+            </div>
+
+            <button
+              type="submit"
+              disabled={loading}
+              className="w-full bg-indigo-600 text-white rounded-md py-2.5 font-medium hover:bg-indigo-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500 focus:ring-offset-black transition-colors disabled:opacity-50"
+            >
+              {loading ? 'Logging in...' : 'Log in'}
             </button>
           </form>
 
-          <div className="mt-10 pt-10 border-t border-white/5 text-center">
-            <p className="text-xs text-gray-500 font-bold uppercase tracking-widest">
-              New to the Nexus? <Link to="/signup" className="text-indigo-400 hover:text-indigo-300 transition-colors ml-2 border-b-2 border-indigo-400/20 hover:border-indigo-400 pb-0.5">Create Identity</Link>
-            </p>
-          </div>
+          <p className="mt-6 text-center text-sm text-gray-400">
+            Don't have an account?{' '}
+            <Link to="/signup" className="text-indigo-400 hover:text-indigo-300 font-medium">
+              Create an account
+            </Link>
+          </p>
         </div>
-      </main>
+      </div>
     </div>
   );
 }

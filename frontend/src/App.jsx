@@ -1,35 +1,57 @@
 import React from 'react';
 import { BrowserRouter, Routes, Route, Navigate } from 'react-router-dom';
-import ScrollToHash from './components/ScrollToHash';
+import ScrollToHash from './components/layout/ScrollToHash'; // layout/ — handles hash anchor scroll behaviour
 import Home from './pages/Home';
 import Generate from './pages/Generate';
 import Login from './pages/Login';
 import Signup from './pages/Signup';
 import Dashboard from './pages/Dashboard';
-import { AuthProvider, useAuth } from './context/AuthContext';
-
-// Basic wrapper to protect routes
-function ProtectedRoute({ children }) {
-  const { isAuthenticated, isLoading } = useAuth();
-  if (isLoading) return <div className="min-h-screen bg-[#030303]" />; // prevent flicker
-  if (!isAuthenticated) return <Navigate to="/login" replace />;
-  return children;
-}
+import AdminDashboard from './pages/AdminDashboard';
+import PrivacyPolicy from './pages/PrivacyPolicy';
+import Chatbot from './components/layout/Chatbot';
+import CookieBanner from './components/layout/CookieBanner';
+import { AuthProvider } from './context/AuthContext';
+import ProtectedRoute from './components/ProtectedRoute';
 
 function App() {
   return (
-    <AuthProvider>
-      <BrowserRouter>
+    <BrowserRouter>
+      <AuthProvider>
         <ScrollToHash />
         <Routes>
           <Route path="/" element={<Home />} />
-          <Route path="/generate" element={<ProtectedRoute><Generate /></ProtectedRoute>} />
-          <Route path="/dashboard" element={<ProtectedRoute><Dashboard /></ProtectedRoute>} />
           <Route path="/login" element={<Login />} />
           <Route path="/signup" element={<Signup />} />
+          <Route path="/privacy" element={<PrivacyPolicy />} />
+          <Route
+            path="/generate"
+            element={
+              <ProtectedRoute>
+                <Generate />
+              </ProtectedRoute>
+            }
+          />
+          <Route
+            path="/dashboard"
+            element={
+              <ProtectedRoute>
+                <Dashboard />
+              </ProtectedRoute>
+            }
+          />
+          <Route
+            path="/admin"
+            element={
+              <ProtectedRoute>
+                <AdminDashboard />
+              </ProtectedRoute>
+            }
+          />
         </Routes>
-      </BrowserRouter>
-    </AuthProvider>
+        <Chatbot />
+        <CookieBanner />
+      </AuthProvider>
+    </BrowserRouter>
   );
 }
 

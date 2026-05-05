@@ -1,7 +1,16 @@
+// components/layout/Navbar.jsx
+// ─────────────────────────────────────────────
+// PURPOSE: The persistent top navigation bar shown on every page.
+//          Handles scroll-aware styling, auth-conditional links,
+//          and the logout action.
+//
+// Used by: All pages (Home, Generate, Dashboard, Login, Signup)
+// ─────────────────────────────────────────────
+
 import React, { useState, useEffect } from 'react';
 import { Link, useLocation, useNavigate } from 'react-router-dom';
 import { Sparkles, ArrowRight, LogOut, LayoutDashboard, BrainCircuit } from 'lucide-react';
-import { useAuth } from '../context/AuthContext';
+import { useAuth } from '../../context/AuthContext';
 
 export default function Navbar() {
   const [scrolled, setScrolled] = useState(false);
@@ -47,6 +56,7 @@ export default function Navbar() {
               <>
                 <Link to="/dashboard" className={`text-sm font-bold tracking-wide transition-colors ${location.pathname === '/dashboard' ? 'text-indigo-400' : 'text-gray-400 hover:text-white'}`}>Vault</Link>
                 <Link to="/generate" className={`text-sm font-bold tracking-wide transition-colors ${location.pathname === '/generate' ? 'text-indigo-400' : 'text-gray-400 hover:text-white'}`}>Generate</Link>
+                <Link to="/admin" className={`text-sm font-bold tracking-wide transition-colors ${location.pathname === '/admin' ? 'text-rose-400' : 'text-gray-400 hover:text-rose-300'}`}>Admin</Link>
               </>
             ) : (
               <>
@@ -59,8 +69,8 @@ export default function Navbar() {
           <div className="flex items-center gap-6">
             {!isAuthenticated ? (
               <>
-                <Link 
-                  to="/login" 
+                <Link
+                  to="/login"
                   className="text-sm font-bold tracking-wide text-gray-400 hover:text-white transition-all duration-300"
                 >
                   Sign In
@@ -75,7 +85,7 @@ export default function Navbar() {
                 </Link>
               </>
             ) : (
-              <button 
+              <button
                 onClick={handleLogout}
                 className="flex items-center gap-2 text-sm font-bold text-gray-500 hover:text-red-400 transition-colors"
               >

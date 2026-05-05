@@ -9,7 +9,7 @@ from fastapi.middleware.cors import CORSMiddleware
 from fastapi.responses import JSONResponse, RedirectResponse
 
 from core.config import settings
-from api.routes import router
+from api.router import main_router as router
 
 
 def create_app() -> FastAPI:

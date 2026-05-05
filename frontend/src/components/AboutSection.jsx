@@ -13,19 +13,17 @@ export default function AboutSection() {
             </div>
             
             <h2 className="text-5xl md:text-6xl font-black text-white leading-tight tracking-tighter">
-              Bridging the gap from <br />
-              <span className="text-gradient text-glow">Code to Engineering.</span>
+              Stop searching for <br />
+              <span className="text-gradient text-glow">what to build.</span>
             </h2>
 
             <div className="space-y-6 text-gray-400 text-lg font-medium leading-relaxed max-w-xl">
               <p>
-                IntelliProject was born from a simple observation: many talented developers struggle not with 
-                coding, but with deciding <span className="text-white">what</span> to build to showcase their skills.
+                As a student or self-taught developer, figuring out <span className="text-white">what</span> to build is often harder than actually writing the code.
               </p>
               <p>
-                Our mission is to bridge the gap between "tutorial hell" and real-world engineering. By 
-                leveraging AI, we help you identify projects that are both challenging and resume-worthy, 
-                tailored specifically to your expertise.
+                IntelliProject analyzes your current tech stack and the time you have available to suggest realistic projects. 
+                We provide a clear roadmap, prerequisite tools, and warn you about potential scope creep before you even start.
               </p>
             </div>
           </div>
@@ -35,11 +33,10 @@ export default function AboutSection() {
               <div className="absolute top-0 left-0 w-full h-1 bg-gradient-to-r from-indigo-500 to-purple-600 opacity-50" />
               <div className="absolute -right-20 -bottom-20 w-64 h-64 bg-indigo-600/10 blur-[80px] rounded-full group-hover:bg-indigo-600/20 transition-all duration-700" />
               
-              <h3 className="text-white font-black mb-6 text-2xl tracking-tight uppercase tracking-widest text-indigo-400">Our Vision</h3>
+              <h3 className="text-white font-black mb-6 text-2xl tracking-tight uppercase tracking-widest text-indigo-400">How it helps</h3>
               <p className="text-gray-300 text-lg leading-relaxed font-medium">
-                To become the standard platform for project discovery and architectural guidance, 
-                empowering the next generation of builders to ship meaningful software with precision 
-                and confidence.
+                Instead of building another generic todo list, get suggestions that fit your exact skillset. 
+                You'll receive a step-by-step roadmap, a feasibility analysis, and warnings about the hardest parts of the project so you don't get stuck.
               </p>
               
               <div className="mt-10 pt-10 border-t border-white/5 flex items-center justify-between">

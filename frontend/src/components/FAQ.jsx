@@ -4,15 +4,15 @@ import { ChevronDown, Plus, Minus } from 'lucide-react';
 const questions = [
   {
     question: 'How does the AI generator work?',
-    answer: 'Our AI analyzes your expertise, interests, and development timeframe. It then cross-references this with real-world project trends and recruiter expectations to craft a personalized roadmap that maximizes your learning and resume impact.'
+    answer: 'We pass your technical skills, desired domain, and time budget into an advanced Language Model. We instruct the AI to analyze feasibility and common pitfalls, and it returns a structured JSON blueprint with a step-by-step roadmap.'
   },
   {
-    question: 'Are these projects really resume-worthy?',
-    answer: 'Absolutely. Every recommendation includes a "Resume Impact" and "Innovation" score. We focus on non-trivial problems that demonstrate high-level architectural thinking and technical skills.'
+    question: 'Are these projects actually realistic?',
+    answer: 'Yes. We specifically prompt the AI to run a "feasibility analysis" before showing you the result. It will warn you about unrealistic scope, difficult data sources, or missing prerequisites.'
   },
   {
     question: 'Is it free to use?',
-    answer: 'Building something matters to us. Our basic generator is free for everyone. Premium users get access to more complex architectures and one-click export to GitHub repositories.'
+    answer: 'Yes, this tool is 100% free and open-source. We built this to solve our own problem of not knowing what to build.'
   },
   {
     question: 'What if I don’t like the generated idea?',

@@ -1,13 +1,15 @@
 import React from 'react';
-import Navbar from '../components/Navbar';
-import Hero from '../components/Hero';
-import HowItWorks from '../components/HowItWorks';
-import AboutSection from '../components/AboutSection';
-import SampleShowcase from '../components/SampleShowcase';
-import Testimonials from '../components/Testimonials';
-import FAQ from '../components/FAQ';
-import CallToAction from '../components/CallToAction';
-import Footer from '../components/Footer';
+// layout/ — components that appear on every page
+import Navbar from '../components/layout/Navbar';
+import Footer from '../components/layout/Footer';
+// home/ — sections that only appear on the landing page
+import Hero from '../components/home/Hero';
+import AboutSection from '../components/home/AboutSection';
+import HowItWorks from '../components/home/HowItWorks';
+import SampleShowcase from '../components/home/SampleShowcase';
+import Testimonials from '../components/home/Testimonials';
+import FAQ from '../components/home/FAQ';
+import CallToAction from '../components/home/CallToAction';
 
 export default function Home() {
   return (

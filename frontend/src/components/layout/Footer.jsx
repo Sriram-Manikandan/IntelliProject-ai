@@ -1,4 +1,13 @@
+// components/layout/Footer.jsx
+// ─────────────────────────────────────────────
+// PURPOSE: The site-wide footer displayed at the bottom of every page.
+//          Contains brand info, navigation link groups, and social icons.
+//
+// Used by: Home, Generate, Dashboard pages
+// ─────────────────────────────────────────────
+
 import React from 'react';
+import { Link } from 'react-router-dom';
 import { Sparkles, Twitter, Github, Linkedin, Mail } from 'lucide-react';
 
 const links = [
@@ -22,8 +31,8 @@ export default function Footer() {
               </span>
             </div>
             <p className="text-base text-gray-500 leading-relaxed max-w-sm font-medium">
-              Empowering engineers to build high-impact projects through AI-architected blueprints and structured development roadmaps.
-              <span className="block mt-4 text-indigo-400/80 italic font-bold tracking-widest uppercase text-[10px]">Architecting the future of building.</span>
+              Empowering students and self-taught developers to build practical projects and improve their engineering skills.
+              <span className="block mt-4 text-indigo-400/80 italic font-bold tracking-widest uppercase text-[10px]">Built for practical learning.</span>
             </p>
             <div className="flex items-center gap-4 pt-4">
               {[Twitter, Github, Linkedin, Mail].map((Icon, i) => (
@@ -55,8 +64,8 @@ export default function Footer() {
             © {new Date().getFullYear()} IntelliProject. Engineered with precision.
           </p>
           <div className="flex items-center gap-8">
-            <a href="#" className="text-xs text-gray-600 hover:text-white transition-all font-bold uppercase tracking-widest">Privacy Protocol</a>
-            <a href="#" className="text-xs text-gray-600 hover:text-white transition-all font-bold uppercase tracking-widest">Systems Terms</a>
+            <Link to="/privacy" className="text-xs text-gray-600 hover:text-white transition-all font-bold uppercase tracking-widest">Privacy Policy</Link>
+            <a href="#" className="text-xs text-gray-600 hover:text-white transition-all font-bold uppercase tracking-widest">Terms of Service</a>
           </div>
         </div>
       </div>

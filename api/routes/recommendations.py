@@ -1,15 +1,24 @@
-# app/api/routes.py
+# api/routes/recommendations.py
 # ─────────────────────────────────────────────
-# Route definitions for the IntelliProject API
+# PURPOSE: HTTP route handler for the project generation feature.
+#          This file's ONLY job is to:
+#            1. Receive the incoming POST request
+#            2. Pass the validated payload to the recommendation service
+#            3. Return the response (or raise an HTTP error on failure)
+#
+# Business logic lives in: services/recommendation_service.py
+# Data shapes live in:     models/schemas.py
 # ─────────────────────────────────────────────
 
 import logging
 from fastapi import APIRouter, HTTPException
+
 from models.schemas import ProjectRequest, ProjectResponse
 from services.recommendation_service import generate_projects
 
 logger = logging.getLogger(__name__)
 
+# This router is assembled into the main app via api/router.py
 router = APIRouter()
 
 
@@ -25,26 +34,31 @@ router = APIRouter()
 )
 async def generate_project_recommendations(payload: ProjectRequest) -> ProjectResponse:
     """
-    POST /generate
+    POST /api/v1/generate
 
-    - Validates the incoming request via Pydantic
-    - Delegates to the recommendation service
-    - Returns a structured ProjectResponse
+    Receives a ProjectRequest, delegates to the recommendation service,
+    and returns a ProjectResponse containing 3 project ideas.
+
+    FastAPI automatically validates the request body against ProjectRequest
+    and returns a 422 Unprocessable Entity if validation fails.
     """
     logger.info(
-        "Generate request: skills=%s, domain=%s, difficulty=%s, time_hours=%s",
+        "POST /generate | skills=%s | domain=%s | difficulty=%s | time_hours=%s",
         payload.skills, payload.domain, payload.difficulty, payload.time_hours,
     )
+
     try:
         result = await generate_projects(payload)
         logger.info("Successfully generated %d recommendations", len(result.recommendations))
         return result
 
     except ValueError as exc:
-        logger.warning("Validation error: %s", exc)
+        # Raised by the service layer for known validation issues
+        logger.warning("Validation error in recommendation generation: %s", exc)
         raise HTTPException(status_code=422, detail=str(exc)) from exc
 
     except Exception as exc:
+        # Catch-all for unexpected failures
         logger.exception("Unexpected error during project generation")
         raise HTTPException(
             status_code=500,

@@ -20,13 +20,13 @@ export default function CallToAction() {
         </div>
 
         <h2 className="text-5xl sm:text-6xl font-black text-white mb-8 leading-[1.1] tracking-tighter">
-          Stop staring at blank repos. <br />
-          <span className="text-gradient text-glow">Start building today.</span>
+          Need a project idea? <br />
+          <span className="text-gradient text-glow">Let's find one.</span>
         </h2>
 
         <p className="text-gray-400 max-w-2xl mx-auto mb-14 text-lg font-medium leading-relaxed">
-          Join thousands of developers turning their skills into impressive projects.
-          No more tutorial hell. No more "I don't know what to build."
+          Create a free account to enter your tech stack, generate custom project roadmaps, 
+          and save your favorite ideas to your dashboard.
         </p>
 
         <div className="flex flex-col sm:flex-row items-center justify-center gap-8">

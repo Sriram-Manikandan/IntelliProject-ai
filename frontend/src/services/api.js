@@ -14,3 +14,29 @@ export async function generateProjects({ skills, domain, difficulty, time_hours 
 
   return res.json();
 }
+
+export async function chatWithRecruit(messages) {
+  const res = await fetch(`${API_BASE}/chat`, {
+    method: 'POST',
+    headers: { 'Content-Type': 'application/json' },
+    body: JSON.stringify({ messages }),
+  });
+
+  if (!res.ok) {
+    const error = await res.json().catch(() => ({}));
+    throw new Error(error.detail || 'Failed to communicate with Recruit.');
+  }
+
+  return res.json();
+}
+
+export async function getAdminStats(userId) {
+  const res = await fetch(`${API_BASE}/admin/stats?user_id=${userId}`);
+  
+  if (!res.ok) {
+    const error = await res.json().catch(() => ({}));
+    throw new Error(error.detail || 'Failed to fetch admin stats.');
+  }
+
+  return res.json();
+}

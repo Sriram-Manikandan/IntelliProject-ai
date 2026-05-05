@@ -1,9 +1,12 @@
 import React, { useState, useEffect } from 'react';
-import Navbar from '../components/Navbar';
-import ProjectForm from '../components/ProjectForm';
-import SkeletonLoader from '../components/SkeletonCard';
-import ResultsView from '../components/ResultsView';
-import Footer from '../components/Footer';
+// layout/ — persistent page shell components
+import Navbar from '../components/layout/Navbar';
+import Footer from '../components/layout/Footer';
+// generate/ — components specific to the AI generation feature
+import ProjectForm from '../components/generate/ProjectForm';
+import SkeletonLoader from '../components/generate/SkeletonCard';
+import ResultsView from '../components/generate/ResultsView';
+// services/api.js — calls the backend API
 import { generateProjects } from '../services/api';
 import { AlertTriangle, RefreshCw } from 'lucide-react';
 

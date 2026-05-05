@@ -1,3 +1,15 @@
+// components/generate/ProjectCard.jsx
+// ─────────────────────────────────────────────
+// PURPOSE: Displays a single AI-generated project recommendation.
+//          Handles the expand/collapse of technical details and the
+//          save/unsave toggle for the current user.
+//
+// Database calls are handled by: services/projectService.js
+//   (NOT directly here — this component only calls the service)
+//
+// Used by: components/generate/ResultsView.jsx, pages/Dashboard.jsx
+// ─────────────────────────────────────────────
+
 import React, { useState } from 'react';
 import {
   ChevronDown,
@@ -11,8 +23,14 @@ import {
   Bookmark,
   Check,
   Loader2,
+  ShieldAlert,
+  Target,
+  BrainCircuit,
 } from 'lucide-react';
+import { useAuth } from '../../context/AuthContext';
+import { saveProject, deleteProject } from '../../services/projectService';
 
+// ── Sub-component: Score Bar ──────────────────
 function ScoreBar({ label, score, icon: Icon }) {
   return (
     <div className="flex items-center gap-4 group">
@@ -32,38 +50,28 @@ function ScoreBar({ label, score, icon: Icon }) {
   );
 }
 
-import { useAuth } from '../context/AuthContext';
-import { supabase } from '../lib/supabaseClient';
-
+// ── Main Component ────────────────────────────
 export default function ProjectCard({ project, index, initialIsSaved = false }) {
   const [expanded, setExpanded] = useState(false);
   const { user } = useAuth();
   const [isSaved, setIsSaved] = useState(initialIsSaved);
   const [saveLoading, setSaveLoading] = useState(false);
 
+  /**
+   * Toggle save/unsave for this project.
+   * Calls projectService (which handles all Supabase logic).
+   * Does NOT contain any direct Supabase code.
+   */
   const toggleSave = async () => {
     if (!user) return;
     setSaveLoading(true);
 
     try {
       if (isSaved) {
-        const { error } = await supabase
-          .from('saved_projects')
-          .delete()
-          .eq('user_id', user.id)
-          .eq('project_data->>title', project.title);
-        
-        if (error) throw error;
+        await deleteProject(user.id, project.title);
         setIsSaved(false);
       } else {
-        const { error } = await supabase
-          .from('saved_projects')
-          .insert({
-            user_id: user.id,
-            project_data: project
-          });
-        
-        if (error) throw error;
+        await saveProject(user.id, project);
         setIsSaved(true);
       }
     } catch (err) {
@@ -88,15 +96,15 @@ export default function ProjectCard({ project, index, initialIsSaved = false }) 
             {project.title}
           </h3>
         </div>
-        <button 
+        <button
           onClick={toggleSave}
           disabled={saveLoading}
           className={`shrink-0 w-12 h-12 rounded-2xl border flex items-center justify-center transition-all duration-300 disabled:opacity-50 ${
-            isSaved 
-              ? 'bg-emerald-500/10 border-emerald-500/30 text-emerald-400' 
+            isSaved
+              ? 'bg-emerald-500/10 border-emerald-500/30 text-emerald-400'
               : 'bg-white/5 border-white/10 text-gray-500 hover:text-white hover:border-white/20'
           }`}
-          title={isSaved ? "Remove from saved" : "Save this blueprint"}
+          title={isSaved ? 'Remove from saved' : 'Save this blueprint'}
         >
           {saveLoading ? (
             <Loader2 className="w-5 h-5 animate-spin" />
@@ -137,7 +145,7 @@ export default function ProjectCard({ project, index, initialIsSaved = false }) 
         <ScoreBar label="Technical Innovation" score={project.innovation_score} icon={Lightbulb} />
       </div>
 
-      {/* Expand / Collapse */}
+      {/* Expand / Collapse Toggle */}
       <button
         onClick={() => setExpanded(!expanded)}
         className="w-full flex items-center justify-center gap-3 py-3.5 rounded-2xl border border-white/5 bg-white/[0.02] text-gray-400 hover:text-white hover:border-indigo-500/30 transition-all text-sm font-bold group"
@@ -149,6 +157,7 @@ export default function ProjectCard({ project, index, initialIsSaved = false }) 
       {/* Expanded Content */}
       <div className={`overflow-hidden transition-all duration-700 ease-in-out ${expanded ? 'max-h-[2000px] opacity-100 mt-8' : 'max-h-0 opacity-0'}`}>
         <div className="space-y-8 pt-4 border-t border-white/5">
+
           {/* Architecture */}
           <div>
             <h4 className="text-sm font-black text-white mb-3 flex items-center gap-2 uppercase tracking-widest">
@@ -232,6 +241,57 @@ export default function ProjectCard({ project, index, initialIsSaved = false }) 
               ))}
             </div>
           </div>
+
+          {/* AI Boundaries */}
+          {project.boundaries && project.boundaries.length > 0 && (
+            <div>
+              <h4 className="text-sm font-black text-white mb-4 flex items-center gap-2 uppercase tracking-widest">
+                <Target className="w-4 h-4 text-blue-400" />
+                Scope Boundaries
+              </h4>
+              <div className="grid gap-3">
+                {project.boundaries.map((boundary, i) => (
+                  <div key={i} className="flex items-start gap-3 p-4 rounded-xl bg-blue-500/5 border border-blue-500/20">
+                    <Target className="w-4 h-4 text-blue-400 mt-0.5 shrink-0" />
+                    <p className="text-sm text-blue-100/70 font-medium leading-relaxed">{boundary}</p>
+                  </div>
+                ))}
+              </div>
+            </div>
+          )}
+
+          {/* AI Warnings */}
+          {project.warnings && project.warnings.length > 0 && (
+            <div>
+              <h4 className="text-sm font-black text-white mb-4 flex items-center gap-2 uppercase tracking-widest">
+                <ShieldAlert className="w-4 h-4 text-rose-400" />
+                Critical Warnings
+              </h4>
+              <div className="grid gap-3">
+                {project.warnings.map((warning, i) => (
+                  <div key={i} className="flex items-start gap-3 p-4 rounded-xl bg-rose-500/5 border border-rose-500/20">
+                    <ShieldAlert className="w-4 h-4 text-rose-400 mt-0.5 shrink-0" />
+                    <p className="text-sm text-rose-100/70 font-medium leading-relaxed">{warning}</p>
+                  </div>
+                ))}
+              </div>
+            </div>
+          )}
+
+          {/* Feasibility Analysis */}
+          {project.feasibility_analysis && (
+            <div>
+              <h4 className="text-sm font-black text-white mb-4 flex items-center gap-2 uppercase tracking-widest">
+                <BrainCircuit className="w-4 h-4 text-purple-400" />
+                AI Feasibility Analysis
+              </h4>
+              <div className="p-5 rounded-2xl bg-gradient-to-br from-purple-500/10 to-indigo-500/5 border border-purple-500/20">
+                <p className="text-sm text-gray-300 font-medium leading-relaxed italic">
+                  "{project.feasibility_analysis}"
+                </p>
+              </div>
+            </div>
+          )}
 
           {/* Bottom Collapse */}
           <div className="pt-6 border-t border-white/5 pb-2">

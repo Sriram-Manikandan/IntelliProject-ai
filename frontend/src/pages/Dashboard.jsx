@@ -1,10 +1,13 @@
 import React, { useState, useEffect } from 'react';
-import Navbar from '../components/Navbar';
-import ProjectCard from '../components/ProjectCard';
-import Footer from '../components/Footer';
+// layout/ — persistent page shell
+import Navbar from '../components/layout/Navbar';
+import Footer from '../components/layout/Footer';
+// generate/ — ProjectCard is used to display saved blueprints
+import ProjectCard from '../components/generate/ProjectCard';
 import { Bookmark, LayoutDashboard, Search, Loader2 } from 'lucide-react';
 import { Link } from 'react-router-dom';
-import { supabase } from '../lib/supabaseClient';
+// services — centralised data fetching (no direct Supabase calls in this component)
+import { getUserProjects } from '../services/projectService';
 import { useAuth } from '../context/AuthContext';
 
 export default function Dashboard() {
@@ -19,13 +22,9 @@ export default function Dashboard() {
     const fetchSavedProjects = async () => {
       setLoading(true);
       try {
-        const { data, error } = await supabase
-          .from('saved_projects')
-          .select('project_data')
-          .eq('user_id', user.id);
-
-        if (error) throw error;
-        setSavedProjects(data.map(item => item.project_data));
+        // getUserProjects() in projectService handles all Supabase logic
+        const projects = await getUserProjects(user.id);
+        setSavedProjects(projects);
       } catch (err) {
         console.error('Error fetching projects:', err);
       } finally {

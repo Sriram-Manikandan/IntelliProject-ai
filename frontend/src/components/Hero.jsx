@@ -31,17 +31,17 @@ export default function Hero() {
 
         {/* Headline */}
         <h1 className="text-6xl sm:text-7xl md:text-8xl font-black leading-[1.1] tracking-tighter mb-8 animate-fade-in-up opacity-0">
-          Don't just code.
+          Find your next
           <br />
-          <span className="text-gradient text-glow">Build something</span>
+          <span className="text-gradient text-glow">practical project</span>
           <br />
-          that matters.
+          to build.
         </h1>
 
         {/* Subtext */}
         <p className="text-lg sm:text-xl text-gray-400 max-w-2xl mx-auto mb-10 leading-relaxed animate-fade-in opacity-0" style={{ animationDelay: '0.3s' }}>
-          Tell us your skills, interests, and timeline — and IntelliProject will craft
-          structured, resume-worthy project ideas tailored just for you.
+          Input the technologies you know and how much time you have. We'll generate realistic, 
+          doable project ideas to help you practice your skills and build your portfolio.
         </p>
 
         {/* CTA Buttons */}
