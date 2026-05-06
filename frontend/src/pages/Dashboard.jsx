@@ -16,12 +16,18 @@ export default function Dashboard() {
   const navigate = useNavigate();
 
   const [isEditModalOpen, setIsEditModalOpen] = useState(false);
-  const [displayName, setDisplayName] = useState(user?.user_metadata?.full_name || '');
+  const [displayName, setDisplayName] = useState('');
   const [oldPassword, setOldPassword] = useState('');
   const [newPassword, setNewPassword] = useState('');
   const [confirmPassword, setConfirmPassword] = useState('');
   const [isUpdating, setIsUpdating] = useState(false);
   const [message, setMessage] = useState({ type: '', text: '' });
+
+  useEffect(() => {
+    if (user?.user_metadata?.full_name) {
+      setDisplayName(user.user_metadata.full_name);
+    }
+  }, [user]);
 
   useEffect(() => {
     if (!user) return;
@@ -53,6 +59,9 @@ export default function Dashboard() {
 
   const handleUpdateAccount = async (e) => {
     e.preventDefault();
+    if (!oldPassword) {
+      return setMessage({ type: 'error', text: 'Current password is required to save changes' });
+    }
     if (newPassword && newPassword !== confirmPassword) {
       return setMessage({ type: 'error', text: 'New passwords do not match' });
     }
@@ -61,22 +70,40 @@ export default function Dashboard() {
     setMessage({ type: '', text: '' });
     
     try {
-      // 1. Update Profile (Name)
+      // 1. Verify old password by attempting a re-login
+      const { error: authError } = await supabase.auth.signInWithPassword({
+        email: user.email,
+        password: oldPassword
+      });
+      
+      if (authError) {
+        throw new Error('Incorrect current password. Please try again.');
+      }
+
+      // 2. Update Profile (Name)
       await updateProfile({ full_name: displayName });
       
-      // 2. Update Password if provided
+      // 3. Update Password if provided
       if (newPassword) {
-        // Note: Supabase JS client updatePassword doesn't strictly require old password
-        // but we can simulate the requirement or just use the new one.
         await updatePassword(newPassword);
       }
       
       setMessage({ type: 'success', text: 'Account updated successfully!' });
+      setOldPassword('');
+      setNewPassword('');
+      setConfirmPassword('');
       setTimeout(() => setIsEditModalOpen(false), 2000);
     } catch (err) {
       setMessage({ type: 'error', text: err.message });
     } finally {
       setIsUpdating(false);
+    }
+  };
+
+  const handleDeleteAccount = async () => {
+    if (window.confirm('Are you sure you want to delete your account? This action is irreversible.')) {
+      await logout();
+      navigate('/');
     }
   };
 
@@ -190,7 +217,7 @@ export default function Dashboard() {
                   placeholder="Search projects..."
                   value={searchQuery}
                   onChange={(e) => setSearchQuery(e.target.value)}
-                  className="w-full bg-white/[0.02] border border-white/10 rounded-xl py-3 pl-11 pr-4 text-white placeholder:text-gray-600 focus:outline-none focus:border-indigo-500/40 focus:ring-2 focus:ring-indigo-500/20 transition-all text-sm font-medium"
+                  className="w-full bg-gray-100 dark:bg-white/[0.02] border border-gray-200 dark:border-white/10 rounded-xl py-3 pl-11 pr-4 text-gray-900 dark:text-white placeholder:text-gray-500 dark:placeholder:text-gray-600 focus:outline-none focus:border-indigo-500/40 focus:ring-2 focus:ring-indigo-500/20 transition-all text-sm font-medium"
                 />
               </div>
             </div>
@@ -211,7 +238,7 @@ export default function Dashboard() {
                 <div className="w-16 h-16 mx-auto rounded-full bg-white/[0.02] border border-white/10 flex items-center justify-center mb-6">
                   <Bookmark className="w-6 h-6 text-gray-600" />
                 </div>
-                <h3 className="text-xl font-bold text-white mb-2">No projects found</h3>
+                <h3 className="text-xl font-bold text-gray-900 dark:text-white mb-2">No projects found</h3>
                 <p className="text-gray-400 text-sm max-w-xs mx-auto mb-8 font-medium">
                   You haven't saved any projects yet.
                 </p>
