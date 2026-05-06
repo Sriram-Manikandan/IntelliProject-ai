@@ -26,6 +26,7 @@ import {
   ShieldAlert,
   Target,
   BrainCircuit,
+  Trash2,
 } from 'lucide-react';
 import { useAuth } from '../../context/AuthContext';
 import { saveProject, deleteProject } from '../../services/projectService';
@@ -51,7 +52,7 @@ function ScoreBar({ label, score, icon: Icon }) {
 }
 
 // ── Main Component ────────────────────────────
-export default function ProjectCard({ project, index, initialIsSaved = false }) {
+export default function ProjectCard({ project, index, initialIsSaved = false, onDelete }) {
   const [expanded, setExpanded] = useState(false);
   const { user } = useAuth();
   const [isSaved, setIsSaved] = useState(initialIsSaved);
@@ -64,12 +65,22 @@ export default function ProjectCard({ project, index, initialIsSaved = false }) 
    */
   const toggleSave = async () => {
     if (!user) return;
+    
+    // If it's already saved and we have an onDelete callback (Dashboard context), 
+    // ask for confirmation before removing.
+    if (isSaved && onDelete) {
+      if (!window.confirm('Are you sure you want to remove this blueprint from your dashboard?')) {
+        return;
+      }
+    }
+
     setSaveLoading(true);
 
     try {
       if (isSaved) {
         await deleteProject(user.id, project.title);
         setIsSaved(false);
+        if (onDelete) onDelete(project.title);
       } else {
         await saveProject(user.id, project);
         setIsSaved(true);
@@ -109,7 +120,7 @@ export default function ProjectCard({ project, index, initialIsSaved = false }) 
           {saveLoading ? (
             <Loader2 className="w-5 h-5 animate-spin" />
           ) : isSaved ? (
-            <Check className="w-5 h-5" />
+            onDelete ? <Trash2 className="w-5 h-5" /> : <Check className="w-5 h-5" />
           ) : (
             <Bookmark className="w-5 h-5" />
           )}

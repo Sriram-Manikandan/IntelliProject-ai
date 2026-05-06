@@ -58,6 +58,10 @@ export default function Dashboard() {
     p.problem_statement.toLowerCase().includes(searchQuery.toLowerCase())
   );
 
+  const handleProjectDelete = (projectTitle) => {
+    setSavedProjects(prev => prev.filter(p => p.title !== projectTitle));
+  };
+
   const handleUpdateAccount = async (e) => {
     e.preventDefault();
     
@@ -236,7 +240,13 @@ export default function Dashboard() {
             ) : filteredProjects.length > 0 ? (
               <div className="grid grid-cols-1 gap-8">
                 {filteredProjects.map((project, index) => (
-                  <ProjectCard key={project.title} project={project} index={index} initialIsSaved={true} />
+                  <ProjectCard 
+                    key={project.title} 
+                    project={project} 
+                    index={index} 
+                    initialIsSaved={true} 
+                    onDelete={handleProjectDelete}
+                  />
                 ))}
               </div>
             ) : (
