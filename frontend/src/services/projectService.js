@@ -24,14 +24,17 @@ import { supabase } from '../lib/supabaseClient';
  * @throws Will throw an error if the Supabase insert fails
  */
 export async function saveProject(userId, projectData) {
-  const { error } = await supabase
+  const { data, error } = await supabase
     .from('saved_projects')
     .insert({
       user_id: userId,
       project_data: projectData,
-    });
+    })
+    .select('id')
+    .single();
 
   if (error) throw error;
+  return data.id;
 }
 
 /**
@@ -43,12 +46,11 @@ export async function saveProject(userId, projectData) {
  * @returns {Promise<void>}
  * @throws Will throw an error if the Supabase delete fails
  */
-export async function deleteProject(userId, projectTitle) {
+export async function deleteProject(projectId) {
   const { error } = await supabase
     .from('saved_projects')
     .delete()
-    .eq('user_id', userId)
-    .eq('project_data->>title', projectTitle);  // JSONB text extraction operator
+    .eq('id', projectId);
 
   if (error) throw error;
 }
@@ -63,12 +65,15 @@ export async function deleteProject(userId, projectTitle) {
 export async function getUserProjects(userId) {
   const { data, error } = await supabase
     .from('saved_projects')
-    .select('project_data')
+    .select('id, project_data')
     .eq('user_id', userId)
     .order('created_at', { ascending: false });
 
   if (error) throw error;
 
-  // Unwrap the JSONB column — each row has { project_data: { ... } }
-  return data.map(row => row.project_data);
+  // Map the data to include the record ID inside the project object for easier access
+  return data.map(row => ({
+    ...row.project_data,
+    id: row.id
+  }));
 }

@@ -56,6 +56,7 @@ export default function ProjectCard({ project, index, initialIsSaved = false, on
   const [expanded, setExpanded] = useState(false);
   const { user } = useAuth();
   const [isSaved, setIsSaved] = useState(initialIsSaved);
+  const [projectId, setProjectId] = useState(project.id);
   const [saveLoading, setSaveLoading] = useState(false);
 
   /**
@@ -78,11 +79,18 @@ export default function ProjectCard({ project, index, initialIsSaved = false, on
 
     try {
       if (isSaved) {
-        await deleteProject(user.id, project.title);
+        // Use projectId state (which might have been set during initial load or after saving)
+        if (projectId) {
+          await deleteProject(projectId);
+        } else {
+          // Fallback just in case, but using ID is preferred
+          console.warn('Attempting to delete project without ID');
+        }
         setIsSaved(false);
         if (onDelete) onDelete(project.title);
       } else {
-        await saveProject(user.id, project);
+        const newId = await saveProject(user.id, project);
+        setProjectId(newId);
         setIsSaved(true);
       }
     } catch (err) {
