@@ -1,4 +1,6 @@
 import React from 'react';
+import { Navigate } from 'react-router-dom';
+import { useAuth } from '../context/AuthContext';
 // layout/ — components that appear on every page
 import Navbar from '../components/layout/Navbar';
 import Footer from '../components/layout/Footer';
@@ -12,6 +14,12 @@ import FAQ from '../components/home/FAQ';
 import CallToAction from '../components/home/CallToAction';
 
 export default function Home() {
+  const { isAuthenticated } = useAuth();
+  
+  if (isAuthenticated) {
+    return <Navigate to="/dashboard" replace />;
+  }
+
   return (
     <div className="min-h-screen bg-surface-900 overflow-x-hidden">
       <Navbar />

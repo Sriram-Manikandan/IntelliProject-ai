@@ -8,12 +8,11 @@
 
 import React from 'react';
 import { Link } from 'react-router-dom';
-import { Sparkles, Twitter, Github, Linkedin, Mail } from 'lucide-react';
+import { Sparkles, Github, Linkedin, Mail } from 'lucide-react';
 
 const links = [
-  { label: 'Product', items: ['Features', 'Testimonials', 'FAQ'] },
-  { label: 'Company', items: ['About', 'Feedback', 'Careers', 'Contact', 'Blog'] },
-  { label: 'Legal', items: ['Privacy', 'Terms', 'Cookie Policy'] }
+  { label: 'Product', items: ['Testimonials', 'FAQ'] },
+  { label: 'Company', items: ['Feedback', 'Contact', 'Blog'] }
 ];
 
 export default function Footer() {
@@ -35,11 +34,15 @@ export default function Footer() {
               <span className="block mt-4 text-indigo-400/80 italic font-bold tracking-widest uppercase text-[10px]">Built for practical learning.</span>
             </p>
             <div className="flex items-center gap-4 pt-4">
-              {[Twitter, Github, Linkedin, Mail].map((Icon, i) => (
-                <a key={i} href="#" className="w-12 h-12 rounded-2xl bg-white/[0.02] border border-white/5 flex items-center justify-center text-gray-500 hover:text-white hover:border-indigo-500/30 hover:bg-indigo-500/5 transition-all duration-500 shadow-xl group">
-                  <Icon className="w-5 h-5 group-hover:scale-110 transition-transform" />
-                </a>
-              ))}
+              <a href="https://github.com/Sriram-Manikandan/" target="_blank" rel="noopener noreferrer" className="w-12 h-12 rounded-2xl bg-white/[0.02] border border-white/5 flex items-center justify-center text-gray-500 hover:text-white hover:border-indigo-500/30 hover:bg-indigo-500/5 transition-all duration-500 shadow-xl group">
+                <Github className="w-5 h-5 group-hover:scale-110 transition-transform" />
+              </a>
+              <a href="https://www.linkedin.com/in/srirammanikandan/" target="_blank" rel="noopener noreferrer" className="w-12 h-12 rounded-2xl bg-white/[0.02] border border-white/5 flex items-center justify-center text-gray-500 hover:text-white hover:border-indigo-500/30 hover:bg-indigo-500/5 transition-all duration-500 shadow-xl group">
+                <Linkedin className="w-5 h-5 group-hover:scale-110 transition-transform" />
+              </a>
+              <a href="mailto:sriramtech2007@gmail.com" className="w-12 h-12 rounded-2xl bg-white/[0.02] border border-white/5 flex items-center justify-center text-gray-500 hover:text-white hover:border-indigo-500/30 hover:bg-indigo-500/5 transition-all duration-500 shadow-xl group">
+                <Mail className="w-5 h-5 group-hover:scale-110 transition-transform" />
+              </a>
             </div>
           </div>
 
@@ -49,7 +52,15 @@ export default function Footer() {
               <ul className="space-y-5">
                 {group.items.map((item, j) => (
                   <li key={j}>
-                    <a href={item === 'Features' ? '#features' : (item === 'FAQ' ? '#faq' : (item === 'Testimonials' ? '#testimonials' : '#'))} className="text-sm text-gray-500 hover:text-indigo-400 transition-all font-medium hover:pl-2">
+                    <a 
+                      href={item === 'FAQ' ? '#faq' : (item === 'Testimonials' ? '#testimonials' : (item === 'Contact' ? 'mailto:sriramtech2007@gmail.com' : '#!'))} 
+                      onClick={(e) => {
+                        if (item !== 'FAQ' && item !== 'Testimonials' && item !== 'Contact') {
+                          e.preventDefault();
+                        }
+                      }}
+                      className="text-sm text-gray-500 hover:text-indigo-400 transition-all font-medium hover:pl-2"
+                    >
                       {item}
                     </a>
                   </li>
@@ -65,7 +76,7 @@ export default function Footer() {
           </p>
           <div className="flex items-center gap-8">
             <Link to="/privacy" className="text-xs text-gray-600 hover:text-white transition-all font-bold uppercase tracking-widest">Privacy Policy</Link>
-            <a href="#" className="text-xs text-gray-600 hover:text-white transition-all font-bold uppercase tracking-widest">Terms of Service</a>
+            <Link to="/terms" className="text-xs text-gray-600 hover:text-white transition-all font-bold uppercase tracking-widest">Terms of Service</Link>
           </div>
         </div>
       </div>

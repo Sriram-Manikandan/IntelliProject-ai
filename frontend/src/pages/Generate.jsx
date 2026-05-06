@@ -1,14 +1,13 @@
 import React, { useState, useEffect } from 'react';
 // layout/ — persistent page shell components
-import Navbar from '../components/layout/Navbar';
-import Footer from '../components/layout/Footer';
+import { Link } from 'react-router-dom';
 // generate/ — components specific to the AI generation feature
 import ProjectForm from '../components/generate/ProjectForm';
 import SkeletonLoader from '../components/generate/SkeletonCard';
 import ResultsView from '../components/generate/ResultsView';
 // services/api.js — calls the backend API
 import { generateProjects } from '../services/api';
-import { AlertTriangle, RefreshCw } from 'lucide-react';
+import { AlertTriangle, RefreshCw, ArrowLeft } from 'lucide-react';
 
 export default function Generate() {
   const [view, setView] = useState('form'); // 'form' | 'loading' | 'results' | 'error'
@@ -68,10 +67,18 @@ export default function Generate() {
   };
 
   return (
-    <div className="min-h-screen bg-[#030303]">
-      <Navbar />
+    <div className="min-h-screen bg-gray-50 dark:bg-[#030303] transition-colors duration-300">
+      <div className="pt-8 px-6 max-w-7xl mx-auto">
+        <Link 
+          to="/dashboard"
+          className="inline-flex items-center gap-2 px-4 py-2 rounded-xl bg-white dark:bg-white/5 border border-gray-200 dark:border-white/10 text-sm font-bold text-gray-600 dark:text-gray-400 hover:text-gray-900 dark:hover:text-white hover:bg-gray-100 dark:hover:bg-white/10 transition-all shadow-sm dark:shadow-none"
+        >
+          <ArrowLeft className="w-4 h-4" />
+          Back to Dashboard
+        </Link>
+      </div>
 
-      <main className="pt-24 pb-16 px-6">
+      <main className="pt-8 pb-16 px-6">
 
         {/* Form view */}
         {view === 'form' && (
@@ -115,8 +122,6 @@ export default function Generate() {
           </div>
         )}
       </main>
-
-      <Footer />
     </div>
   );
 }

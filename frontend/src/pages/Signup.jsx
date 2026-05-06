@@ -1,107 +1,177 @@
 import React, { useState } from 'react';
 import { Link, useNavigate, Navigate } from 'react-router-dom';
 import Navbar from '../components/layout/Navbar';
+import { User, Mail, Lock, ArrowRight, Loader2 } from 'lucide-react';
 import { useAuth } from '../context/AuthContext';
 
 export default function Signup() {
+  const navigate = useNavigate();
+  const { signup, isAuthenticated } = useAuth();
+  const [name, setName] = useState('');
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
   const [loading, setLoading] = useState(false);
-  const [error, setError] = useState(null);
-  const [message, setMessage] = useState(null);
+  const [error, setError] = useState('');
+  const [isSignedUp, setIsSignedUp] = useState(false);
   
-  const { signup, isAuthenticated } = useAuth();
-  const navigate = useNavigate();
+  // Real-time password validation
+  const validation = {
+    length: password.length >= 8,
+    number: /[0-9]/.test(password),
+    special: /[!@#$%^&*(),.?":{}|<>]/.test(password),
+    upper: /[A-Z]/.test(password)
+  };
+  const isPasswordValid = Object.values(validation).every(Boolean);
 
-  // Redirect if already logged in
-  if (isAuthenticated) {
-    return <Navigate to="/dashboard" replace />;
-  }
-
-  const handleSubmit = async (e) => {
+  const handleSignup = async (e) => {
     e.preventDefault();
-    setError(null);
-    setMessage(null);
+    if (!isPasswordValid) return; // double check
+
     setLoading(true);
+    setError('');
 
     try {
-      const { error } = await signup(email, password);
-      if (error) throw error;
-      setMessage('Account created successfully! Check your email to verify your account.');
+      const data = await signup(email, password, { full_name: name });
+      if (data) setIsSignedUp(true);
     } catch (err) {
-      setError(err.message || 'Failed to create account. Please try again.');
+      setError(err.message || 'Failed to create account');
     } finally {
       setLoading(false);
     }
   };
 
+  if (isAuthenticated) {
+    return <Navigate to="/dashboard" replace />;
+  }
+
+  if (isSignedUp) {
+    return (
+      <div className="min-h-screen bg-[#030303] flex flex-col">
+        <Navbar />
+        <main className="flex-1 flex items-center justify-center px-6">
+          <div className="w-full max-w-md bg-[#0a0a0a]/80 backdrop-blur-xl border border-white/10 rounded-3xl p-12 text-center shadow-2xl animate-fade-in-up">
+            <div className="w-20 h-20 mx-auto rounded-full bg-indigo-500/10 border border-indigo-500/20 flex items-center justify-center mb-8">
+              <Mail className="w-8 h-8 text-indigo-400" />
+            </div>
+            <h1 className="text-3xl font-black text-white mb-4">Check Your Email</h1>
+            <p className="text-gray-400 mb-8 leading-relaxed font-medium">
+              We've sent a verification link to <span className="text-white font-bold">{email}</span>. 
+              Please confirm your identity.
+            </p>
+            <div className="space-y-4">
+              <Link to="/login" className="btn-primary w-full py-4 block">Back to Login</Link>
+            </div>
+          </div>
+        </main>
+      </div>
+    );
+  }
+
   return (
-    <div className="min-h-screen bg-[#030303] text-white selection:bg-indigo-500/30 font-sans">
+    <div className="min-h-screen bg-[#030303] flex flex-col">
       <Navbar />
 
-      <div className="pt-32 pb-20 px-6 flex items-center justify-center min-h-screen">
-        <div className="w-full max-w-md bg-[#0a0a0a] border border-white/10 rounded-lg p-8 shadow-2xl">
-          <h2 className="text-2xl font-bold text-center mb-6">Create your account</h2>
-          
-          {error && (
-            <div className="bg-red-500/10 border border-red-500/20 text-red-400 p-3 rounded-md mb-6 text-sm text-center">
-              {error}
-            </div>
-          )}
+      <main className="flex-1 flex items-center justify-center p-6 relative">
+        <div className="absolute top-1/4 left-1/4 w-96 h-96 bg-indigo-500/10 rounded-full blur-[120px] pointer-events-none" />
+        <div className="absolute bottom-1/4 right-1/4 w-96 h-96 bg-purple-500/10 rounded-full blur-[120px] pointer-events-none" />
 
-          {message && (
-            <div className="bg-emerald-500/10 border border-emerald-500/20 text-emerald-400 p-3 rounded-md mb-6 text-sm text-center">
-              {message}
-            </div>
-          )}
+        <div className="w-full max-w-md bg-[#0a0a0a]/80 backdrop-blur-xl border border-white/10 rounded-3xl p-8 relative z-10 shadow-2xl">
+          <div className="text-center mb-8">
+            <h2 className="text-3xl font-black text-white tracking-tighter mb-2">Create Account</h2>
+            <p className="text-gray-400 text-sm font-medium">Join IntelliProject today.</p>
+          </div>
 
-          <form onSubmit={handleSubmit} className="space-y-4">
-            <div>
-              <label className="block text-sm font-medium text-gray-300 mb-1" htmlFor="email">
-                Email address
-              </label>
-              <input
-                id="email"
-                type="email"
-                value={email}
-                onChange={(e) => setEmail(e.target.value)}
-                required
-                className="w-full bg-black border border-gray-700 rounded-md px-4 py-2 text-white focus:outline-none focus:border-indigo-500 focus:ring-1 focus:ring-indigo-500"
-              />
-            </div>
-            
-            <div>
-              <label className="block text-sm font-medium text-gray-300 mb-1" htmlFor="password">
-                Password
-              </label>
-              <input
-                id="password"
-                type="password"
-                value={password}
-                onChange={(e) => setPassword(e.target.value)}
-                required
-                className="w-full bg-black border border-gray-700 rounded-md px-4 py-2 text-white focus:outline-none focus:border-indigo-500 focus:ring-1 focus:ring-indigo-500"
-              />
-              <p className="mt-1 text-xs text-gray-500">Must be at least 6 characters.</p>
+          <form className="space-y-5" onSubmit={handleSignup}>
+            {error && (
+              <div className="bg-red-500/10 border border-red-500/20 rounded-xl p-4 text-xs font-bold text-red-400 animate-shake">
+                {error}
+              </div>
+            )}
+
+            <div className="space-y-3">
+              <label htmlFor="signup-name" className="text-[10px] font-black text-gray-500 uppercase tracking-[0.2em] pl-1">Full Name</label>
+              <div className="relative group">
+                <User className="absolute left-5 top-1/2 -translate-y-1/2 w-5 h-5 text-gray-600 group-focus-within:text-indigo-400 transition-colors" />
+                <input 
+                  id="signup-name"
+                  type="text" 
+                  required
+                  value={name}
+                  onChange={(e) => setName(e.target.value)}
+                  placeholder="John Doe"
+                  className="w-full bg-white/[0.02] border border-white/10 rounded-2xl py-4 pl-14 pr-5 text-white placeholder:text-gray-600 focus:outline-none focus:border-indigo-500/40 focus:ring-4 focus:ring-indigo-500/5 transition-all text-sm font-medium"
+                />
+              </div>
             </div>
 
-            <button
-              type="submit"
-              disabled={loading}
-              className="w-full bg-indigo-600 text-white rounded-md py-2.5 font-medium hover:bg-indigo-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500 focus:ring-offset-black transition-colors disabled:opacity-50 mt-4"
+            <div className="space-y-3">
+              <label htmlFor="signup-email" className="text-[10px] font-black text-gray-500 uppercase tracking-[0.2em] pl-1">Email address</label>
+              <div className="relative group">
+                <Mail className="absolute left-5 top-1/2 -translate-y-1/2 w-5 h-5 text-gray-600 group-focus-within:text-indigo-400 transition-colors" />
+                <input 
+                  id="signup-email"
+                  type="email" 
+                  required
+                  value={email}
+                  onChange={(e) => setEmail(e.target.value)}
+                  placeholder="you@example.com"
+                  className="w-full bg-white/[0.02] border border-white/10 rounded-2xl py-4 pl-14 pr-5 text-white placeholder:text-gray-600 focus:outline-none focus:border-indigo-500/40 focus:ring-4 focus:ring-indigo-500/5 transition-all text-sm font-medium"
+                />
+              </div>
+            </div>
+
+            <div className="space-y-3">
+              <label htmlFor="signup-password" className="text-[10px] font-black text-gray-500 uppercase tracking-[0.2em] pl-1">Password</label>
+              <div className="relative group">
+                <Lock className="absolute left-5 top-1/2 -translate-y-1/2 w-5 h-5 text-gray-600 group-focus-within:text-indigo-400 transition-colors" />
+                <input 
+                  id="signup-password"
+                  type="password" 
+                  required
+                  value={password}
+                  onChange={(e) => setPassword(e.target.value)}
+                  placeholder="Min 8 chars, num, spec."
+                  className="w-full bg-white/[0.02] border border-white/10 rounded-2xl py-4 pl-14 pr-5 text-white placeholder:text-gray-600 focus:outline-none focus:border-indigo-500/40 focus:ring-4 focus:ring-indigo-500/5 transition-all text-sm font-medium"
+                />
+              </div>
+              
+              <div className="grid grid-cols-2 gap-2 mt-4 px-2">
+                {[
+                  { label: '8+ Characters', met: validation.length },
+                  { label: 'Numbers', met: validation.number },
+                  { label: 'Uppercase', met: validation.upper },
+                  { label: 'Special Symbol', met: validation.special }
+                ].map((item, i) => (
+                  <div key={i} className="flex items-center gap-2">
+                    <div className={`w-1 h-1 rounded-full ${item.met ? 'bg-indigo-400 shadow-[0_0_8px_rgba(129,140,248,0.6)]' : 'bg-gray-700'}`} />
+                    <span className={`text-[9px] font-black uppercase tracking-widest ${item.met ? 'text-indigo-400' : 'text-gray-600'}`}>{item.label}</span>
+                  </div>
+                ))}
+              </div>
+            </div>
+
+            <button 
+              type="submit" 
+              disabled={loading || !isPasswordValid} 
+              className="btn-primary w-full py-4.5 flex items-center justify-center gap-3 mt-8 text-lg group disabled:opacity-50 disabled:cursor-not-allowed"
             >
-              {loading ? 'Creating account...' : 'Sign up'}
+              {loading ? (
+                <Loader2 className="w-5 h-5 animate-spin" />
+              ) : (
+                <>
+                  Create account <ArrowRight className="w-5 h-5 group-hover:translate-x-1 transition-transform" />
+                </>
+              )}
             </button>
           </form>
 
-          <p className="mt-6 text-center text-sm text-gray-400">
-            Already have an account?{' '}
-            <Link to="/login" className="text-indigo-400 hover:text-indigo-300 font-medium">
-              Log in instead
-            </Link>
-          </p>
+          <div className="mt-10 pt-10 border-t border-white/5 text-center">
+            <p className="text-xs text-gray-500 font-bold uppercase tracking-widest">
+              Already have an account? <Link to="/login" className="text-indigo-400 hover:text-indigo-300 transition-colors ml-2 border-b-2 border-indigo-400/20 hover:border-indigo-400 pb-0.5">Log in</Link>
+            </p>
+          </div>
         </div>
-      </div>
+      </main>
     </div>
   );
 }

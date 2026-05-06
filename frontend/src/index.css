@@ -166,3 +166,15 @@
     filter: drop-shadow(0 0 8px rgba(99, 102, 241, 0.4));
   }
 }
+
+/* Global Light Mode via Inversion (Contrasting Colors) */
+html.light {
+  filter: invert(1) hue-rotate(180deg);
+  background-color: #fcfcfc;
+}
+
+/* Prevent images and videos from being color inverted */
+html.light img,
+html.light video {
+  filter: invert(1) hue-rotate(180deg);
+}
