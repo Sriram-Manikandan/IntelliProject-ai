@@ -50,8 +50,7 @@ export async function deleteProject(userId, projectId) {
   const { error } = await supabase
     .from('saved_projects')
     .delete()
-    .eq('id', projectId)
-    .eq('user_id', userId);
+    .match({ id: projectId, user_id: userId });
 
   if (error) {
     console.error('Supabase Delete Error:', error);

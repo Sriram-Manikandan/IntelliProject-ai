@@ -79,15 +79,12 @@ export default function ProjectCard({ project, index, initialIsSaved = false, on
 
     try {
       if (isSaved) {
-        // Use projectId state (which might have been set during initial load or after saving)
-        if (projectId) {
+        if (onDelete) {
+          await onDelete(); // Dashboard handler already has the ID via arrow function
+        } else if (projectId) {
           await deleteProject(user.id, projectId);
-        } else {
-          // Fallback just in case, but using ID is preferred
-          console.warn('Attempting to delete project without ID');
+          setIsSaved(false);
         }
-        setIsSaved(false);
-        if (onDelete) onDelete(project.title);
       } else {
         const newId = await saveProject(user.id, project);
         setProjectId(newId);

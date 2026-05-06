@@ -58,8 +58,20 @@ export default function Dashboard() {
     p.problem_statement.toLowerCase().includes(searchQuery.toLowerCase())
   );
 
-  const handleProjectDelete = (projectTitle) => {
-    setSavedProjects(prev => prev.filter(p => p.title !== projectTitle));
+  const handleProjectDelete = async (projectId) => {
+    console.log('DASHBOARD: Requesting delete for project ID:', projectId);
+    try {
+      await deleteProject(user.id, projectId);
+      console.log('DASHBOARD: Delete request sent successfully.');
+      setSavedProjects(prev => {
+        const newList = prev.filter(p => p.id !== projectId);
+        console.log(`DASHBOARD: Local state updated. Before: ${prev.length}, After: ${newList.length}`);
+        return newList;
+      });
+    } catch (err) {
+      console.error('DASHBOARD: Delete failed:', err);
+      alert('Error deleting project: ' + err.message);
+    }
   };
 
   const handleUpdateAccount = async (e) => {
@@ -241,11 +253,11 @@ export default function Dashboard() {
               <div className="grid grid-cols-1 gap-8">
                 {filteredProjects.map((project, index) => (
                   <ProjectCard 
-                    key={project.title} 
+                    key={project.id || index} 
                     project={project} 
                     index={index} 
                     initialIsSaved={true} 
-                    onDelete={handleProjectDelete}
+                    onDelete={() => handleProjectDelete(project.id)}
                   />
                 ))}
               </div>
