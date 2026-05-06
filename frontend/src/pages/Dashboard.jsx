@@ -1,7 +1,7 @@
 import React, { useState, useEffect } from 'react';
 import { Bookmark, LayoutDashboard, Search, Loader2, Settings, LogOut, User as UserIcon, Briefcase, Sun, Moon, BrainCircuit, Shield, X } from 'lucide-react';
 import { Link, useNavigate } from 'react-router-dom';
-import { getUserProjects } from '../services/projectService';
+import { getUserProjects, deleteProject } from '../services/projectService';
 import { useAuth } from '../context/AuthContext';
 import { useTheme } from '../context/ThemeContext';
 import ProjectCard from '../components/generate/ProjectCard';
