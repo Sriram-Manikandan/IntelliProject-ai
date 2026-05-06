@@ -81,7 +81,7 @@ export default function ProjectCard({ project, index, initialIsSaved = false, on
       if (isSaved) {
         // Use projectId state (which might have been set during initial load or after saving)
         if (projectId) {
-          await deleteProject(projectId);
+          await deleteProject(user.id, projectId);
         } else {
           // Fallback just in case, but using ID is preferred
           console.warn('Attempting to delete project without ID');
@@ -95,6 +95,7 @@ export default function ProjectCard({ project, index, initialIsSaved = false, on
       }
     } catch (err) {
       console.error('Error toggling save:', err);
+      alert('Failed to delete project from database. Please check your connection or database permissions.');
     } finally {
       setSaveLoading(false);
     }

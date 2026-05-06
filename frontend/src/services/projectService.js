@@ -46,13 +46,17 @@ export async function saveProject(userId, projectData) {
  * @returns {Promise<void>}
  * @throws Will throw an error if the Supabase delete fails
  */
-export async function deleteProject(projectId) {
+export async function deleteProject(userId, projectId) {
   const { error } = await supabase
     .from('saved_projects')
     .delete()
-    .eq('id', projectId);
+    .eq('id', projectId)
+    .eq('user_id', userId);
 
-  if (error) throw error;
+  if (error) {
+    console.error('Supabase Delete Error:', error);
+    throw error;
+  }
 }
 
 /**
