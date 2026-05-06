@@ -46,7 +46,6 @@ export default function Signup() {
 
   if (isSignedUp) {
     return (
-    return (
       <div className="min-h-screen bg-gray-50 dark:bg-[#030303] flex flex-col transition-colors duration-300">
         <Navbar />
         <main className="flex-1 flex items-center justify-center px-6">
