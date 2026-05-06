@@ -12,7 +12,7 @@ export default function Dashboard() {
   const [searchQuery, setSearchQuery] = useState('');
   const [loading, setLoading] = useState(true);
   const [activeTab, setActiveTab] = useState('projects');
-  const { user, logout, updateProfile, updatePassword } = useAuth();
+  const { user, logout, updateProfile, updatePassword, resetPassword } = useAuth();
   const { theme, toggleTheme } = useTheme();
   const navigate = useNavigate();
 
