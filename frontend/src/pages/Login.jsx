@@ -36,7 +36,7 @@ export default function Login() {
   }
 
   return (
-    <div className="min-h-screen bg-[#030303] flex flex-col">
+    <div className="min-h-screen bg-gray-50 dark:bg-[#030303] flex flex-col transition-colors duration-300">
       <Navbar />
 
       <main className="flex-1 flex items-center justify-center p-6 relative">
