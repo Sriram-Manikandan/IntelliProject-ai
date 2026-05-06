@@ -59,18 +59,13 @@ export default function Dashboard() {
   );
 
   const handleProjectDelete = async (projectId) => {
-    console.log('DASHBOARD: Requesting delete for project ID:', projectId);
     try {
       await deleteProject(user.id, projectId);
-      console.log('DASHBOARD: Delete request sent successfully.');
-      setSavedProjects(prev => {
-        const newList = prev.filter(p => p.id !== projectId);
-        console.log(`DASHBOARD: Local state updated. Before: ${prev.length}, After: ${newList.length}`);
-        return newList;
-      });
+      setSavedProjects(prev => prev.filter(p => p.id !== projectId));
     } catch (err) {
-      console.error('DASHBOARD: Delete failed:', err);
-      alert('Error deleting project: ' + err.message);
+      console.error('Delete failed:', err);
+      // We only alert if it's a real failure, not an RLS rejection (which is now handled in service)
+      alert(err.message);
     }
   };
 
