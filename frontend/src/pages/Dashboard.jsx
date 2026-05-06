@@ -60,9 +60,12 @@ export default function Dashboard() {
 
   const handleUpdateAccount = async (e) => {
     e.preventDefault();
-    if (!oldPassword) {
-      return setMessage({ type: 'error', text: 'Current password is required to save changes' });
+    
+    // Only require old password if the user is trying to change their password
+    if (newPassword && !oldPassword) {
+      return setMessage({ type: 'error', text: 'Current password is required to update your password' });
     }
+    
     if (newPassword && newPassword !== confirmPassword) {
       return setMessage({ type: 'error', text: 'New passwords do not match' });
     }
@@ -71,14 +74,16 @@ export default function Dashboard() {
     setMessage({ type: '', text: '' });
     
     try {
-      // 1. Verify old password by attempting a re-login
-      const { error: authError } = await supabase.auth.signInWithPassword({
-        email: user.email,
-        password: oldPassword
-      });
-      
-      if (authError) {
-        throw new Error('Incorrect current password. Please try again.');
+      // 1. Verify old password ONLY if a new password is being set
+      if (newPassword) {
+        const { error: authError } = await supabase.auth.signInWithPassword({
+          email: user.email,
+          password: oldPassword
+        });
+        
+        if (authError) {
+          throw new Error('Incorrect current password. Please try again.');
+        }
       }
 
       // 2. Update Profile (Name)
