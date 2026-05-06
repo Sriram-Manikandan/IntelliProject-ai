@@ -47,14 +47,19 @@ export async function saveProject(userId, projectData) {
  * @throws Will throw an error if the Supabase delete fails
  */
 export async function deleteProject(userId, projectId) {
-  const { error } = await supabase
+  const { error, count } = await supabase
     .from('saved_projects')
-    .delete()
+    .delete({ count: 'exact' }) // Request exact count of deleted rows
     .match({ id: projectId, user_id: userId });
 
   if (error) {
     console.error('Supabase Delete Error:', error);
     throw error;
+  }
+
+  if (count === 0) {
+    console.error('Delete failed: No rows were affected. This usually means RLS (Row Level Security) is blocking the delete.');
+    throw new Error('Database refused to delete the item. This is likely a permission issue (RLS) on your Supabase dashboard.');
   }
 }
 
