@@ -5,6 +5,7 @@ import { getUserProjects } from '../services/projectService';
 import { useAuth } from '../context/AuthContext';
 import { useTheme } from '../context/ThemeContext';
 import ProjectCard from '../components/generate/ProjectCard';
+import { supabase } from '../lib/supabaseClient';
 
 export default function Dashboard() {
   const [savedProjects, setSavedProjects] = useState([]);
