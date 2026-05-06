@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from 'react';
-import { Bookmark, LayoutDashboard, Search, Loader2, Settings, LogOut, User as UserIcon, Briefcase, Sun, Moon, BrainCircuit } from 'lucide-react';
+import { Bookmark, LayoutDashboard, Search, Loader2, Settings, LogOut, User as UserIcon, Briefcase, Sun, Moon, BrainCircuit, Shield } from 'lucide-react';
 import { Link, useNavigate } from 'react-router-dom';
 import { getUserProjects } from '../services/projectService';
 import { useAuth } from '../context/AuthContext';
@@ -11,9 +11,15 @@ export default function Dashboard() {
   const [searchQuery, setSearchQuery] = useState('');
   const [loading, setLoading] = useState(true);
   const [activeTab, setActiveTab] = useState('projects');
-  const { user, logout } = useAuth();
+  const { user, logout, updateProfile, updatePassword } = useAuth();
   const { theme, toggleTheme } = useTheme();
   const navigate = useNavigate();
+
+  const [displayName, setDisplayName] = useState(user?.user_metadata?.full_name || '');
+  const [newPassword, setNewPassword] = useState('');
+  const [isUpdatingProfile, setIsUpdatingProfile] = useState(false);
+  const [isUpdatingPassword, setIsUpdatingPassword] = useState(false);
+  const [message, setMessage] = useState({ type: '', text: '' });
 
   useEffect(() => {
     if (!user) return;
@@ -42,6 +48,49 @@ export default function Dashboard() {
     p.title.toLowerCase().includes(searchQuery.toLowerCase()) || 
     p.problem_statement.toLowerCase().includes(searchQuery.toLowerCase())
   );
+
+  const handleUpdateProfile = async (e) => {
+    e.preventDefault();
+    setIsUpdatingProfile(true);
+    setMessage({ type: '', text: '' });
+    try {
+      await updateProfile({ full_name: displayName });
+      setMessage({ type: 'success', text: 'Profile updated successfully!' });
+    } catch (err) {
+      setMessage({ type: 'error', text: err.message });
+    } finally {
+      setIsUpdatingProfile(false);
+    }
+  };
+
+  const handleUpdatePassword = async (e) => {
+    e.preventDefault();
+    if (!newPassword) return;
+    setIsUpdatingPassword(true);
+    setMessage({ type: '', text: '' });
+    try {
+      await updatePassword(newPassword);
+      setNewPassword('');
+      setMessage({ type: 'success', text: 'Password updated successfully!' });
+    } catch (err) {
+      setMessage({ type: 'error', text: err.message });
+    } finally {
+      setIsUpdatingPassword(false);
+    }
+  };
+
+  const handleDeleteAccount = async () => {
+    if (window.confirm('Are you sure you want to delete your account? This action is irreversible.')) {
+      // In a real app, you'd call a backend function here.
+      // For now, as per request, we log out and redirect to home.
+      await logout();
+      navigate('/');
+    }
+  };
+
+  const handleAvatarChange = () => {
+    setMessage({ type: 'success', text: 'Avatar upload functionality will be available in the next update!' });
+  };
 
   return (
     <div className="min-h-screen bg-gray-50 dark:bg-[#030303] flex text-gray-900 dark:text-white font-sans selection:bg-indigo-500/30 transition-colors duration-300">
@@ -177,6 +226,12 @@ export default function Dashboard() {
               User <span className="text-gradient">Settings</span>
             </h1>
 
+            {message.text && (
+              <div className={`mb-6 p-4 rounded-xl border ${message.type === 'success' ? 'bg-emerald-500/10 border-emerald-500/20 text-emerald-400' : 'bg-red-500/10 border-red-500/20 text-red-400'}`}>
+                {message.text}
+              </div>
+            )}
+
             {/* Account Info Card */}
             <div className="bg-white dark:bg-white/5 border border-gray-200 dark:border-white/10 rounded-2xl p-8 mb-8 shadow-sm dark:shadow-none transition-colors duration-300">
               <h3 className="text-lg font-bold text-gray-900 dark:text-white mb-6 flex items-center gap-2">
@@ -188,23 +243,67 @@ export default function Dashboard() {
                   <UserIcon className="w-8 h-8 text-indigo-500 dark:text-indigo-400" />
                 </div>
                 <div>
-                  <button className="px-4 py-2 rounded-lg bg-gray-100 dark:bg-white/5 border border-gray-200 dark:border-white/10 text-sm font-bold text-gray-700 dark:text-gray-300 hover:bg-gray-200 dark:hover:bg-white/10 transition-colors mb-2">
+                  <button 
+                    onClick={handleAvatarChange}
+                    className="px-4 py-2 rounded-lg bg-gray-100 dark:bg-white/5 border border-gray-200 dark:border-white/10 text-sm font-bold text-gray-700 dark:text-gray-300 hover:bg-gray-200 dark:hover:bg-white/10 transition-colors mb-2"
+                  >
                     Change Avatar
                   </button>
                   <p className="text-xs text-gray-500 dark:text-gray-400">JPG, GIF or PNG. Max size of 800K</p>
                 </div>
               </div>
               
-              <div className="space-y-4">
+              <form onSubmit={handleUpdateProfile} className="space-y-4">
                 <div>
                   <label className="text-xs font-black text-gray-500 uppercase tracking-widest mb-1.5 block">Display Name</label>
-                  <input type="text" placeholder="IntelliUser" className="w-full bg-gray-50 dark:bg-black/20 border border-gray-200 dark:border-white/10 rounded-lg px-4 py-2.5 text-gray-900 dark:text-white focus:outline-none focus:border-indigo-500 transition-colors text-sm font-medium" />
+                  <input 
+                    type="text" 
+                    value={displayName}
+                    onChange={(e) => setDisplayName(e.target.value)}
+                    placeholder="IntelliUser" 
+                    className="w-full bg-gray-50 dark:bg-black/20 border border-gray-200 dark:border-white/10 rounded-lg px-4 py-2.5 text-gray-900 dark:text-white focus:outline-none focus:border-indigo-500 transition-colors text-sm font-medium" 
+                  />
                 </div>
                 <div>
                   <label className="text-xs font-black text-gray-500 uppercase tracking-widest mb-1.5 block">Email Address</label>
                   <input type="text" value={user?.email || ''} disabled className="w-full bg-gray-100 dark:bg-black/40 border border-gray-200 dark:border-white/5 rounded-lg px-4 py-2.5 text-gray-500 dark:text-gray-400 cursor-not-allowed text-sm font-medium" />
                 </div>
-              </div>
+                <button 
+                  type="submit"
+                  disabled={isUpdatingProfile}
+                  className="btn-primary py-2.5 px-6 text-sm disabled:opacity-50"
+                >
+                  {isUpdatingProfile ? 'Saving...' : 'Save Profile'}
+                </button>
+              </form>
+            </div>
+
+            {/* Security Section */}
+            <div className="bg-white dark:bg-white/5 border border-gray-200 dark:border-white/10 rounded-2xl p-8 mb-8 shadow-sm dark:shadow-none transition-colors duration-300">
+              <h3 className="text-lg font-bold text-gray-900 dark:text-white mb-6 flex items-center gap-2">
+                <Shield className="w-5 h-5 text-indigo-500" />
+                Security
+              </h3>
+              
+              <form onSubmit={handleUpdatePassword} className="space-y-4">
+                <div>
+                  <label className="text-xs font-black text-gray-500 uppercase tracking-widest mb-1.5 block">New Password</label>
+                  <input 
+                    type="password" 
+                    value={newPassword}
+                    onChange={(e) => setNewPassword(e.target.value)}
+                    placeholder="••••••••" 
+                    className="w-full bg-gray-50 dark:bg-black/20 border border-gray-200 dark:border-white/10 rounded-lg px-4 py-2.5 text-gray-900 dark:text-white focus:outline-none focus:border-indigo-500 transition-colors text-sm font-medium" 
+                  />
+                </div>
+                <button 
+                  type="submit"
+                  disabled={isUpdatingPassword || !newPassword}
+                  className="btn-primary py-2.5 px-6 text-sm disabled:opacity-50"
+                >
+                  {isUpdatingPassword ? 'Updating...' : 'Update Password'}
+                </button>
+              </form>
             </div>
 
             {/* Notifications & Preferences Card */}
@@ -256,7 +355,10 @@ export default function Dashboard() {
                  Danger Zone
                </h3>
                <p className="text-sm text-gray-600 dark:text-gray-400 mb-6 font-medium">Permanently delete your account and all associated projects. This action cannot be undone.</p>
-               <button className="px-6 py-3 rounded-xl bg-red-600 hover:bg-red-700 text-white text-sm font-bold transition-all shadow-lg shadow-red-500/20">
+               <button 
+                 onClick={handleDeleteAccount}
+                 className="px-6 py-3 rounded-xl bg-red-600 hover:bg-red-700 text-white text-sm font-bold transition-all shadow-lg shadow-red-500/20"
+               >
                  Delete Account
                </button>
             </div>

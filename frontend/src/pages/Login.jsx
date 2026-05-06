@@ -93,7 +93,7 @@ export default function Login() {
                 <input type="checkbox" className="w-4 h-4 rounded border-white/10 bg-white/[0.02] text-indigo-500 focus:ring-indigo-500/50 focus:ring-offset-0" />
                 <span className="text-xs text-gray-500 font-bold group-hover:text-gray-400 transition-colors">Keep Me Synced</span>
               </label>
-              <a href="#" className="text-xs text-indigo-400 hover:text-indigo-300 font-bold transition-colors uppercase tracking-widest" onClick={(e) => e.preventDefault()}>Restore Link</a>
+              <Link to="/forgot-password" size="sm" className="text-xs text-indigo-400 hover:text-indigo-300 font-bold transition-colors uppercase tracking-widest">Forgot Password?</Link>
             </div>
 
             <button type="submit" disabled={loading} className="btn-primary w-full py-4.5 flex items-center justify-center gap-3 mt-6 text-lg group disabled:opacity-50 disabled:cursor-not-allowed">

@@ -1,0 +1,118 @@
+import React, { useState } from 'react';
+import { useNavigate, Link } from 'react-router-dom';
+import Navbar from '../components/layout/Navbar';
+import { Lock, ArrowRight, Loader2, CheckCircle2 } from 'lucide-react';
+import { useAuth } from '../context/AuthContext';
+
+export default function ResetPassword() {
+  const navigate = useNavigate();
+  const { updatePassword } = useAuth();
+  const [password, setPassword] = useState('');
+  const [confirmPassword, setConfirmPassword] = useState('');
+  const [loading, setLoading] = useState(false);
+  const [error, setError] = useState('');
+  const [success, setSuccess] = useState(false);
+
+  const handleSubmit = async (e) => {
+    e.preventDefault();
+    if (password !== confirmPassword) {
+      return setError('Passwords do not match');
+    }
+    setLoading(true);
+    setError('');
+    
+    try {
+      await updatePassword(password);
+      setSuccess(true);
+      setTimeout(() => navigate('/dashboard'), 3000);
+    } catch (err) {
+      setError(err.message || 'Failed to update password');
+    } finally {
+      setLoading(false);
+    }
+  };
+
+  return (
+    <div className="min-h-screen bg-[#030303] flex flex-col">
+      <Navbar />
+
+      <main className="flex-1 flex items-center justify-center p-6 relative">
+        <div className="absolute top-1/4 left-1/4 w-96 h-96 bg-indigo-500/10 rounded-full blur-[120px] pointer-events-none" />
+        
+        <div className="w-full max-w-md bg-[#0a0a0a]/80 backdrop-blur-xl border border-white/10 rounded-3xl p-8 relative z-10 shadow-2xl">
+          {success ? (
+            <div className="text-center py-8">
+              <div className="w-16 h-16 bg-emerald-500/10 rounded-full flex items-center justify-center mx-auto mb-6">
+                <CheckCircle2 className="w-8 h-8 text-emerald-400" />
+              </div>
+              <h2 className="text-2xl font-black text-white tracking-tighter mb-4">Password Updated</h2>
+              <p className="text-gray-400 text-sm font-medium mb-8">
+                Your password has been reset successfully. Redirecting you to the dashboard...
+              </p>
+              <Link to="/dashboard" className="btn-primary inline-flex items-center gap-2 py-3 px-8 text-sm">
+                Go to Dashboard
+              </Link>
+            </div>
+          ) : (
+            <>
+              <div className="text-center mb-8">
+                <h2 className="text-3xl font-black text-white tracking-tighter mb-2">Set New Password</h2>
+                <p className="text-gray-400 text-sm font-medium">Create a new, strong password for your account.</p>
+              </div>
+
+              <form className="space-y-6" onSubmit={handleSubmit}>
+                {error && (
+                  <div className="bg-red-500/10 border border-red-500/20 rounded-xl p-4 text-xs font-bold text-red-400">
+                    {error}
+                  </div>
+                )}
+
+                <div className="space-y-3">
+                  <label htmlFor="new-password" className="text-[10px] font-black text-gray-500 uppercase tracking-[0.2em] pl-1">New Password</label>
+                  <div className="relative group">
+                    <Lock className="absolute left-5 top-1/2 -translate-y-1/2 w-5 h-5 text-gray-600 group-focus-within:text-indigo-400 transition-colors" />
+                    <input 
+                      id="new-password"
+                      type="password" 
+                      required
+                      value={password}
+                      onChange={(e) => setPassword(e.target.value)}
+                      placeholder="••••••••"
+                      className="w-full bg-white/[0.02] border border-white/10 rounded-2xl py-4 pl-14 pr-5 text-white placeholder:text-gray-600 focus:outline-none focus:border-indigo-500/40 focus:ring-4 focus:ring-indigo-500/5 transition-all text-sm font-medium"
+                    />
+                  </div>
+                </div>
+
+                <div className="space-y-3">
+                  <label htmlFor="confirm-password" className="text-[10px] font-black text-gray-500 uppercase tracking-[0.2em] pl-1">Confirm Password</label>
+                  <div className="relative group">
+                    <Lock className="absolute left-5 top-1/2 -translate-y-1/2 w-5 h-5 text-gray-600 group-focus-within:text-indigo-400 transition-colors" />
+                    <input 
+                      id="confirm-password"
+                      type="password" 
+                      required
+                      value={confirmPassword}
+                      onChange={(e) => setConfirmPassword(e.target.value)}
+                      placeholder="••••••••"
+                      className="w-full bg-white/[0.02] border border-white/10 rounded-2xl py-4 pl-14 pr-5 text-white placeholder:text-gray-600 focus:outline-none focus:border-indigo-500/40 focus:ring-4 focus:ring-indigo-500/5 transition-all text-sm font-medium"
+                    />
+                  </div>
+                </div>
+
+                <button type="submit" disabled={loading} className="btn-primary w-full py-4.5 flex items-center justify-center gap-3 mt-6 text-lg group disabled:opacity-50">
+                  {loading ? (
+                    <Loader2 className="w-5 h-5 animate-spin" />
+                  ) : (
+                    <>
+                      Update Password <ArrowRight className="w-5 h-5 group-hover:translate-x-1 transition-transform" />
+                    </>
+                  )}
+                </button>
+              </form>
+            </>
+          )}
+        </div>
+      </main>
+    </div>
+  );
+}
