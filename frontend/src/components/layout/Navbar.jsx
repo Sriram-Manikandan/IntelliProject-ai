@@ -54,7 +54,7 @@ export default function Navbar() {
             <Link to="/" className={`text-sm font-bold tracking-wide transition-colors ${location.pathname === '/' ? 'text-indigo-400' : 'text-gray-400 hover:text-white'}`}>Home</Link>
             {isAuthenticated ? (
               <>
-                <Link to="/dashboard" className={`text-sm font-bold tracking-wide transition-colors ${location.pathname === '/dashboard' ? 'text-indigo-400' : 'text-gray-400 hover:text-white'}`}>Vault</Link>
+                <Link to="/dashboard" className={`text-sm font-bold tracking-wide transition-colors ${location.pathname === '/dashboard' ? 'text-indigo-400' : 'text-gray-400 hover:text-white'}`}>Projects</Link>
                 <Link to="/generate" className={`text-sm font-bold tracking-wide transition-colors ${location.pathname === '/generate' ? 'text-indigo-400' : 'text-gray-400 hover:text-white'}`}>Generate</Link>
                 <Link to="/admin" className={`text-sm font-bold tracking-wide transition-colors ${location.pathname === '/admin' ? 'text-rose-400' : 'text-gray-400 hover:text-rose-300'}`}>Admin</Link>
               </>
