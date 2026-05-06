@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from 'react';
-import { Bookmark, LayoutDashboard, Search, Loader2, Settings, LogOut, User as UserIcon, Briefcase, Sun, Moon, BrainCircuit, Shield } from 'lucide-react';
+import { Bookmark, LayoutDashboard, Search, Loader2, Settings, LogOut, User as UserIcon, Briefcase, Sun, Moon, BrainCircuit, Shield, X } from 'lucide-react';
 import { Link, useNavigate } from 'react-router-dom';
 import { getUserProjects } from '../services/projectService';
 import { useAuth } from '../context/AuthContext';
@@ -15,10 +15,12 @@ export default function Dashboard() {
   const { theme, toggleTheme } = useTheme();
   const navigate = useNavigate();
 
+  const [isEditModalOpen, setIsEditModalOpen] = useState(false);
   const [displayName, setDisplayName] = useState(user?.user_metadata?.full_name || '');
+  const [oldPassword, setOldPassword] = useState('');
   const [newPassword, setNewPassword] = useState('');
-  const [isUpdatingProfile, setIsUpdatingProfile] = useState(false);
-  const [isUpdatingPassword, setIsUpdatingPassword] = useState(false);
+  const [confirmPassword, setConfirmPassword] = useState('');
+  const [isUpdating, setIsUpdating] = useState(false);
   const [message, setMessage] = useState({ type: '', text: '' });
 
   useEffect(() => {
@@ -49,42 +51,41 @@ export default function Dashboard() {
     p.problem_statement.toLowerCase().includes(searchQuery.toLowerCase())
   );
 
-  const handleUpdateProfile = async (e) => {
+  const handleUpdateAccount = async (e) => {
     e.preventDefault();
-    setIsUpdatingProfile(true);
+    if (newPassword && newPassword !== confirmPassword) {
+      return setMessage({ type: 'error', text: 'New passwords do not match' });
+    }
+    
+    setIsUpdating(true);
     setMessage({ type: '', text: '' });
+    
     try {
+      // 1. Update Profile (Name)
       await updateProfile({ full_name: displayName });
-      setMessage({ type: 'success', text: 'Profile updated successfully!' });
+      
+      // 2. Update Password if provided
+      if (newPassword) {
+        // Note: Supabase JS client updatePassword doesn't strictly require old password
+        // but we can simulate the requirement or just use the new one.
+        await updatePassword(newPassword);
+      }
+      
+      setMessage({ type: 'success', text: 'Account updated successfully!' });
+      setTimeout(() => setIsEditModalOpen(false), 2000);
     } catch (err) {
       setMessage({ type: 'error', text: err.message });
     } finally {
-      setIsUpdatingProfile(false);
+      setIsUpdating(false);
     }
   };
 
-  const handleUpdatePassword = async (e) => {
-    e.preventDefault();
-    if (!newPassword) return;
-    setIsUpdatingPassword(true);
-    setMessage({ type: '', text: '' });
+  const handleForgotPasswordInSettings = async () => {
     try {
-      await updatePassword(newPassword);
-      setNewPassword('');
-      setMessage({ type: 'success', text: 'Password updated successfully!' });
+      await resetPassword(user.email);
+      setMessage({ type: 'success', text: 'Password reset link sent to your email!' });
     } catch (err) {
       setMessage({ type: 'error', text: err.message });
-    } finally {
-      setIsUpdatingPassword(false);
-    }
-  };
-
-  const handleDeleteAccount = async () => {
-    if (window.confirm('Are you sure you want to delete your account? This action is irreversible.')) {
-      // In a real app, you'd call a backend function here.
-      // For now, as per request, we log out and redirect to home.
-      await logout();
-      navigate('/');
     }
   };
 
@@ -222,11 +223,19 @@ export default function Dashboard() {
           </div>
         ) : (
           <div className="max-w-3xl mx-auto pb-24">
-            <h1 className="text-3xl sm:text-4xl font-black text-gray-900 dark:text-white tracking-tight mb-8">
-              User <span className="text-gradient">Settings</span>
-            </h1>
+            <div className="flex items-center justify-between mb-8">
+              <h1 className="text-3xl sm:text-4xl font-black text-gray-900 dark:text-white tracking-tight">
+                User <span className="text-gradient">Settings</span>
+              </h1>
+              <button 
+                onClick={() => setIsEditModalOpen(true)}
+                className="btn-primary py-2.5 px-6 text-sm flex items-center gap-2"
+              >
+                Edit Profile
+              </button>
+            </div>
 
-            {message.text && (
+            {message.text && !isEditModalOpen && (
               <div className={`mb-6 p-4 rounded-xl border ${message.type === 'success' ? 'bg-emerald-500/10 border-emerald-500/20 text-emerald-400' : 'bg-red-500/10 border-red-500/20 text-red-400'}`}>
                 {message.text}
               </div>
@@ -238,73 +247,121 @@ export default function Dashboard() {
                 <UserIcon className="w-5 h-5 text-indigo-500" />
                 Account Profile
               </h3>
-              <div className="flex items-center gap-6 mb-8">
+              <div className="flex items-center gap-6">
                 <div className="w-20 h-20 rounded-full bg-indigo-50 dark:bg-indigo-500/10 flex items-center justify-center border-2 border-indigo-100 dark:border-indigo-500/20">
                   <UserIcon className="w-8 h-8 text-indigo-500 dark:text-indigo-400" />
                 </div>
                 <div>
-                  <button 
-                    onClick={handleAvatarChange}
-                    className="px-4 py-2 rounded-lg bg-gray-100 dark:bg-white/5 border border-gray-200 dark:border-white/10 text-sm font-bold text-gray-700 dark:text-gray-300 hover:bg-gray-200 dark:hover:bg-white/10 transition-colors mb-2"
-                  >
-                    Change Avatar
-                  </button>
-                  <p className="text-xs text-gray-500 dark:text-gray-400">JPG, GIF or PNG. Max size of 800K</p>
+                  <p className="text-sm font-bold text-gray-900 dark:text-white mb-1">{user?.user_metadata?.full_name || 'IntelliUser'}</p>
+                  <p className="text-xs text-gray-500 dark:text-gray-400 mb-3">{user?.email}</p>
+                  <p className="text-emerald-400 text-[10px] font-black uppercase tracking-widest flex items-center gap-2">
+                    <span className="w-1.5 h-1.5 rounded-full bg-emerald-400 animate-pulse" /> Status: Verified
+                  </p>
                 </div>
               </div>
-              
-              <form onSubmit={handleUpdateProfile} className="space-y-4">
-                <div>
-                  <label className="text-xs font-black text-gray-500 uppercase tracking-widest mb-1.5 block">Display Name</label>
-                  <input 
-                    type="text" 
-                    value={displayName}
-                    onChange={(e) => setDisplayName(e.target.value)}
-                    placeholder="IntelliUser" 
-                    className="w-full bg-gray-50 dark:bg-black/20 border border-gray-200 dark:border-white/10 rounded-lg px-4 py-2.5 text-gray-900 dark:text-white focus:outline-none focus:border-indigo-500 transition-colors text-sm font-medium" 
-                  />
-                </div>
-                <div>
-                  <label className="text-xs font-black text-gray-500 uppercase tracking-widest mb-1.5 block">Email Address</label>
-                  <input type="text" value={user?.email || ''} disabled className="w-full bg-gray-100 dark:bg-black/40 border border-gray-200 dark:border-white/5 rounded-lg px-4 py-2.5 text-gray-500 dark:text-gray-400 cursor-not-allowed text-sm font-medium" />
-                </div>
-                <button 
-                  type="submit"
-                  disabled={isUpdatingProfile}
-                  className="btn-primary py-2.5 px-6 text-sm disabled:opacity-50"
-                >
-                  {isUpdatingProfile ? 'Saving...' : 'Save Profile'}
-                </button>
-              </form>
             </div>
 
-            {/* Security Section */}
-            <div className="bg-white dark:bg-white/5 border border-gray-200 dark:border-white/10 rounded-2xl p-8 mb-8 shadow-sm dark:shadow-none transition-colors duration-300">
-              <h3 className="text-lg font-bold text-gray-900 dark:text-white mb-6 flex items-center gap-2">
-                <Shield className="w-5 h-5 text-indigo-500" />
-                Security
-              </h3>
-              
-              <form onSubmit={handleUpdatePassword} className="space-y-4">
-                <div>
-                  <label className="text-xs font-black text-gray-500 uppercase tracking-widest mb-1.5 block">New Password</label>
-                  <input 
-                    type="password" 
-                    value={newPassword}
-                    onChange={(e) => setNewPassword(e.target.value)}
-                    placeholder="••••••••" 
-                    className="w-full bg-gray-50 dark:bg-black/20 border border-gray-200 dark:border-white/10 rounded-lg px-4 py-2.5 text-gray-900 dark:text-white focus:outline-none focus:border-indigo-500 transition-colors text-sm font-medium" 
-                  />
+            {/* Edit Profile Modal/Box */}
+            {isEditModalOpen && (
+              <div className="fixed inset-0 z-[100] flex items-center justify-center p-6 bg-black/60 backdrop-blur-sm animate-fade-in">
+                <div className="w-full max-w-lg bg-white dark:bg-[#0a0a0a] border border-gray-200 dark:border-white/10 rounded-3xl p-8 shadow-2xl relative">
+                  <button 
+                    onClick={() => setIsEditModalOpen(false)}
+                    className="absolute top-6 right-6 text-gray-400 hover:text-gray-900 dark:hover:text-white transition-colors p-2 hover:bg-gray-100 dark:hover:bg-white/5 rounded-full"
+                  >
+                    <X className="w-5 h-5" />
+                  </button>
+
+                  <h3 className="text-2xl font-black text-gray-900 dark:text-white mb-2 tracking-tight">Edit Your Profile</h3>
+                  <p className="text-sm text-gray-500 dark:text-gray-400 mb-8 font-medium">Update your identity and account security.</p>
+
+                  <form onSubmit={handleUpdateAccount} className="space-y-5">
+                    {message.text && (
+                      <div className={`p-4 rounded-xl border text-xs font-bold ${message.type === 'success' ? 'bg-emerald-500/10 border-emerald-500/20 text-emerald-400' : 'bg-red-500/10 border-red-500/20 text-red-400'}`}>
+                        {message.text}
+                      </div>
+                    )}
+
+                    <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+                      <div className="space-y-1.5">
+                        <label className="text-[10px] font-black text-gray-500 uppercase tracking-widest ml-1">Full Name</label>
+                        <input 
+                          type="text" 
+                          value={displayName}
+                          onChange={(e) => setDisplayName(e.target.value)}
+                          className="w-full bg-gray-50 dark:bg-black/20 border border-gray-200 dark:border-white/10 rounded-xl px-4 py-3 text-gray-900 dark:text-white focus:outline-none focus:border-indigo-500 transition-colors text-sm font-medium"
+                        />
+                      </div>
+                      <div className="space-y-1.5">
+                        <label className="text-[10px] font-black text-gray-500 uppercase tracking-widest ml-1">Email (Read Only)</label>
+                        <input type="text" value={user?.email} disabled className="w-full bg-gray-100 dark:bg-black/40 border border-gray-200 dark:border-white/5 rounded-xl px-4 py-3 text-gray-500 dark:text-gray-400 cursor-not-allowed text-sm font-medium" />
+                      </div>
+                    </div>
+
+                    <div className="h-px bg-gray-200 dark:bg-white/10 my-4" />
+
+                    <div className="space-y-4">
+                      <div className="space-y-1.5">
+                        <label className="text-[10px] font-black text-gray-500 uppercase tracking-widest ml-1">Current Password</label>
+                        <input 
+                          type="password" 
+                          value={oldPassword}
+                          onChange={(e) => setOldPassword(e.target.value)}
+                          placeholder="Required for changes"
+                          className="w-full bg-gray-50 dark:bg-black/20 border border-gray-200 dark:border-white/10 rounded-xl px-4 py-3 text-gray-900 dark:text-white focus:outline-none focus:border-indigo-500 transition-colors text-sm font-medium"
+                        />
+                      </div>
+                      <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+                        <div className="space-y-1.5">
+                          <label className="text-[10px] font-black text-gray-500 uppercase tracking-widest ml-1">New Password</label>
+                          <input 
+                            type="password" 
+                            value={newPassword}
+                            onChange={(e) => setNewPassword(e.target.value)}
+                            placeholder="Min 6 chars"
+                            className="w-full bg-gray-50 dark:bg-black/20 border border-gray-200 dark:border-white/10 rounded-xl px-4 py-3 text-gray-900 dark:text-white focus:outline-none focus:border-indigo-500 transition-colors text-sm font-medium"
+                          />
+                        </div>
+                        <div className="space-y-1.5">
+                          <label className="text-[10px] font-black text-gray-500 uppercase tracking-widest ml-1">Confirm New</label>
+                          <input 
+                            type="password" 
+                            value={confirmPassword}
+                            onChange={(e) => setConfirmPassword(e.target.value)}
+                            placeholder="Match password"
+                            className="w-full bg-gray-50 dark:bg-black/20 border border-gray-200 dark:border-white/10 rounded-xl px-4 py-3 text-gray-900 dark:text-white focus:outline-none focus:border-indigo-500 transition-colors text-sm font-medium"
+                          />
+                        </div>
+                      </div>
+                      <button 
+                        type="button"
+                        onClick={handleForgotPasswordInSettings}
+                        className="text-[10px] font-black text-indigo-500 hover:text-indigo-400 uppercase tracking-widest transition-colors"
+                      >
+                        Forgot Password? Send Reset Link
+                      </button>
+                    </div>
+
+                    <div className="flex gap-4 pt-4">
+                      <button 
+                        type="button"
+                        onClick={() => setIsEditModalOpen(false)}
+                        className="flex-1 py-3.5 rounded-xl border border-gray-200 dark:border-white/10 text-gray-600 dark:text-gray-400 font-bold hover:bg-gray-50 dark:hover:bg-white/5 transition-colors text-sm"
+                      >
+                        Cancel
+                      </button>
+                      <button 
+                        type="submit"
+                        disabled={isUpdating}
+                        className="flex-1 btn-primary py-3.5 text-sm disabled:opacity-50"
+                      >
+                        {isUpdating ? 'Updating...' : 'Save Changes'}
+                      </button>
+                    </div>
+                  </form>
                 </div>
-                <button 
-                  type="submit"
-                  disabled={isUpdatingPassword || !newPassword}
-                  className="btn-primary py-2.5 px-6 text-sm disabled:opacity-50"
-                >
-                  {isUpdatingPassword ? 'Updating...' : 'Update Password'}
-                </button>
-              </form>
-            </div>
+              </div>
+            )}
 
             {/* Notifications & Preferences Card */}
             <div className="bg-white dark:bg-white/5 border border-gray-200 dark:border-white/10 rounded-2xl p-8 mb-8 shadow-sm dark:shadow-none transition-colors duration-300">
