@@ -122,7 +122,7 @@ export default function Dashboard() {
   };
 
   return (
-    <div className="min-h-screen bg-gray-50 dark:bg-[#030303] flex text-gray-900 dark:text-white font-sans selection:bg-indigo-500/30 transition-colors duration-300">
+    <div className="min-h-screen bg-[#030303] flex text-gray-900 dark:text-white font-sans selection:bg-indigo-500/30 transition-colors duration-300">
       {/* Sidebar */}
       <aside className="w-64 bg-white dark:bg-[#0a0a0a] border-r border-gray-200 dark:border-white/10 flex flex-col fixed inset-y-0 left-0 z-50 transition-colors duration-300">
         <div className="p-6">
@@ -218,7 +218,7 @@ export default function Dashboard() {
                   placeholder="Search projects..."
                   value={searchQuery}
                   onChange={(e) => setSearchQuery(e.target.value)}
-                  className="w-full bg-gray-100 dark:bg-white/[0.02] border border-gray-200 dark:border-white/10 rounded-xl py-3 pl-11 pr-4 text-gray-900 dark:text-white placeholder:text-gray-500 dark:placeholder:text-gray-600 focus:outline-none focus:border-indigo-500/40 focus:ring-2 focus:ring-indigo-500/20 transition-all text-sm font-medium"
+                  className="w-full bg-white/[0.02] border border-white/10 rounded-xl py-3 pl-11 pr-4 text-white placeholder:text-gray-600 focus:outline-none focus:border-indigo-500/40 focus:ring-2 focus:ring-indigo-500/20 transition-all text-sm font-medium"
                 />
               </div>
             </div>
@@ -239,7 +239,7 @@ export default function Dashboard() {
                 <div className="w-16 h-16 mx-auto rounded-full bg-white/[0.02] border border-white/10 flex items-center justify-center mb-6">
                   <Bookmark className="w-6 h-6 text-gray-600" />
                 </div>
-                <h3 className="text-xl font-bold text-gray-900 dark:text-white mb-2">No projects found</h3>
+                <h3 className="text-xl font-bold text-white mb-2">No projects found</h3>
                 <p className="text-gray-400 text-sm max-w-xs mx-auto mb-8 font-medium">
                   You haven't saved any projects yet.
                 </p>

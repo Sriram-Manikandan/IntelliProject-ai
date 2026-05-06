@@ -46,7 +46,7 @@ export default function Signup() {
 
   if (isSignedUp) {
     return (
-      <div className="min-h-screen bg-gray-50 dark:bg-[#030303] flex flex-col transition-colors duration-300">
+      <div className="min-h-screen bg-[#030303] flex flex-col">
         <Navbar />
         <main className="flex-1 flex items-center justify-center px-6">
           <div className="w-full max-w-md bg-[#0a0a0a]/80 backdrop-blur-xl border border-white/10 rounded-3xl p-12 text-center shadow-2xl animate-fade-in-up">
@@ -68,7 +68,7 @@ export default function Signup() {
   }
 
   return (
-    <div className="min-h-screen bg-gray-50 dark:bg-[#030303] flex flex-col transition-colors duration-300">
+    <div className="min-h-screen bg-[#030303] flex flex-col">
       <Navbar />
 
       <main className="flex-1 flex items-center justify-center p-6 relative">
