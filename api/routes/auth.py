@@ -6,7 +6,7 @@
 
 import logging
 from typing import Optional
-from pydantic import BaseModel, EmailStr
+from pydantic import BaseModel
 from fastapi import APIRouter, Depends, HTTPException, status
 from sqlalchemy.orm import Session
 
@@ -27,13 +27,13 @@ router = APIRouter(prefix="/auth", tags=["Authentication"])
 
 # ── Schemas ──────────────────────────────────
 class SignupRequest(BaseModel):
-    email: EmailStr
+    email: str
     password: str
     full_name: Optional[str] = None
 
 
 class LoginRequest(BaseModel):
-    email: EmailStr
+    email: str
     password: str
 
 
@@ -44,7 +44,7 @@ class UpdateProfileRequest(BaseModel):
 
 
 class ForgotPasswordRequest(BaseModel):
-    email: EmailStr
+    email: str
 
 
 class ResetPasswordRequest(BaseModel):
