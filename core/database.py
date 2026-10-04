@@ -11,10 +11,12 @@ from core.config import settings
 
 logger = logging.getLogger(__name__)
 
-# Normalize PostgreSQL connection URI
+# Normalize PostgreSQL connection URI to explicitly use psycopg2
 db_url = settings.DATABASE_URL.strip()
 if db_url.startswith("postgres://"):
-    db_url = db_url.replace("postgres://", "postgresql://", 1)
+    db_url = db_url.replace("postgres://", "postgresql+psycopg2://", 1)
+elif db_url.startswith("postgresql://") and not db_url.startswith("postgresql+"):
+    db_url = db_url.replace("postgresql://", "postgresql+psycopg2://", 1)
 
 # Configure SQLAlchemy engine with pooling suited for Neon serverless Postgres
 engine = None

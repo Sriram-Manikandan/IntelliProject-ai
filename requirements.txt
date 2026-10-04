@@ -8,5 +8,6 @@ tenacity>=8.2.3
 gunicorn>=22.0.0
 sqlalchemy>=2.0.28
 psycopg2-binary>=2.9.9
+psycopg[binary]>=3.1.18
 pyjwt>=2.8.0
 bcrypt>=4.1.2
