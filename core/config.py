@@ -1,6 +1,7 @@
-# app/core/config.py
+# core/config.py
 # ─────────────────────────────────────────────
 # Centralised configuration loaded from .env
+# Supports Neon DB (PostgreSQL) and Render deployment
 # ─────────────────────────────────────────────
 
 from pydantic_settings import BaseSettings
@@ -9,22 +10,32 @@ from typing import List
 
 class Settings(BaseSettings):
     APP_NAME: str = "IntelliProject"
-    APP_VERSION: str = "1.0.0"
+    APP_VERSION: str = "2.0.0"
     DEBUG: bool = True
 
     HOST: str = "0.0.0.0"
     PORT: int = 8000
 
-    # Accepts a comma-separated string from the .env file
-    ALLOWED_ORIGINS: str = "http://localhost:3000,http://localhost:5173"
+    # Comma-separated list of origins or wildcard
+    ALLOWED_ORIGINS: str = "http://localhost:3000,http://localhost:5173,https://*.onrender.com,*"
 
-    # Supabase configuration
-    SUPABASE_URL: str = ""
-    SUPABASE_SERVICE_ROLE_KEY: str = ""
+    # Neon PostgreSQL configuration
+    DATABASE_URL: str = ""
+
+    # JWT Authentication configuration
+    JWT_SECRET: str = "intelliproject-secure-jwt-secret-key-change-in-production"
+    JWT_ALGORITHM: str = "HS256"
+    ACCESS_TOKEN_EXPIRE_MINUTES: int = 60 * 24 * 7  # 7 days
+
+    # Groq AI
+    GROQ_API_KEY: str = ""
 
     @property
     def origins_list(self) -> List[str]:
-        return [o.strip() for o in self.ALLOWED_ORIGINS.split(",")]
+        if not self.ALLOWED_ORIGINS:
+            return ["*"]
+        origins = [o.strip() for o in self.ALLOWED_ORIGINS.split(",") if o.strip()]
+        return origins if origins else ["*"]
 
     class Config:
         env_file = ".env"

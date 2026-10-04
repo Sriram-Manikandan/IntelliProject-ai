@@ -1,15 +1,24 @@
-# app/main.py
+# main.py
 # ─────────────────────────────────────────────
 # Application factory – creates and configures
-# the FastAPI instance with middleware and routes
+# the FastAPI instance with middleware, routes, and Neon DB initialization.
 # ─────────────────────────────────────────────
 
+from contextlib import asynccontextmanager
 from fastapi import FastAPI
 from fastapi.middleware.cors import CORSMiddleware
 from fastapi.responses import JSONResponse, RedirectResponse
 
 from core.config import settings
+from core.database import init_db
 from api.router import main_router as router
+
+
+@asynccontextmanager
+async def lifespan(app: FastAPI):
+    """Lifecycle events: initialize Neon DB tables on server start."""
+    init_db()
+    yield
 
 
 def create_app() -> FastAPI:
@@ -27,10 +36,10 @@ def create_app() -> FastAPI:
         redoc_url="/redoc",      # ReDoc UI
         openapi_url="/openapi.json",
         debug=settings.DEBUG,
+        lifespan=lifespan,
     )
 
     # ── CORS ──────────────────────────────────
-    # Allow the front-end dev server (React / Vite / Next.js) to call the API
     app.add_middleware(
         CORSMiddleware,
         allow_origins=settings.origins_list,
@@ -45,7 +54,12 @@ def create_app() -> FastAPI:
     # ── Health-check ──────────────────────────
     @app.get("/health", tags=["System"], summary="Health check")
     async def health() -> JSONResponse:
-        return JSONResponse({"status": "ok", "app": settings.APP_NAME, "version": settings.APP_VERSION})
+        return JSONResponse({
+            "status": "ok",
+            "app": settings.APP_NAME,
+            "version": settings.APP_VERSION,
+            "database": "Neon PostgreSQL",
+        })
 
     # ── Root Redirect ─────────────────────────
     @app.get("/", include_in_schema=False)
@@ -55,5 +69,5 @@ def create_app() -> FastAPI:
     return app
 
 
-# Instantiate the app so uvicorn can import it as "app.main:app"
+# Instantiate the app for Uvicorn
 app = create_app()

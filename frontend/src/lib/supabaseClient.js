@@ -1,6 +1,8 @@
-import { createClient } from '@supabase/supabase-js';
+// frontend/src/lib/supabaseClient.js
+// ─────────────────────────────────────────────
+// DEPRECATED: Database & auth have moved to Neon DB (PostgreSQL) and the FastAPI backend.
+// This mock export remains to prevent any broken legacy imports.
+// ─────────────────────────────────────────────
 
-const supabaseUrl = import.meta.env.VITE_SUPABASE_URL || 'YOUR_SUPABASE_URL';
-const supabaseAnonKey = import.meta.env.VITE_SUPABASE_ANON_KEY || 'YOUR_SUPABASE_ANON_KEY';
-
-export const supabase = createClient(supabaseUrl, supabaseAnonKey);
+export const supabase = null;
+export default supabase;

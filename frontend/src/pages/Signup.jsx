@@ -32,7 +32,9 @@ export default function Signup() {
 
     try {
       const data = await signup(email, password, { full_name: name });
-      if (data) setIsSignedUp(true);
+      if (data) {
+        navigate('/dashboard');
+      }
     } catch (err) {
       setError(err.message || 'Failed to create account');
     } finally {

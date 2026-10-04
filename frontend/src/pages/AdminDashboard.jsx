@@ -184,28 +184,28 @@ export default function AdminDashboard() {
                   <Globe className="w-8 h-8 text-white" />
                 </div>
                 <div className="text-center">
-                  <h4 className="text-lg font-bold text-gray-900 dark:text-white flex items-center justify-center gap-2">Frontend <ExternalLink className="w-4 h-4 text-gray-400 group-hover:text-gray-600 dark:group-hover:text-white transition-colors" /></h4>
-                  <p className="text-sm text-gray-500 dark:text-gray-400 mt-1">Manage Vercel Deployment</p>
+                  <h4 className="text-lg font-bold text-gray-900 dark:text-white flex items-center justify-center gap-2">Frontend & Backend <ExternalLink className="w-4 h-4 text-gray-400 group-hover:text-gray-600 dark:group-hover:text-white transition-colors" /></h4>
+                  <p className="text-sm text-gray-500 dark:text-gray-400 mt-1">Manage Render Services</p>
                 </div>
               </a>
               
-              <a href="https://railway.app" target="_blank" rel="noopener noreferrer" className="bg-white dark:bg-white/5 border border-gray-200 dark:border-white/10 rounded-2xl p-6 flex flex-col items-center justify-center gap-4 hover:border-gray-300 dark:hover:border-purple-500/30 transition-all group shadow-sm dark:shadow-none">
+              <a href="https://dashboard.render.com" target="_blank" rel="noopener noreferrer" className="bg-white dark:bg-white/5 border border-gray-200 dark:border-white/10 rounded-2xl p-6 flex flex-col items-center justify-center gap-4 hover:border-gray-300 dark:hover:border-purple-500/30 transition-all group shadow-sm dark:shadow-none">
                 <div className="p-4 bg-purple-100 dark:bg-purple-500/10 rounded-full group-hover:scale-110 transition-transform">
                   <Server className="w-8 h-8 text-purple-600 dark:text-purple-400" />
                 </div>
                 <div className="text-center">
-                  <h4 className="text-lg font-bold text-gray-900 dark:text-white flex items-center justify-center gap-2">Backend <ExternalLink className="w-4 h-4 text-gray-400 group-hover:text-gray-600 dark:group-hover:text-white transition-colors" /></h4>
-                  <p className="text-sm text-gray-500 dark:text-gray-400 mt-1">Manage Railway FastAPI</p>
+                  <h4 className="text-lg font-bold text-gray-900 dark:text-white flex items-center justify-center gap-2">Render Cloud <ExternalLink className="w-4 h-4 text-gray-400 group-hover:text-gray-600 dark:group-hover:text-white transition-colors" /></h4>
+                  <p className="text-sm text-gray-500 dark:text-gray-400 mt-1">Web Service & Static Site</p>
                 </div>
               </a>
 
-              <a href="https://supabase.com" target="_blank" rel="noopener noreferrer" className="bg-white dark:bg-white/5 border border-gray-200 dark:border-white/10 rounded-2xl p-6 flex flex-col items-center justify-center gap-4 hover:border-gray-300 dark:hover:border-emerald-500/30 transition-all group shadow-sm dark:shadow-none">
+              <a href="https://console.neon.tech" target="_blank" rel="noopener noreferrer" className="bg-white dark:bg-white/5 border border-gray-200 dark:border-white/10 rounded-2xl p-6 flex flex-col items-center justify-center gap-4 hover:border-gray-300 dark:hover:border-emerald-500/30 transition-all group shadow-sm dark:shadow-none">
                 <div className="p-4 bg-emerald-100 dark:bg-emerald-500/10 rounded-full group-hover:scale-110 transition-transform">
                   <Database className="w-8 h-8 text-emerald-600 dark:text-emerald-400" />
                 </div>
                 <div className="text-center">
-                  <h4 className="text-lg font-bold text-gray-900 dark:text-white flex items-center justify-center gap-2">Database <ExternalLink className="w-4 h-4 text-gray-400 group-hover:text-gray-600 dark:group-hover:text-white transition-colors" /></h4>
-                  <p className="text-sm text-gray-500 dark:text-gray-400 mt-1">Manage Supabase Auth & DB</p>
+                  <h4 className="text-lg font-bold text-gray-900 dark:text-white flex items-center justify-center gap-2">Neon Database <ExternalLink className="w-4 h-4 text-gray-400 group-hover:text-gray-600 dark:group-hover:text-white transition-colors" /></h4>
+                  <p className="text-sm text-gray-500 dark:text-gray-400 mt-1">Manage Serverless Postgres</p>
                 </div>
               </a>
             </div>

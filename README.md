@@ -29,16 +29,21 @@ The system is built using an asynchronous FastAPI backend and a custom dark-them
 **Backend**
 - Python 3.11+
 - FastAPI (Async API)
-- Pydantic v2
+- Neon DB (Serverless PostgreSQL)
+- SQLAlchemy 2.0 (ORM & Connection Pooling)
+- JWT Authentication (PyJWT + bcrypt password hashing)
 - Groq API (llama-3.3-70b-versatile)
-- Uvicorn
-- Environment-based configuration
+- Pydantic v2
+- Uvicorn & Gunicorn
+- Render.com Web Service
 
 **Frontend**
-- React (Vite)
+- React 19 (Vite 6)
 - Tailwind CSS v3
-- React Router DOM
+- React Router DOM v7
 - Lucide React (Icons)
+- Recharts (Metrics & Admin Visualizations)
+- Render.com Static Site
 
 ---
 
@@ -214,13 +219,26 @@ _Note: If the API key is missing or the Groq service is unreachable, the system 
 
 ---
 
-## 📌 Future Improvements
+## 🌐 Deploying to Render & Neon DB
 
-- Add OAuth / Social Login integration.
-- Save user sessions or allow exporting to PDF/Markdown.
-- Integrate with Figma for UI design exports.
-- Deploy backend (Render / Railway).
-- Deploy frontend (Vercel / Netlify).
+### 1. Set Up Neon DB (Serverless PostgreSQL)
+1. Head to [Neon.tech](https://neon.tech) and create a free PostgreSQL project.
+2. In your Neon dashboard, copy your **Connection String** (it starts with `postgresql://...` and includes `?sslmode=require`).
+3. *(Optional)* Run the SQL schema from [`init_db.sql`](file:///d:/Intelliproject/init_db.sql) in Neon's **SQL Editor**. (The FastAPI backend will also auto-create all tables on first startup).
+
+### 2. Deploy to Render via Blueprint (Recommended)
+This repository includes a [`render.yaml`](file:///d:/Intelliproject/render.yaml) file for single-click Blueprint deployments:
+1. Push your repository to **GitHub** or **GitLab**.
+2. Go to the [Render Dashboard](https://dashboard.render.com).
+3. Click **New +** → **Blueprint**.
+4. Connect this repository. Render will automatically detect `render.yaml` and configure both:
+   - **`intelliproject-backend`** (Python Web Service)
+   - **`intelliproject-frontend`** (Static Site)
+5. Fill in the required environment variables:
+   - `DATABASE_URL`: Your Neon Postgres connection string
+   - `GROQ_API_KEY`: Your Groq API key
+   - `VITE_API_BASE_URL`: `https://<your-backend-name>.onrender.com/api/v1`
+6. Click **Apply**. Both your backend API and React frontend will build and deploy!
 
 ---
 

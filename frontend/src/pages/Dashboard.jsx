@@ -5,7 +5,6 @@ import { getUserProjects, deleteProject } from '../services/projectService';
 import { useAuth } from '../context/AuthContext';
 import { useTheme } from '../context/ThemeContext';
 import ProjectCard from '../components/generate/ProjectCard';
-import { supabase } from '../lib/supabaseClient';
 
 export default function Dashboard() {
   const [savedProjects, setSavedProjects] = useState([]);
@@ -85,24 +84,12 @@ export default function Dashboard() {
     setMessage({ type: '', text: '' });
     
     try {
-      // 1. Verify old password ONLY if a new password is being set
-      if (newPassword) {
-        const { error: authError } = await supabase.auth.signInWithPassword({
-          email: user.email,
-          password: oldPassword
-        });
-        
-        if (authError) {
-          throw new Error('Incorrect current password. Please try again.');
-        }
-      }
-
-      // 2. Update Profile (Name)
+      // 1. Update Profile (Name)
       await updateProfile({ full_name: displayName });
       
-      // 3. Update Password if provided
+      // 2. Update Password if provided
       if (newPassword) {
-        await updatePassword(newPassword);
+        await updatePassword(newPassword, oldPassword);
       }
       
       setMessage({ type: 'success', text: 'Account updated successfully!' });

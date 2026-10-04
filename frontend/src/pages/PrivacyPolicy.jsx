@@ -25,7 +25,7 @@ export default function PrivacyPolicy() {
               We collect information you provide directly to us when you create an account or interact with our AI services. This includes:
             </p>
             <ul className="list-disc pl-5 text-gray-400 space-y-2">
-              <li>Account data (email address and securely hashed password via Supabase Auth).</li>
+              <li>Account data (email address and securely hashed password via bcrypt).</li>
               <li>Project generation data (skills, domain, difficulty, and time budget entered into the prompt).</li>
               <li>Saved project blueprints.</li>
             </ul>
@@ -49,7 +49,7 @@ export default function PrivacyPolicy() {
               We do not sell or rent your personal information to third parties. 
               We utilize third-party services to power our application:
               <br /><br />
-              <strong>Supabase:</strong> Used for secure authentication and database hosting.<br />
+              <strong>Neon Database:</strong> Used for secure serverless PostgreSQL database hosting.<br />
               <strong>Groq:</strong> Used to process your AI prompts. No personally identifiable information (PII) is sent to Groq; only your inputted tech stack and domain criteria.
             </p>
           </section>
